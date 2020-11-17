@@ -6,9 +6,10 @@ This is a Twitter client by cats for cats🐾
 > **[日本語](README_JP.md)**
 
 ## Features
-- It's easy to tweet "にゃーん".
-- ~Needlessly~ flexible color settings.
-- Support for interactive mode.
+- Multi-byte character support
+- It's easy to tweet "にゃーん"
+- ~Needlessly~ flexible color settings
+- Support for interactive mode
 
 ## Screenshot
 ![twnyan](https://user-images.githubusercontent.com/44780846/99259409-5058d280-285d-11eb-82f3-ba80065517be.gif)
@@ -26,8 +27,8 @@ Download a zip file from ReleasePage that fits your environment and pass the Pat
 - Emoji can be displayed.
 
 ### Remarks
-- I have not been able to confirm that it works on a Mac.
-- To run in a WSL environment, you need to be able to use xdg-open.
+- I have not been able to confirm that it works on a Mac
+- To run in a WSL environment, you need to be able to use xdg-open
 
 ## Usage
 ```$ twnyan [command] [argument]```
@@ -59,7 +60,7 @@ Manipulates tweets.
 | image file | If there is more than one, please separate them with a space | ```tweet 🍣 sushi1.png sushi2.png``` |
 | tweet number | Separate each tweet with a space if there is more than one | ```tweet remove 2 5``` |
 
-- You can also omit the text and just post an image. (e.g. ```tweet cat.png```)
+- You can also omit the text and just post an image (e.g. ```tweet cat.png```)
 
 ## timeline
 **timeline [counts]**
@@ -108,7 +109,7 @@ Displays the user timeline.
 | userID | If you omit it, you will be specified | ```user``` |
 | counts | If you omit it, the default value is given in the configuration file | ```user twitter 15``` |
 
-- The '@' in the user ID is optional.
+- The '@' in the user ID is optional
 
 ## search
 **search [<keyword>] [counts]**
