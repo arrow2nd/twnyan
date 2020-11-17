@@ -14,6 +14,7 @@ This is a Twitter client by cats for cats🐾
 ![twnyan](https://user-images.githubusercontent.com/44780846/99259409-5058d280-285d-11eb-82f3-ba80065517be.gif)
 
 ## How to install
+**(Recommended)**
 
 ```$ go get github.com/arrow2nd/twnyan```
 
@@ -49,7 +50,7 @@ Manipulates tweets.
 
 | Subcommand | Alias | Description | Argument |
 | -------- | -------- | -------- | -------- |
-| none | The default value for the tweet is 10,000 words. |  | ```tweet [text] [image file]```.
+| none |  | The default value for the tweet is 10,000 words. | ```tweet [text] [image file]```.
 | remove | rm | remove the tweet. | ```tweet remove [<tweet number>]```.
 
 | Arguments | Hints | Examples |
@@ -243,7 +244,7 @@ Color setting.
 
 Specify it with a hexadecimal color code.
 
-| name | Description |
+| Name | Description |
 | -------- | -------- |
 | Accent1 | Background color of tweet numbers, etc. |
 | Accent2 | Posting times for tweets, etc. |
@@ -266,7 +267,7 @@ Specify it with a hexadecimal color code.
 ## DefaultData
 The default value is set.
 
-| name | Description |
+| Name | Description |
 | -------- | -------- |
 | Counts | Default number of fetches |
 | Prompt | Prompt character |

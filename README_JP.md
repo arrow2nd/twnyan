@@ -2,7 +2,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 
 ねこによるねこのためのTwitterクライアント🐾
-s
+
 ## 特徴
 - すぐ「にゃーん」できる
 - ~無駄に~柔軟な色設定
@@ -12,6 +12,7 @@ s
 ![twnyan](https://user-images.githubusercontent.com/44780846/99259409-5058d280-285d-11eb-82f3-ba80065517be.gif)
 
 ## インストール
+**（おすすめ）**
 
 ```$ go get github.com/arrow2nd/twnyan```
 
@@ -24,7 +25,7 @@ Releaseから環境にあったzipをダウンロードして、バイナリフ�
 
 ### 備考
 - Macでの動作は確認できていません
-- WSL環境で実行する場合、[xdg-openが使用できる必要](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)があります
+- WSL環境で実行する場合、[xdg-openが使用できる](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)必要があります
 
 ## 使い方
 ```$ twnyan [コマンド] [引数]```
