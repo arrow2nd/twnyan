@@ -1,6 +1,9 @@
 # twnyan
-ねこによるねこのためのTwitterクライアント🐾
+[![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
+[![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 
+ねこによるねこのためのTwitterクライアント🐾
+s
 ## 特徴
 - すぐ「にゃーん」できる
 - ~無駄に~柔軟な色設定
