@@ -1,0 +1,34 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  deploy:
+    environment:
+      - GOPATH: /home/circleci/go
+    docker:
+      - image: circleci/golang:1.9
+    steps:
+      - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
+      - checkout
+      - run: go get -v -t -d ./...
+      - run: go get github.com/mitchellh/gox
+      - run: go get github.com/tcnksm/ghr
+      - run: mkdir release
+      - run: gox -os="linux darwin windows" -arch="amd64" -output="{{.Dir}}-{{.OS}}-{{.Arch}}/{{.Dir}}" -ldflags="-s -w"
+      - run: for os in linux darwin windows; do
+                cp README.md README_JP.md LICENSE.txt twnyan-$os-amd64/
+                zip -r ./release/twnyan-$os-amd64.zip twnyan-$os-amd64/
+              done
+      - run: ghr -u $CIRCLE_PROJECT_USERNAME $CIRCLE_TAG release/
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
