@@ -19,7 +19,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.9
 	github.com/pkg/browser v0.0.0-20201112035734-206646e67786
 	github.com/stretchr/testify v1.6.1 // indirect
-	golang.org/x/crypto v0.0.0-20201116153603-4be66e5b6582
+	golang.org/x/crypto v0.0.0-20201117144127-c1f2f97bffc9
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 	gopkg.in/abiosoft/ishell.v2 v2.0.0
@@ -27,6 +27,6 @@ require (
 )
 
 replace (
-	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db => github.com/arrow2nd/readline v0.0.0-20201109142603-dc8be9e18d0d
+	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db => github.com/arrow2nd/readline v0.0.0-20201119043036-5ad5643ca11c
 	github.com/flynn-archive/go-shlex v0.0.0-20150515145356-3f9db97f8568 => github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 )
