@@ -13,8 +13,6 @@ jobs:
         - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
         - checkout
         - run: go get -v -t -d ./...
-        - run: go get github.com/golang/lint/golint
-        - run: golint ./...
         - run: go vet ./...
         - run: go test -v -race ./...
   deploy:
@@ -35,6 +33,12 @@ jobs:
 
 workflows:
   version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: /.*/
   deploy:
     jobs:
       - deploy:
