@@ -7,8 +7,8 @@ import (
 	"github.com/gookit/color"
 )
 
-// parsingTweetCommandArgument ツイートのコマンドをパースする
-func parsingTweetCommandArgument(args []string) (string, []string) {
+// parseTweetCmdArgs ツイートのコマンドをパースする
+func parseTweetCmdArgs(args []string) (string, []string) {
 	status, media := "にゃーん", []string{}
 
 	if len(args) > 0 {
