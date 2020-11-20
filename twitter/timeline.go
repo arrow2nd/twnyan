@@ -1,6 +1,8 @@
 package twitter
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/url"
@@ -9,6 +11,7 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
+	"gopkg.in/yaml.v2"
 )
 
 // Tweets ツイート
@@ -28,6 +31,37 @@ func (t *Tweets) DrawTweets() {
 	fmt.Print("\n")
 }
 
+// OutData データを整形して標準出力する
+func (t *Tweets) OutData(dataType string) error {
+	var (
+		outByte []byte
+		outStr  string
+		err     error
+	)
+
+	switch dataType {
+	case "yaml":
+		outByte, err = yaml.Marshal(t.tweets)
+		outStr = string(outByte)
+	case "json":
+		outByte, err = json.Marshal(t.tweets)
+	default:
+		return errors.New("The type of data is invalid")
+	}
+	if err != nil {
+		return err
+	}
+
+	if dataType == "json" {
+		dst := new(bytes.Buffer)
+		json.Indent(dst, outByte, "", "\t")
+		outStr = dst.String()
+	}
+
+	fmt.Printf("%s\n", outStr)
+	return nil
+}
+
 // DrawUserInfo ユーザー情報を表示
 func (t *Tweets) DrawUserInfo(idx int) {
 	if len(t.tweets) <= 0 || len(t.tweets) <= idx {
@@ -40,7 +74,7 @@ func (t *Tweets) DrawUserInfo(idx int) {
 // GetDataFromTweetNum ツイート番号から指定したデータを取得
 func (t *Tweets) GetDataFromTweetNum(numStr, dataType string) (string, error) {
 	if !util.IsNumber(numStr) {
-		return "", fmt.Errorf("'%s' is not a number", numStr)
+		return "", fmt.Errorf("Tweet number is invalid")
 	}
 
 	// 数値に変換
@@ -100,7 +134,7 @@ func (t *Tweets) LoadMentionTL(count string) error {
 // LoadUserTL ユーザータイムラインを読み込む
 func (t *Tweets) LoadUserTL(user, count string) error {
 	v := createURLValues(count)
-	v.Add("exclude_replies", "true")
+	//	v.Add("exclude_replies", "true")
 	if user != "" {
 		v.Add("screen_name", user)
 	}

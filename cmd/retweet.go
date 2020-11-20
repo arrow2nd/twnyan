@@ -66,7 +66,7 @@ func quote(c *ishell.Context) {
 		return
 	}
 
-	status, media := parsingTweetCommandArgument(c.Args[1:])
+	status, media := parseTweetCmdArgs(c.Args[1:])
 	status += " " + uri
 	twitter.PostTweet(status, "", media)
 }
