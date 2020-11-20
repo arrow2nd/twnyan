@@ -18,7 +18,7 @@ func init() {
 			"tweet nyaan! cat.png dog.png",
 		),
 		Func: func(c *ishell.Context) {
-			status, media := parsingTweetCommandArgument(c.Args)
+			status, media := parseTweetCmdArgs(c.Args)
 			twitter.PostTweet(status, "", media)
 		},
 	}

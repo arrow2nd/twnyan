@@ -34,6 +34,6 @@ func reply(c *ishell.Context) {
 		return
 	}
 
-	status, media := parsingTweetCommandArgument(c.Args[1:])
+	status, media := parseTweetCmdArgs(c.Args[1:])
 	twitter.PostTweet(status, tweetID, media)
 }

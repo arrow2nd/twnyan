@@ -10,11 +10,11 @@ func init() {
 	shell.AddCmd(&ishell.Cmd{
 		Name:    "list",
 		Aliases: []string{"ls"},
-		Help:    "displays the timeline of the list",
+		Help:    "get the list timeline",
 		LongHelp: createLongHelp(
-			"Displays the timeline of the list.\nYou can use the tab key to complete the list name.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			"Get the list timeline.\nYou can use the tab key to complete the list name.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
 			"ls",
-			"list [<list name>] [counts]",
+			"list [<list name>] [counts] [data format(json|yaml)]",
 			"list cats 50",
 		),
 		Func: getListTimeline,
@@ -25,13 +25,13 @@ func init() {
 }
 
 func getListTimeline(c *ishell.Context) {
-	args, err := util.FetchStringSpecifiedType(c.Args, "str", "num")
+	args, err := util.FetchStringSpecifiedType(c.Args, "str", "num", "str")
 	if err != nil {
 		showWrongMsg(c.Cmd.Name)
 		return
 	}
 
-	name, counts := args[0], args[1]
+	name, counts, dataFmt := args[0], args[1], args[2]
 	if counts == "" {
 		counts = cfg.Default.Counts
 	}
@@ -44,7 +44,13 @@ func getListTimeline(c *ishell.Context) {
 	}
 
 	err = tweets.LoadListTL(listID[idx], counts)
-	if err == nil {
+	if err != nil {
+		return
+	}
+
+	if dataFmt == "" {
 		tweets.DrawTweets()
+	} else {
+		tweets.OutData(dataFmt)
 	}
 }

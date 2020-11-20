@@ -9,23 +9,33 @@ func init() {
 	shell.AddCmd(&ishell.Cmd{
 		Name:    "timeline",
 		Aliases: []string{"tl"},
-		Help:    "displays the home timeline",
+		Help:    "get a home timeline",
 		LongHelp: createLongHelp(
-			"Displays the home timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			"Get a home timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
 			"tl",
-			"timeline [counts]",
+			"timeline [counts] [data format(json|yaml)]",
 			"timeline 50",
 		),
 		Func: func(c *ishell.Context) {
-			counts := cfg.Default.Counts
+			counts, dataFmt := cfg.Default.Counts, ""
 
-			if len(c.Args) > 0 && util.IsNumber(c.Args[0]) {
-				counts = c.Args[0]
+			args, _ := util.FetchStringSpecifiedType(c.Args, "num", "str")
+			if args != nil {
+				counts, dataFmt = args[0], args[1]
+				if counts == "" {
+					counts = cfg.Default.Counts
+				}
 			}
 
 			err := tweets.LoadHomeTL(counts)
-			if err == nil {
+			if err != nil {
+				return
+			}
+
+			if dataFmt == "" {
 				tweets.DrawTweets()
+			} else {
+				tweets.OutData(dataFmt)
 			}
 		},
 	})
