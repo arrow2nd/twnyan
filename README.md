@@ -64,56 +64,61 @@ Manipulates tweets.
 - You can also omit the text and just post an image (e.g. ```tweet cat.png```)
 
 ## timeline
-**timeline [counts]**
+**timeline [counts] [data format]**
 
-Displays the home timeline.
+Get a home timeline.
 > Alias: tl
 
 | Arguments | Hints | Examples |
 | -------- | -------- | -------- |
 | counts | If you omit it, the default value is given in the configuration file | ```timeline 39``` |
+| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```timeline 50 json``` |
 
 ## mention
-**twnyan mention [counts]**
+**twnyan mention [counts] [data format]**
 
-Displays the Mentions to you.
+Get a Mentions to you.
 > Alias: mt
 
 | Arguments | Hints | Examples |
 | -------- | -------- | -------- |
 | counts | If you omit it, the default value is given in the configuration file | ```mention 20``` |
+| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```mention 50 json``` |
 
 ## list
-**list [<list name>] [counts]**
+**list [<list name>] [counts] [data format]**
 
-Displays the timeline of the list.
+Get a timeline of the list.
 > Alias: ls
 
 | Arguments | Hints | Examples |
 | -------- | -------- | -------- |
 | list name | If you are running in interactive mode, you can complete it with the Tab key | ```list Cats```|
 | counts | If you omit it, the default value is given in the configuration file | ```list "Cat Gathering" 30``` |
+| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```list dogs 50 json``` |
 
 ## user
 **user [Subcommand] [argument]**
 
-Displays the user timeline.
+Get a user timeline.
 > Alias: ur
 
 | Subcommand | Alias | Description | Argument |
 | -------- | -------- | -------- | -------- |
-| none |  | Displays the timeline of the specified user | ```user [userID] [counts]``` |
-| number | num, no | Displays the timeline of the person who posted the specified tweet | ```user number [<tweet number>] [counts]``` |
+| none |  | Get a timeline of the specified user | ```user [userID] [counts] [data format]``` |
+| number | num, no | Get a timeline of the person who posted the specified tweet | ```user number [<tweet number>] [counts]``` |
 
 | Arguments | Hints | Examples |
 | -------- | -------- | -------- |
 | userID | If you omit it, you will be specified | ```user``` |
 | counts | If you omit it, the default value is given in the configuration file | ```user twitter 15``` |
+| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```user github 50 yaml``` |
 
 - The '@' in the user ID is optional
+- If you want to output your posts in a specific data format, enter ```user [your userID] [counts] [data format]```
 
 ## search
-**search [<keyword>] [counts]**
+**search [<keyword>] [counts] [data format]**
 
 Searches for tweets tweets in the past 7 days.
 > Alias: sh
@@ -122,6 +127,7 @@ Searches for tweets tweets in the past 7 days.
 | -------- | -------- | -------- |
 | keyword | Please enclose any spaces in double quotes | ```search "cat dog"``` |
 | counts | If you omit it, the default value is given in the configuration file | ```search sushi 5``` |
+| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```search golang 50 yaml``` |
 
 ## favorite
 **favorite  [Subcommand] [<tweet number>]**
