@@ -47,11 +47,12 @@ func showTweet(i int, tw *anaconda.Tweet) {
 	// ツイートテキスト
 	text := runewidth.Wrap(html.UnescapeString(tw.FullText), width-2)
 	util.Replace(&text, "\n", "\n ")
+
 	// ハッシュタグハイライト
-	rep := regexp.MustCompile("[#＃]([\\S\n]+)")
+	rep := regexp.MustCompile("[#＃]([\\w\u05be\u05f3\u05f4]*[\\p{L}_]+[\\w\u05be\u05f3\u05f4]*)")
 	text = rep.ReplaceAllString(text, color.HEX(cfg.Color.Hashtag).Sprintf("#$1"))
 	// メンションハイライト
-	rep = regexp.MustCompile("[@＠]([\\S\n]+)")
+	rep = regexp.MustCompile("[@＠]([\\w]+)")
 	text = rep.ReplaceAllString(text, color.HEX(cfg.Color.Reply).Sprintf("@$1"))
 
 	// いいね・RT
