@@ -134,7 +134,6 @@ func (t *Tweets) LoadMentionTL(count string) error {
 // LoadUserTL ユーザータイムラインを読み込む
 func (t *Tweets) LoadUserTL(user, count string) error {
 	v := createURLValues(count)
-	//	v.Add("exclude_replies", "true")
 	if user != "" {
 		v.Add("screen_name", user)
 	}
