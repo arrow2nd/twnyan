@@ -36,8 +36,8 @@ func IsNumber(str string) bool {
 	return regexp.MustCompile("^[0-9]{1,3}$").Match([]byte(str))
 }
 
-// Replace 文字列を置換
-func Replace(str *string, reg, rep string) {
+// AllReplace 該当文字列を全て置換
+func AllReplace(str *string, reg, rep string) {
 	replace := regexp.MustCompile(reg)
 	*str = replace.ReplaceAllString(*str, rep)
 }

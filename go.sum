@@ -4,10 +4,6 @@ github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 h1:r+EmXj
 github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7/go.mod h1:b2EuEMLSG9q3bZ95ql1+8oVqzzrTNSiOQqSXWFBzxeI=
 github.com/abiosoft/ishell v2.0.0+incompatible h1:zpwIuEHc37EzrsIYah3cpevrIc8Oma7oZPxr03tlmmw=
 github.com/abiosoft/ishell v2.0.0+incompatible/go.mod h1:HQR9AqF2R3P4XXpMpI0NAzgHf/aS6+zVXRj14cVk9qg=
-github.com/arrow2nd/readline v0.0.0-20201109142603-dc8be9e18d0d h1:VU3mRO1/1O0ilfClf3xzbHUGiuRDu5Naj8qeJijxkg4=
-github.com/arrow2nd/readline v0.0.0-20201109142603-dc8be9e18d0d/go.mod h1:DV86x0t0blAkDY1e3PpR0oEiAq04CJ9KymI+qPIdWdc=
-github.com/arrow2nd/readline v0.0.0-20201119041757-d23a85e65a4e h1:YuyRiboZ8Tb43wcf0NctcCNyRY5xbgYxYhoToIK7ghQ=
-github.com/arrow2nd/readline v0.0.0-20201119041757-d23a85e65a4e/go.mod h1:DV86x0t0blAkDY1e3PpR0oEiAq04CJ9KymI+qPIdWdc=
 github.com/arrow2nd/readline v0.0.0-20201119043036-5ad5643ca11c h1:NdnKtz/T1JuJ3//nG+5pY1d+3WXMUYtr/CTyAzJCUQg=
 github.com/arrow2nd/readline v0.0.0-20201119043036-5ad5643ca11c/go.mod h1:DV86x0t0blAkDY1e3PpR0oEiAq04CJ9KymI+qPIdWdc=
 github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 h1:ekDALXAVvY/Ub1UtNta3inKQwZ/jMB/zpOtD8rAYh78=
