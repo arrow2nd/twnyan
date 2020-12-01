@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -16,8 +17,7 @@ import (
 // showTweet ツイートを表示
 func showTweet(i int, tw *anaconda.Tweet) {
 	width := util.GetWindowWidth()
-	status := ""
-	space := ""
+	status, space := "", ""
 	isQuote := (i == -1)
 
 	// 引用リツイートの場合セパレータを挿入
@@ -46,45 +46,30 @@ func showTweet(i int, tw *anaconda.Tweet) {
 
 	// ツイートテキスト
 	text := runewidth.Wrap(html.UnescapeString(tw.FullText), width-2)
-	util.Replace(&text, "\n", "\n ")
+	util.AllReplace(&text, "\n", "\n ")
 
-	// ハッシュタグハイライト
-	rep := regexp.MustCompile("[#＃]([\\w\u05be\u05f3\u05f4]*[\\p{L}_]+[\\w\u05be\u05f3\u05f4]*)")
-	text = rep.ReplaceAllString(text, color.HEX(cfg.Color.Hashtag).Sprintf("#$1"))
-	// メンションハイライト
-	rep = regexp.MustCompile("[@＠]([\\w]+)")
-	text = rep.ReplaceAllString(text, color.HEX(cfg.Color.Reply).Sprintf("@$1"))
+	// ハッシュタグ・メンションをハイライト
+	highlight(&text)
 
-	// いいね・RT
-	reaction := ""
-	rCnt := []int{tw.FavoriteCount, tw.RetweetCount}
-	rFlag := []bool{tw.Favorited, tw.Retweeted}
-	rUnit := []string{"fav", "RT"}
-	rCol := []string{cfg.Color.Fav, cfg.Color.RT}
-	for i := 0; i < 2; i++ {
-		if rCnt[i] <= 0 {
-			continue
-		} else if rCnt[i] > 1 {
-			rUnit[i] += "s"
-		}
-		reaction += " "
-		if rFlag[i] {
-			reaction += color.HEXStyle(cfg.Color.BoxFg, rCol[i]).Sprintf(" %d%s ", rCnt[i], rUnit[i])
-		} else {
-			reaction += color.HEX(rCol[i]).Sprintf("%d%s", rCnt[i], rUnit[i])
-		}
-	}
+	// いいね・RT数
+	reaction := createReaction(
+		"",
+		tw.FavoriteCount,
+		"fav",
+		cfg.Color.Fav,
+		tw.Favorited,
+	)
+	reaction = createReaction(
+		reaction,
+		tw.RetweetCount,
+		"RT",
+		cfg.Color.RT,
+		tw.Retweeted,
+	)
 
 	// 投稿時間
-	postTime := ""
-	createdAtTime, _ := tw.CreatedAtTime()
-	if util.IsSameDate(createdAtTime) {
-		postTime = createdAtTime.Local().Format(cfg.Default.TimeFormat)
-	} else {
-		format := fmt.Sprintf("%s %s", cfg.Default.DateFormat, cfg.Default.TimeFormat)
-		postTime = createdAtTime.Local().Format(format)
-	}
-	postTime = color.HEX(cfg.Color.Accent2).Sprint(postTime)
+	pt, _ := tw.CreatedAtTime()
+	postTime := createPostTime(pt)
 
 	// 表示
 	if !isQuote {
@@ -99,12 +84,43 @@ func showTweet(i int, tw *anaconda.Tweet) {
 	}
 }
 
+// highlight ハイライト
+func highlight(text *string) {
+	// ハッシュタグ
+	rep := regexp.MustCompile("[#＃]([\\w\u05be\u05f3\u05f4]*[\\p{L}_]+[\\w\u05be\u05f3\u05f4]*)")
+	*text = rep.ReplaceAllString(*text, color.HEX(cfg.Color.Hashtag).Sprintf("#$1"))
+
+	// メンション
+	rep = regexp.MustCompile("[@＠]([\\w]+)")
+	*text = rep.ReplaceAllString(*text, color.HEX(cfg.Color.Reply).Sprintf("@$1"))
+}
+
+// replaceTag タグを置換
+func replaceTag(text *string, tags []string, reg, rep, hex string) {
+	// 文字列長で降順ソート
+	sort.Slice(tags, func(i, j int) bool {
+		return len(tags[i]) > len(tags[j])
+	})
+
+	fmt.Println(tags)
+
+	// 置換
+	for _, v := range tags {
+		util.AllReplace(
+			text,
+			reg+v,
+			color.HEX(hex).Sprint(rep+v),
+		)
+	}
+}
+
 // showUserInfo ユーザー情報を表示
 func showUserInfo(user *anaconda.User) {
 	width := util.GetWindowWidth()
 
 	// ユーザー情報
 	userStr := createUserString(user)
+
 	// 関係性
 	status := getFriendships(user)
 
@@ -118,18 +134,21 @@ func showUserInfo(user *anaconda.User) {
 	if desc == "" {
 		desc = "none"
 	} else {
-		util.Replace(&desc, "\n", "\n           ")
+		util.AllReplace(&desc, "\n", "\n           ")
 	}
+
 	// 場所
 	location := user.Location
 	if location == "" {
 		location = "none"
 	}
+
 	// Webサイト
 	website := user.URL
 	if website == "" {
 		website = "none"
 	}
+
 	// アカウント作成日
 	tm, _ := time.Parse(time.RubyDate, user.CreatedAt)
 	format := fmt.Sprintf("%s %s", cfg.Default.DateFormat, cfg.Default.TimeFormat)
@@ -163,6 +182,35 @@ func createUserString(user *anaconda.User) string {
 	return fmt.Sprintf("%s %s%s", name, screenName, badge)
 }
 
+// createReaction リアクション数の文字列を作成
+func createReaction(text string, count int, unit, hex string, flg bool) string {
+	if count <= 0 {
+		return text
+	} else if count > 1 {
+		unit += "s"
+	}
+
+	text += " "
+	if flg {
+		text += color.HEXStyle(cfg.Color.BoxFg, hex).Sprintf(" %d%s ", count, unit)
+	} else {
+		text += color.HEX(hex).Sprintf("%d%s", count, unit)
+	}
+	return text
+}
+
+// createPostTime 投稿時間の文字列を作成
+func createPostTime(t time.Time) string {
+	postTime := ""
+	if util.IsSameDate(t) {
+		postTime = t.Local().Format(cfg.Default.TimeFormat)
+	} else {
+		format := fmt.Sprintf("%s %s", cfg.Default.DateFormat, cfg.Default.TimeFormat)
+		postTime = t.Local().Format(format)
+	}
+	return color.HEX(cfg.Color.Accent2).Sprint(postTime)
+}
+
 // createSeparator セパレータを作成
 func createSeparator(hasPutSpace bool) string {
 	width := util.GetWindowWidth() - 2
@@ -176,7 +224,7 @@ func createSeparator(hasPutSpace bool) string {
 
 // showSuccessMsg 処理完了メッセージを表示
 func showSuccessMsg(text, tips, hex string) {
-	util.Replace(&text, "[\n\r]", "")
+	util.AllReplace(&text, "[\n\r]", "")
 	text = html.UnescapeString(text)
 	cutText := util.CutString(text, util.GetWindowWidth()-len(tips)-1)
 	tips = color.HEX(hex).Sprint(tips)
