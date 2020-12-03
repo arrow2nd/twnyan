@@ -8,11 +8,11 @@ import (
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
-const version = "0.0.4"
+const version = "1.0.0"
 
 var (
 	shell    = ishell.New()
-	cfg      config.ConfigData
+	cfg      config.Configuration
 	tweets   twitter.Tweets
 	listName []string
 	listID   []int64

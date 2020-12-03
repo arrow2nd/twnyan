@@ -12,7 +12,7 @@ const (
 
 var (
 	api *anaconda.TwitterApi
-	cfg *config.ConfigData
+	cfg *config.Configuration
 )
 
 func init() {
@@ -21,7 +21,7 @@ func init() {
 }
 
 // SetConfig 設定
-func SetConfig(config *config.ConfigData) {
+func SetConfig(config *config.Configuration) {
 	// API
 	api = anaconda.NewTwitterApi(config.Credentials.Token, config.Credentials.Secret)
 
