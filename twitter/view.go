@@ -76,7 +76,7 @@ func showTweet(i int, tw *anaconda.Tweet) {
 		fmt.Print("\n")
 	}
 	fmt.Printf("%s%s %s %s%s\n", status, index, user, postTime, reaction)
-	color.HEX(cfg.Color.Text).Printf(" %s\n", text)
+	fmt.Printf(" %s\n", text)
 
 	// 引用リツイート
 	if tw.QuotedStatus != nil {
