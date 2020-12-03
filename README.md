@@ -260,7 +260,6 @@ Specify it with a hexadecimal color code.
 | BoxFg | Text color of tweet numbers, etc. |
 | UserName | Username |
 | UserID | UserID |
-| Text | Tweet |
 | Separator |Separator（--------） |
 | Reply | Reply ID and Reply Display |
 | Hashtag | Hashtag |
