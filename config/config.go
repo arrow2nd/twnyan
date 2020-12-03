@@ -11,28 +11,27 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// ConfigData 設定情報
-type ConfigData struct {
-	Credentials CredData
-	Color       ColorData
-	Default     DefaultData
+// Configuration 設定情報
+type Configuration struct {
+	Credentials Credentials
+	Color       ColorScheme
+	Default     DefaultValue
 }
 
-// CredData トークン
-type CredData struct {
+// Credentials トークン情報
+type Credentials struct {
 	Token  string
 	Secret string
 }
 
-// ColorData 配色
-type ColorData struct {
+// ColorScheme 配色
+type ColorScheme struct {
 	Accent1   string
 	Accent2   string
 	Accent3   string
 	BoxFg     string
 	UserName  string
 	UserID    string
-	Text      string
 	Separator string
 	Reply     string
 	Hashtag   string
@@ -45,8 +44,8 @@ type ColorData struct {
 	Mute      string
 }
 
-// DefaultData デフォルト値
-type DefaultData struct {
+// DefaultValue デフォルト値
+type DefaultValue struct {
 	Counts     string
 	Prompt     string
 	DateFormat string
@@ -54,7 +53,7 @@ type DefaultData struct {
 }
 
 // Save ファイル保存
-func (cfg *ConfigData) Save() {
+func (cfg *Configuration) Save() {
 	// byteに変換
 	buf, err := yaml.Marshal(cfg)
 	if err != nil {
@@ -70,7 +69,7 @@ func (cfg *ConfigData) Save() {
 }
 
 // Load ファイル読み込み
-func (cfg *ConfigData) Load() error {
+func (cfg *Configuration) Load() error {
 	configPath := getConfigFilePath()
 
 	// 設定ファイルの存在チェック
@@ -94,7 +93,7 @@ func (cfg *ConfigData) Load() error {
 }
 
 // Remove ファイル削除
-func (cfg *ConfigData) Remove() {
+func (cfg *Configuration) Remove() {
 	configPath := getConfigFilePath()
 
 	err := os.Remove(configPath)
