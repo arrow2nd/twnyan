@@ -35,7 +35,7 @@ func Setup() {
 
 	// PIN入力
 	pin := ""
-	color.HEX("#FFA6C3").Print("ฅ^•ω•^ฅ < ")
+	color.HEX("#FFA6C3").Print("ฅ^•ω•^ฅ : ")
 	fmt.Scanf("%s", &pin)
 
 	// トークン発行
@@ -49,17 +49,16 @@ func Setup() {
 	data.Save()
 }
 
-func defaultConfig() *ConfigData {
-	data := ConfigData{}
+func defaultConfig() *Configuration {
+	data := Configuration{}
 
-	// 色
+	// 配色
 	data.Color.Accent1 = "#EF7701"
 	data.Color.Accent2 = "#EF9C02"
 	data.Color.Accent3 = "#FCC01D"
 	data.Color.BoxFg = "#000000"
 	data.Color.UserName = "#FAF8F7"
 	data.Color.UserID = "#9C9C9C"
-	data.Color.Text = "#C9C9C9"
 	data.Color.Separator = "#9C9C9C"
 	data.Color.Reply = "#4DD0E1"
 	data.Color.Hashtag = "#64B5F6"
