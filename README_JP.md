@@ -256,7 +256,6 @@ Releaseから環境にあったzipをダウンロードして、バイナリフ�
 | BoxFg | ツイート番号の文字色など |
 | UserName | ユーザー名 |
 | UserID | ユーザーID |
-| Text | ツイート文 |
 | Separator | セパレーター（--------） |
 | Reply | リプライ先のID、リプライ表示 |
 | Hashtag | ハッシュタグ |
