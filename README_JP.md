@@ -7,16 +7,16 @@
 ## 特徴
 - マルチバイト文字対応
 - すぐ「にゃーん」できる
-- ~無駄に~柔軟な色設定
+- ~そこそこ~柔軟な色設定
 - 対話モード対応
 
 ## スクリーンショット
-![twnyan](https://user-images.githubusercontent.com/44780846/99259409-5058d280-285d-11eb-82f3-ba80065517be.gif)
+![twnyan](https://user-images.githubusercontent.com/44780846/101108835-bc3a8980-3618-11eb-9175-85b92fed3f30.gif)
 
 ## インストール
 **（おすすめ）**
 
-```$ go get github.com/arrow2nd/twnyan```
+```$ go get -u github.com/arrow2nd/twnyan```
 
 ### バイナリファイルを使う
 Releaseから環境にあったzipをダウンロードして、バイナリファイルにPathを通してください。
