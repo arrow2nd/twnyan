@@ -91,8 +91,8 @@ func highlight(text *string) {
 	*text = rep.ReplaceAllString(*text, color.HEX(cfg.Color.Hashtag).Sprintf("#$1"))
 
 	// メンション
-	rep = regexp.MustCompile("[@＠]([\\w]+)")
-	*text = rep.ReplaceAllString(*text, color.HEX(cfg.Color.Reply).Sprintf("@$1"))
+	rep = regexp.MustCompile("(^|[^\\w@#$%&])[@＠](\\w+)")
+	*text = rep.ReplaceAllString(*text, "$1"+color.HEX(cfg.Color.Reply).Sprintf("@$2"))
 }
 
 // replaceTag タグを置換
