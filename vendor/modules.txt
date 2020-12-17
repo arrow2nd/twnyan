@@ -31,7 +31,7 @@ github.com/flynn-archive/go-shlex
 # github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 ## explicit
 github.com/garyburd/go-oauth/oauth
-# github.com/gookit/color v1.3.2
+# github.com/gookit/color v1.3.5
 ## explicit
 github.com/gookit/color
 # github.com/mattn/go-colorable v0.1.8
@@ -41,30 +41,32 @@ github.com/mattn/go-isatty
 # github.com/mattn/go-runewidth v0.0.9
 ## explicit
 github.com/mattn/go-runewidth
-# github.com/pkg/browser v0.0.0-20201112035734-206646e67786
+# github.com/pkg/browser v0.0.0-20201207095918-0426ae3fba23
 ## explicit
 github.com/pkg/browser
 # github.com/stretchr/testify v1.6.1
 ## explicit
-# golang.org/x/crypto v0.0.0-20201117144127-c1f2f97bffc9
+# golang.org/x/crypto v0.0.0-20201217014255-9d1352758620
 ## explicit
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
+# golang.org/x/net v0.0.0-20201216054612-986b41b23924
 ## explicit
 golang.org/x/net/context
-# golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
+# golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 ## explicit
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f
+# golang.org/x/sys v0.0.0-20201214210602-f9fddec55a1e
+## explicit
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.0.0-20201117132131-f5c789dd3221
+# golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf
+## explicit
 golang.org/x/term
 # gopkg.in/abiosoft/ishell.v2 v2.0.0
 ## explicit
 gopkg.in/abiosoft/ishell.v2
-# gopkg.in/yaml.v2 v2.3.0
+# gopkg.in/yaml.v2 v2.4.0
 ## explicit
 gopkg.in/yaml.v2

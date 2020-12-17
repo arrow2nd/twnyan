@@ -15,15 +15,17 @@ require (
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/flynn-archive/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
-	github.com/gookit/color v1.3.2
+	github.com/gookit/color v1.3.5
 	github.com/mattn/go-runewidth v0.0.9
-	github.com/pkg/browser v0.0.0-20201112035734-206646e67786
+	github.com/pkg/browser v0.0.0-20201207095918-0426ae3fba23
 	github.com/stretchr/testify v1.6.1 // indirect
-	golang.org/x/crypto v0.0.0-20201117144127-c1f2f97bffc9
-	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
-	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
+	golang.org/x/crypto v0.0.0-20201217014255-9d1352758620
+	golang.org/x/net v0.0.0-20201216054612-986b41b23924 // indirect
+	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
+	golang.org/x/sys v0.0.0-20201214210602-f9fddec55a1e // indirect
+	golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf // indirect
 	gopkg.in/abiosoft/ishell.v2 v2.0.0
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 replace (
