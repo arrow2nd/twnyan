@@ -87,7 +87,7 @@ func showTweet(i int, tw *anaconda.Tweet) {
 // highlight ハイライト
 func highlight(text *string) {
 	// ハッシュタグ
-	rep := regexp.MustCompile("[#＃]([\\w\u05be\u05f3\u05f4]*[\\p{L}_]+[\\w\u05be\u05f3\u05f4]*)")
+	rep := regexp.MustCompile("[#＃]([^0-9!-/:-@[-\\^\x60{-~\\s　][^!-/:-@[-\\^\x60{-~\\s　]*)")
 	*text = rep.ReplaceAllString(*text, color.HEX(cfg.Color.Hashtag).Sprintf("#$1"))
 
 	// メンション
