@@ -55,7 +55,7 @@ golang.org/x/net/context
 # golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 ## explicit
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.0.0-20201214210602-f9fddec55a1e
+# golang.org/x/sys v0.0.0-20201218084310-7d0127a74742
 ## explicit
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
