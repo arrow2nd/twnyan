@@ -3,6 +3,8 @@ package twitter
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/arrow2nd/twnyan/util"
 )
 
 // Favorite いいねする
@@ -13,7 +15,7 @@ func Favorite(tweetID string) {
 		showAPIErrorString(err)
 		return
 	}
-	showSuccessMsg(tweet.FullText, "Favorited!:", cfg.Color.Fav)
+	util.ShowSuccessMsg("Favorited", tweet.FullText, cfg.Color.BoxFg, cfg.Color.Fav)
 }
 
 // Unfavorite いいねを取り消す
@@ -24,7 +26,7 @@ func Unfavorite(tweetID string) {
 		showAPIErrorString(err)
 		return
 	}
-	showSuccessMsg(tweet.FullText, "Unfavorited:", cfg.Color.Fav)
+	util.ShowSuccessMsg("Unfavorited", tweet.FullText, cfg.Color.BoxFg, cfg.Color.Fav)
 }
 
 // Retweet リツイートする
@@ -35,7 +37,7 @@ func Retweet(tweetID string) {
 		showAPIErrorString(err)
 		return
 	}
-	showSuccessMsg(tweet.FullText, "Retweeted!:", cfg.Color.RT)
+	util.ShowSuccessMsg("Retweeted", tweet.FullText, cfg.Color.BoxFg, cfg.Color.RT)
 }
 
 // UnRetweet リツイートを取り消す
@@ -46,7 +48,7 @@ func UnRetweet(tweetID string) {
 		showAPIErrorString(err)
 		return
 	}
-	showSuccessMsg(tweet.FullText, "UnRetweeted:", cfg.Color.RT)
+	util.ShowSuccessMsg("UnRetweeted", tweet.FullText, cfg.Color.BoxFg, cfg.Color.RT)
 }
 
 // Follow フォローする
@@ -57,7 +59,7 @@ func Follow(name string) {
 		return
 	}
 	text := fmt.Sprintf("%s (@%s)", user.Name, user.ScreenName)
-	showSuccessMsg(text, "Followed!:", cfg.Color.Follow)
+	util.ShowSuccessMsg("Followed", text, cfg.Color.BoxFg, cfg.Color.Follow)
 }
 
 // Unfollow フォローを解除する
@@ -68,7 +70,7 @@ func Unfollow(name string) {
 		return
 	}
 	text := fmt.Sprintf("%s (@%s)", user.Name, user.ScreenName)
-	showSuccessMsg(text, "Unfollowed:", cfg.Color.Follow)
+	util.ShowSuccessMsg("Unfollowed", text, cfg.Color.BoxFg, cfg.Color.Follow)
 }
 
 // Block ブロックする
@@ -79,7 +81,7 @@ func Block(name string) {
 		return
 	}
 	text := fmt.Sprintf("%s (@%s)", user.Name, user.ScreenName)
-	showSuccessMsg(text, "Blocked:", cfg.Color.Block)
+	util.ShowSuccessMsg("Blocked", text, cfg.Color.BoxFg, cfg.Color.Block)
 }
 
 // Unblock ブロックを解除する
@@ -90,7 +92,7 @@ func Unblock(name string) {
 		return
 	}
 	text := fmt.Sprintf("%s (@%s)", user.Name, user.ScreenName)
-	showSuccessMsg(text, "Unblocked:", cfg.Color.Block)
+	util.ShowSuccessMsg("Unblocked", text, cfg.Color.BoxFg, cfg.Color.Block)
 }
 
 // Mute ミュートする
@@ -101,7 +103,7 @@ func Mute(name string) {
 		return
 	}
 	text := fmt.Sprintf("%s (@%s)", user.Name, user.ScreenName)
-	showSuccessMsg(text, "Muted:", cfg.Color.Mute)
+	util.ShowSuccessMsg("Muted", text, cfg.Color.BoxFg, cfg.Color.Mute)
 }
 
 // Unmute ミュートを解除する
@@ -112,5 +114,5 @@ func Unmute(name string) {
 		return
 	}
 	text := fmt.Sprintf("%s (@%s)", user.Name, user.ScreenName)
-	showSuccessMsg(text, "Unmuted:", cfg.Color.Mute)
+	util.ShowSuccessMsg("Unmuted", text, cfg.Color.BoxFg, cfg.Color.Mute)
 }

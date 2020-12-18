@@ -1,9 +1,6 @@
 package cmd
 
-import (
-	"github.com/arrow2nd/twnyan/util"
-	"gopkg.in/abiosoft/ishell.v2"
-)
+import "gopkg.in/abiosoft/ishell.v2"
 
 func init() {
 	shell.AddCmd(&ishell.Cmd{
@@ -13,30 +10,21 @@ func init() {
 		LongHelp: createLongHelp(
 			"Get a Mentions to you.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
 			"mt",
-			"mention [counts] [data format(json|yaml)]",
+			"mention [counts]",
 			"mention 50",
 		),
 		Func: func(c *ishell.Context) {
-			counts, dataFmt := cfg.Default.Counts, ""
+			// 取得件数
+			counts := getCountsFromCmdArg(c.Args)
 
-			args, _ := util.FetchStringSpecifiedType(c.Args, "num", "str")
-			if args != nil {
-				counts, dataFmt = args[0], args[1]
-				if counts == "" {
-					counts = cfg.Default.Counts
-				}
-			}
-
+			// メンションTL読み込み
 			err := tweets.LoadMentionTL(counts)
 			if err != nil {
 				return
 			}
 
-			if dataFmt == "" {
-				tweets.DrawTweets()
-			} else {
-				tweets.OutData(dataFmt)
-			}
+			// 表示
+			tweets.DrawTweets()
 		},
 	})
 }

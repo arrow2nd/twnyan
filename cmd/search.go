@@ -1,9 +1,6 @@
 package cmd
 
-import (
-	"github.com/arrow2nd/twnyan/util"
-	"gopkg.in/abiosoft/ishell.v2"
-)
+import "gopkg.in/abiosoft/ishell.v2"
 
 func init() {
 	shell.AddCmd(&ishell.Cmd{
@@ -13,33 +10,25 @@ func init() {
 		LongHelp: createLongHelp(
 			"Search for tweets from the past 7 days.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
 			"sh",
-			"search [<keyword>] [counts] [data format(json|yaml)]",
+			"search [<keyword>] [counts]",
 			"search cats 50",
 		),
-		Func: getSearch,
+		Func: func(c *ishell.Context) {
+			// 引数をパース
+			keyword, counts, err := parseTLCmdArgs(c.Args)
+			if err != nil {
+				showWrongMsg(c.Cmd.Name)
+				return
+			}
+
+			// 検索結果取得
+			err = tweets.LoadSearchResult(keyword, counts)
+			if err != nil {
+				return
+			}
+
+			// 表示
+			tweets.DrawTweets()
+		},
 	})
-}
-
-func getSearch(c *ishell.Context) {
-	args, err := util.FetchStringSpecifiedType(c.Args, "str", "num", "str")
-	if err != nil || args[0] == "" {
-		showWrongMsg(c.Cmd.Name)
-		return
-	}
-
-	keyword, counts, dataFmt := args[0], args[1], args[2]
-	if counts == "" {
-		counts = cfg.Default.Counts
-	}
-
-	err = tweets.LoadSearchResult(keyword, counts)
-	if err != nil {
-		return
-	}
-
-	if dataFmt == "" {
-		tweets.DrawTweets()
-	} else {
-		tweets.OutData(dataFmt)
-	}
 }

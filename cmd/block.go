@@ -11,10 +11,10 @@ func init() {
 		Aliases: []string{"bk"},
 		Help:    "block user",
 		LongHelp: createLongHelp(
-			"Block user.\nIf you specify a tweet number, the person posting the tweet will be selected.",
+			"Block user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"bk",
-			"block [<userID / tweet number>]",
-			"block arrow_2nd",
+			"block [<username/tweetnumber>]",
+			"block arrow_2nd\n  block 2",
 		),
 		Func: func(c *ishell.Context) {
 			reactToUser(c.Args, c.Cmd.Name, twitter.Block)
@@ -26,10 +26,10 @@ func init() {
 		Aliases: []string{"rm"},
 		Help:    "unblock user",
 		LongHelp: createLongHelp(
-			"Unblock user.\nIf you specify a tweet number, the person posting the tweet will be selected.",
+			"Unblock user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"rm",
-			"block remove [<userID / tweet number>]",
-			"block remove arrow_2nd",
+			"block remove [<username/tweetnumber>]",
+			"block remove arrow_2nd\n  block rm 2",
 		),
 		Func: func(c *ishell.Context) {
 			reactToUser(c.Args, c.Cmd.Name, twitter.Unblock)

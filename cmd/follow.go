@@ -11,10 +11,10 @@ func init() {
 		Aliases: []string{"fw"},
 		Help:    "follow user",
 		LongHelp: createLongHelp(
-			"Follow user.\nIf you specify a tweet number, the person posting the tweet will be selected.",
+			"Follow user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"fw",
-			"follow [<userID / tweet number>]",
-			"follow arrow_2nd",
+			"follow [<username/tweetnumber>]",
+			"follow arrow_2nd\n  follow 2",
 		),
 		Func: func(c *ishell.Context) {
 			reactToUser(c.Args, c.Cmd.Name, twitter.Follow)
@@ -26,10 +26,10 @@ func init() {
 		Aliases: []string{"rm"},
 		Help:    "unfollow user",
 		LongHelp: createLongHelp(
-			"Unfollow user.\nIf you specify a tweet number, the person posting the tweet will be selected.",
+			"Unfollow user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"rm",
-			"follow remove [<userID / tweet number>]",
-			"follow remove arrow_2nd",
+			"follow remove [<username/tweetnumber>]",
+			"follow remove arrow_2nd\n  follow rm 2",
 		),
 		Func: func(c *ishell.Context) {
 			reactToUser(c.Args, c.Cmd.Name, twitter.Unfollow)

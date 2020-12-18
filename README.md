@@ -13,7 +13,7 @@ This is a Twitter client by cats for cats🐾
 - Support for interactive mode
 
 ## Screenshot
-![twnyan](https://user-images.githubusercontent.com/44780846/101108835-bc3a8980-3618-11eb-9175-85b92fed3f30.gif)
+<image src="https://user-images.githubusercontent.com/44780846/102610268-3b2ed680-4170-11eb-8095-56811ee546b4.gif" width=70%>
 
 ## How to install
 **(Recommended)**
@@ -25,11 +25,18 @@ Download a zip file from ReleasePage that fits your environment and pass the Pat
 
 ## Operating conditions
 - Windows/Linux
-- Emoji can be displayed.
+- A terminal that can display emoji
 
 ### Remarks
 - I have not been able to confirm that it works on a Mac
 - To run in a WSL environment, you need to be able to use xdg-open
+
+## initialization
+<image src="https://user-images.githubusercontent.com/44780846/102592746-432e4c80-4157-11eb-8581-29a1f8f850c9.png" width=60%>
+
+The first time you start the program, the browser will start and the authentication page will be displayed.
+
+Follow the steps on the screen and enter the displayed PIN code into twnyan.
 
 ## Usage
 ```$ twnyan [command] [argument]```
@@ -37,7 +44,6 @@ Download a zip file from ReleasePage that fits your environment and pass the Pat
 If you omit the command ```$ twnyan```, it will start in interactive mode.
 
 You can manipulate tweets (like, RT, etc.) by specifying the number of the tweet.
-> Example: ```favorite 0```
 
 ## Command list
 
@@ -45,199 +51,242 @@ You can manipulate tweets (like, RT, etc.) by specifying the number of the tweet
 <summary>Open</summary>
 
 ## tweet
-**tweet [Subcommand] [argument]**
+```Alias: tw```
 
 Manipulates tweets.
-> Alias: tw
+### tweet [text] [imagefile]
+Post tweet.
 
-| Subcommand | Alias | Description | Argument |
-| -------- | -------- | -------- | -------- |
-| none |  | The default value for the tweet is 10,000 words. | ```tweet [text] [image file]```.
-| remove | rm | remove the tweet. | ```tweet remove [<tweet number>]```.
-
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| text | If there is no text and image file, the message will be posted with a "にゃーん" | ```tweet``` |
-| image file | If there is more than one, please separate them with a space | ```tweet 🍣 sushi1.png sushi2.png``` |
-| tweet number | Separate each tweet with a space if there is more than one | ```tweet remove 2 5``` |
+| Arguments  | Hints                                                                            | Examples                            |
+| ---------- | -------------------------------------------------------------------------------- | ----------------------------------- |
+| text       | If there is no text and image file, the message will be posted with a "にゃーん" | ```tweet```                         |
+| image file | If there is more than one, please separate them with a space                     | ```tweet 🍣 sushi1.png sushi2.png``` |
 
 - You can also omit the text and just post an image (e.g. ```tweet cat.png```)
 
+### tweet remove [\<tweetnumber\>]...
+```Alias: rm```
+
+Delete tweet.
+
+| Arguments   | Hints                                                      | Examples               |
+| ----------- | ---------------------------------------------------------- | ---------------------- |
+| tweetNumber | Separate each tweet with a space if there is more than one | ```tweet remove 2 5``` |
+
 ## timeline
-**timeline [counts] [data format]**
+```Alias: tl```
 
 Get a home timeline.
-> Alias: tl
+### timeline [counts]
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| counts | If you omit it, the default value is given in the configuration file | ```timeline 39``` |
-| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```timeline 50 json``` |
+| Arguments | Hints                                                                | Examples          |
+| --------- | -------------------------------------------------------------------- | ----------------- |
+| counts    | If you omit it, the default value is given in the configuration file | ```timeline 39``` |
 
 ## mention
-**twnyan mention [counts] [data format]**
+```Alias: mt```
 
 Get a Mentions to you.
-> Alias: mt
+### mention [counts]
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| counts | If you omit it, the default value is given in the configuration file | ```mention 20``` |
-| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```mention 50 json``` |
+| Arguments | Hints                                                                | Examples         |
+| --------- | -------------------------------------------------------------------- | ---------------- |
+| counts    | If you omit it, the default value is given in the configuration file | ```mention 20``` |
 
 ## list
-**list [<list name>] [counts] [data format]**
+```Alias: ls```
 
 Get a timeline of the list.
-> Alias: ls
+### list [\<listname\>] [counts]
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| list name | If you are running in interactive mode, you can complete it with the Tab key | ```list Cats```|
-| counts | If you omit it, the default value is given in the configuration file | ```list "Cat Gathering" 30``` |
-| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```list dogs 50 json``` |
+| Arguments | Hints                                                                        | Examples                      |
+| --------- | ---------------------------------------------------------------------------- | ----------------------------- |
+| list name | If you are running in interactive mode, you can complete it with the Tab key | ```list Cats```               |
+| counts    | If you omit it, the default value is given in the configuration file         | ```list "Cat Gathering" 30``` |
 
 ## user
-**user [Subcommand] [argument]**
+```Alias: ur```
 
 Get a user timeline.
-> Alias: ur
+### user [<username/tweetnumber>] [counts]
+Get a timeline of the specified user.
 
-| Subcommand | Alias | Description | Argument |
-| -------- | -------- | -------- | -------- |
-| none |  | Get a timeline of the specified user | ```user [userID] [counts] [data format]``` |
-| number | num, no | Get a timeline of the person who posted the specified tweet | ```user number [<tweet number>] [counts]``` |
+| Arguments            | Hints                                                                | Examples                          |
+| -------------------- | -------------------------------------------------------------------- | --------------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional       | ```user github```<br>```user 1``` |
+| counts               | If you omit it, the default value is given in the configuration file | ```user twitter 15```             |
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| userID | If you omit it, you will be specified | ```user``` |
-| counts | If you omit it, the default value is given in the configuration file | ```user twitter 15``` |
-| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```user github 50 yaml``` |
+### user myuser [counts]
+Get your own timeline.
 
-- The '@' in the user ID is optional
-- If you want to output your posts in a specific data format, enter ```user [your userID] [counts] [data format]```
+| Arguments | Hints                                                                | Examples             |
+| --------- | -------------------------------------------------------------------- | -------------------- |
+| counts    | If you omit it, the default value is given in the configuration file | ```user myuser 50``` |
 
 ## search
-**search [<keyword>] [counts] [data format]**
+```Alias: sh```
 
 Searches for tweets tweets in the past 7 days.
-> Alias: sh
+### search [\<keyword\>] [counts]
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| keyword | Please enclose any spaces in double quotes | ```search "cat dog"``` |
-| counts | If you omit it, the default value is given in the configuration file | ```search sushi 5``` |
-| data format | Output the fetched data to standard output. (json or yaml can be specified) | ```search golang 50 yaml``` |
+| Arguments | Hints                                                                | Examples               |
+| --------- | -------------------------------------------------------------------- | ---------------------- |
+| keyword   | Please enclose any spaces in double quotes                           | ```search "cat dog"``` |
+| counts    | If you omit it, the default value is given in the configuration file | ```search sushi 5```   |
 
 ## favorite
-**favorite  [Subcommand] [<tweet number>]**
+```Alias: fv, like```
 
 Manipulate "like".
-> Alias: like, fv
+### favorite [\<tweetnumber\>]
+Like tweet.
 
-| Subcommand | Alias | Description |
-| -------- | -------- | -------- |
-| none |  | Like tweet |
-| remove | rm | UnLike tweet |
+| Arguments   | Hints                                                      | Examples           |
+| ----------- | ---------------------------------------------------------- | ------------------ |
+| tweetnumber | Separate each tweet with a space if there is more than one | ```favorite 1 2``` |
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| tweet number | Separate each tweet with a space if there is more than one | ```favorite 1 2``` |
+### favorite remove [\<tweetnumber\>]
+```Alias: rm```
+
+UnLike tweet.
+
+| Arguments   | Hints                                                      | Examples                  |
+| ----------- | ---------------------------------------------------------- | ------------------------- |
+| tweetnumber | Separate each tweet with a space if there is more than one | ```favorite remove 1 2``` |
 
 ## retweet
-**retweet [Subcommand] [<tweet number>]**
+```Alias: rt```
 
 Manipulate retweets.
-> Alias: rt
+### retweet [\<tweetnumber\>]...
+Retweet tweet.
 
-| Subcommand | Alias | Description | Argument |
-| -------- | -------- | -------- | -------- |
-| none |  | Retweet tweet | ```retweet [<tweet number>]``` |
-| quote | qt | Quote tweet | ```retweet quote [<tweet number>] [text] [image file]``` |
-| remove | rm | UnRetweet tweet | ```retweet remove [<tweet number>]``` |
+| Arguments   | Hints                                                      | Examples          |
+| ----------- | ---------------------------------------------------------- | ----------------- |
+| tweetnumber | Separate each tweet with a space if there is more than one | ```retweet 1 5``` |
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| text | If there is no text and image file, the message will be posted with a "にゃーん" | ```retweet quote 1``` |
-| image file | If there is more than one, please separate them with a space | ```retweet quote 1 🐾 paw_pad.png footprints.png``` |
-| tweet number | Separate each tweet with a space if there is more than one | ```retweet 1 5``` |
+### retweet quote [\<tweetnumber\>] [text] [imagefile]
+```Alias: qt```
+
+Quote tweet.
+
+| Arguments   | Hints                                                                            | Examples                                      |
+| ----------- | -------------------------------------------------------------------------------- | --------------------------------------------- |
+| tweetnumber | Specify the number of the tweet to quote                                         | ```retweet quote 1 good!!!```                 |
+| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```retweet quote 1```                         |
+| imagefile   | If there is more than one, please separate them with a space                     | ```retweet quote 1 🍣 sushi1.png sushi2.png``` |
+
+### retweet remove [\<tweetnumber\>]...
+```Alias: rm```
+
+UnRetweet tweet.
+
+| Arguments   | Hints                                                      | Examples                 |
+| ----------- | ---------------------------------------------------------- | ------------------------ |
+| tweetnumber | Separate each tweet with a space if there is more than one | ```retweet remove 1 5``` |
 
 ## reply
-**reply [<tweet number>] [text] [image file]**
+```Alias: rp```
 
 Post a reply.
-> Alias: rp
+### reply [\<tweetnumber\>] [text] [imagefile]
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| text | If there is no text and image file, the message will be posted with a "にゃーん" | ```reply 1``` |
-| image file | If there is more than one, please separate them with a space | ```reply good!!! sushi1.png sushi2.png``` |
+| Arguments   | Hints                                                                            | Examples                         |
+| ----------- | -------------------------------------------------------------------------------- | -------------------------------- |
+| tweetnumber | Specify the number of the tweet you want to reply to.                            | ```reply 1 meow```               |
+| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```reply 1```                    |
+| image file  | If there is more than one, please separate them with a space                     | ```reply 1 good!!! sushi1.png``` |
 
-- You can also omit the text and just post an image. (e.g. ```reply dog.png```)
+- You can also omit the text and just post an image. (e.g. ```reply 1 dog.png```)
 
 ## follow
-**follow [Subcommand] [<tweet number / userID>]**
+```Alias: fw```
 
 Performs a follow operation.
-> Alias: fw
+### follow [<username/tweetnumber>]
+Follow user.
 
-| Subcommand | Alias | Description |
-| -------- | -------- | -------- |
-| none | | Follow user |
-| remove | rm | Unfollow user |
+| Arguments            | Hints                                                          | Examples                              |
+| -------------------- | -------------------------------------------------------------- | ------------------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```follow github```<br>```follow 1``` |
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| tweet number | Follow the author of the specified tweet | ```follow 1``` |
-| userID | Follow users with the user ID you entered | ```follow arrow_2nd``` |
+### follow remove [<username/tweetnumber>]
+```Alias: rm```
+
+Unfollow user.
+
+| Arguments            | Hints                                                          | Examples                                               |
+| -------------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```follow remove arrow_2nd```<br>```follow remove 1``` |
 
 ## block
-**block [Subcommand] [<tweet number / userID>]**
+```Alias: bk```
 
 Performs a block operation.
-> Alias: bk
+### block [<username/tweetnumber>]
+Block user.
 
-| Subcommand | Alias | Description |
-| -------- | -------- | -------- |
-| none | | Block user |
-| remove | rm | Unblock user |
+| Arguments            | Hints                                                          | Examples                               |
+| -------------------- | -------------------------------------------------------------- | -------------------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```block arrow_2nd```<br>```block 1``` |
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| tweet number | Block the author of the specified tweet | ```block 1``` |
-| userID | Block users with the user ID you entered | ```block arrow_2nd``` |
+### block remove [<username/tweetnumber>]
+```Alias: rm```
+
+Unblock user.
+
+| Arguments            | Hints                                                          | Examples                                             |
+| -------------------- | -------------------------------------------------------------- | ---------------------------------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```block remove arrow_2nd```<br>```block remove 1``` |
 
 ## mute
-**mute [Subcommand] [<tweet number / userID>]**
+```Alias: mu```
 
 Performs a mute operation.
-> Alias: mu
+### mute [<username/tweetnumber>]
+Mute user.
 
-| Subcommand | Alias | Description |
-| -------- | -------- | -------- |
-| none | | Mute user |
-| remove | rm | Unmute user |
+| Arguments            | Hints                                                          | Examples                             |
+| -------------------- | -------------------------------------------------------------- | ------------------------------------ |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```mute arrow_2nd```<br>```mute 1``` |
 
-| Arguments | Hints | Examples |
-| -------- | -------- | -------- |
-| tweet number | Mute the author of the specified tweet | ```mute 1``` |
-| userID | Mute users with the user ID you entered | ```mute arrow_2nd``` |
+### mute remove [<username/tweetnumber>]
+```Alias: rm```
+
+Unmute user.
+
+| Arguments            | Hints                                                          | Examples                                           |
+| -------------------- | -------------------------------------------------------------- | -------------------------------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```mute remove arrow_2nd```<br>```mute remove 1``` |
 
 ## open
-**open [<tweet number>]**
+```Alias: op```
 
 View the tweet in your browser.
-> Alias: op
+### open [\<tweetnumber\>]
+
+| Arguments   | Hints                                                          | Examples     |
+| ----------- | -------------------------------------------------------------- | ------------ |
+| tweetnumber | Specify the number of the tweet to be displayed in the browser | ```open 2``` |
+
+## export
+```Alias: ep```
+
+Specify a file name excluding the file extension
+Exports the currently displayed timeline or tweets to a file.
+### export [\<format\>] [\<filename\>]
+
+| Arguments | Hints                                                                                                      | Examples                 |
+| --------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
+| format    | json/yaml can be specified<br>If you are running in interactive mode, you can complete it with the Tab key | ```export json tweets``` |
+| filename  | Specify a file name excluding the file extension                                                           | ```export yaml test```   |
 
 ## config
-**config [<Subcommand>]**
-
-Manipulation of configuration files
-
-| Subcommand | Alias | Description |
-| -------- | -------- | -------- |
-| reset    | Regenerate the configuration file | ```config reset``` |
-| remove   | Deletes the configuration file | ```config remove``` |
+Manipulation of configuration files.
+### config reset
+Regenerate the configuration file.
+### config remove
+Deletes the configuration file.
 
 </details>
 
@@ -252,34 +301,34 @@ Color setting.
 
 Specify it with a hexadecimal color code.
 
-| Name | Description |
-| -------- | -------- |
-| Accent1 | Background color of tweet numbers, etc. |
-| Accent2 | Posting times for tweets, etc. |
-| Accent3 | Somewhere |
-| BoxFg | Text color of tweet numbers, etc. |
-| UserName | Username |
-| UserID | UserID |
-| Separator |Separator（--------） |
-| Reply | Reply ID and Reply Display |
-| Hashtag | Hashtag |
-| Fav | Likes |
-| RT | Number of retweets and display of retweets |
-| Verified | Authenticated Users |
-| Protected | Protected Users |
-| Follow | Following and FollowedBy |
-| Block | Blocking |
-| Mute | Muting |
+| Name      | Description                                |
+| --------- | ------------------------------------------ |
+| Accent1   | Background color of tweetNos, etc.         |
+| Accent2   | Posting times for tweets, etc.             |
+| Accent3   | Somewhere                                  |
+| BoxFg     | Text color of tweetNos, etc.               |
+| UserName  | Username                                   |
+| UserID    | UserID                                     |
+| Separator | Separator（--------）                      |
+| Reply     | Reply ID and Reply Display                 |
+| Hashtag   | Hashtag                                    |
+| Fav       | Likes                                      |
+| RT        | Number of retweets and display of retweets |
+| Verified  | Authenticated Users                        |
+| Protected | Protected Users                            |
+| Follow    | Following and FollowedBy                   |
+| Block     | Blocking                                   |
+| Mute      | Muting                                     |
  
 ## DefaultData
 The default value is set.
 
-| Name | Description |
-| -------- | -------- |
-| Counts | Default number of fetches |
-| Prompt | Prompt character |
-| DateFormat | Date Format |
-| TimeFormat | Time Format |
+| Name       | Description               |
+| ---------- | ------------------------- |
+| Counts     | Default number of fetches |
+| Prompt     | Prompt character          |
+| DateFormat | Date Format               |
+| TimeFormat | Time Format               |
 
 The format is the same as the format string of the [time package](https://golang.org/pkg/time/#pkg-constants)
 

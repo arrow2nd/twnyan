@@ -87,7 +87,7 @@ func showTweet(i int, tw *anaconda.Tweet) {
 // highlight ハイライト
 func highlight(text *string) {
 	// ハッシュタグ
-	rep := regexp.MustCompile("[#＃]([^0-9!-/:-@[-\\^\x60{-~\\s　][^!-/:-@[-\\^\x60{-~\\s　]*)")
+	rep := regexp.MustCompile("[#＃]([^!-/:-@[-\\^\x60{-~\\s　][^!-/:-@[-\\^\x60{-~\\s　]*)")
 	*text = rep.ReplaceAllString(*text, color.HEX(cfg.Color.Hashtag).Sprintf("#$1"))
 
 	// メンション
@@ -222,22 +222,13 @@ func createSeparator(hasPutSpace bool) string {
 	return color.HEX(cfg.Color.Separator).Sprintf(" %s\n", strings.Repeat(sep, width))
 }
 
-// showSuccessMsg 処理完了メッセージを表示
-func showSuccessMsg(text, tips, hex string) {
-	util.AllReplace(&text, "[\n\r]", "")
-	text = html.UnescapeString(text)
-	cutText := util.CutString(text, util.GetWindowWidth()-len(tips)-1)
-	tips = color.HEX(hex).Sprint(tips)
-	fmt.Printf("%s %s\n", tips, cutText)
-}
-
 // showAPIErrorString APIのエラーを表示
 func showAPIErrorString(err error) {
 	bytes := []byte(err.Error())
 	errMsg := regexp.MustCompile("\"(message|error)\":\\s*\"(.+)\"").FindSubmatch(bytes)
 	if len(errMsg) == 0 {
-		color.Error.Tips(err.Error())
+		color.Error.Prompt(err.Error())
 		return
 	}
-	color.Error.Tips("%s", errMsg[2])
+	color.Error.Prompt("%s", errMsg[2])
 }
