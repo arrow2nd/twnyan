@@ -13,7 +13,7 @@ func init() {
 		LongHelp: createLongHelp(
 			"Like tweet.\nIf there is more than one, please separate them with a space.",
 			"like, fv",
-			"favorite [<tweet number>]...",
+			"favorite [<tweetnumber>]...",
 			"favorite 0 1",
 		),
 		Func: func(c *ishell.Context) {
@@ -28,7 +28,7 @@ func init() {
 		LongHelp: createLongHelp(
 			"UnLike tweet.\nIf there is more than one, please separate them with a space.",
 			"rm",
-			"favorite remove [<tweet number>]...",
+			"favorite remove [<tweetnumber>]...",
 			"favorite remove 0 1",
 		),
 		Func: func(c *ishell.Context) {

@@ -72,7 +72,7 @@ func defaultConfig() *Configuration {
 
 	// デフォルト値
 	data.Default.Counts = "25"
-	data.Default.Prompt = "> "
+	data.Default.Prompt = ": "
 	data.Default.DateFormat = "2006/01/02"
 	data.Default.TimeFormat = "15:04:05"
 

@@ -1,7 +1,6 @@
 package util
 
 import (
-	"reflect"
 	"testing"
 )
 
@@ -93,64 +92,6 @@ func TestIndexOf(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := IndexOf(tt.args.array, tt.args.str); got != tt.want {
 				t.Errorf("IndexOf() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestFetchStringSpecifiedType(t *testing.T) {
-	type args struct {
-		args  []string
-		aType []string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    []string
-		wantErr bool
-	}{
-		{
-			name: "[12]から[12,'']を取り出す",
-			args: args{
-				args:  []string{"12"},
-				aType: []string{"num", "str"},
-			},
-			want: []string{"12", ""},
-		},
-		{
-			name: "[123,abcd]から[123]を取り出す",
-			args: args{
-				args:  []string{"123", "abcd"},
-				aType: []string{"num", "num"},
-			},
-			want: []string{"123", ""},
-		},
-		{
-			name: "引数が多すぎる",
-			args: args{
-				args:  []string{"123", "abcd"},
-				aType: []string{"num"},
-			},
-			wantErr: true,
-		},
-		{
-			name: "引数が無い",
-			args: args{
-				args:  []string{},
-				aType: []string{"num"},
-			},
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := FetchStringSpecifiedType(tt.args.args, tt.args.aType...)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("FetchStringSpecifiedType() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FetchStringSpecifiedType() = %v, want %v", got, tt.want)
 			}
 		})
 	}

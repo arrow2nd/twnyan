@@ -10,7 +10,6 @@ import (
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/arrow2nd/twnyan/util"
-	"github.com/gookit/color"
 	"gopkg.in/yaml.v2"
 )
 
@@ -22,7 +21,7 @@ type Tweets struct {
 // DrawTweets ツイートを表示
 func (t *Tweets) DrawTweets() {
 	if len(t.tweets) <= 0 {
-		color.Info.Tips("Couldn't find a tweet")
+		util.ShowSuccessMsg("NotFound", "No tweets found.", cfg.Color.BoxFg, cfg.Color.Accent3)
 		return
 	}
 	for i := len(t.tweets) - 1; i >= 0; i-- {
@@ -31,34 +30,40 @@ func (t *Tweets) DrawTweets() {
 	fmt.Print("\n")
 }
 
-// OutData データを整形して標準出力する
-func (t *Tweets) OutData(dataType string) error {
+// OutPut データを整形して出力する
+func (t *Tweets) OutPut(format, filename string) error {
 	var (
 		outByte []byte
 		outStr  string
 		err     error
 	)
 
-	switch dataType {
+	// フォーマット
+	switch format {
 	case "yaml":
 		outByte, err = yaml.Marshal(t.tweets)
+		if err != nil {
+			return err
+		}
 		outStr = string(outByte)
 	case "json":
 		outByte, err = json.Marshal(t.tweets)
+		if err != nil {
+			return err
+		}
+		dst := new(bytes.Buffer)
+		json.Indent(dst, outByte, "", "\t")
+		outStr = dst.String()
 	default:
 		return errors.New("The type of data is invalid")
 	}
+
+	// 出力
+	err = util.WriteFile(filename+"."+format, outStr)
 	if err != nil {
 		return err
 	}
 
-	if dataType == "json" {
-		dst := new(bytes.Buffer)
-		json.Indent(dst, outByte, "", "\t")
-		outStr = dst.String()
-	}
-
-	fmt.Printf("%s\n", outStr)
 	return nil
 }
 
@@ -74,13 +79,13 @@ func (t *Tweets) DrawUserInfo(idx int) {
 // GetDataFromTweetNum ツイート番号から指定したデータを取得
 func (t *Tweets) GetDataFromTweetNum(numStr, dataType string) (string, error) {
 	if !util.IsNumber(numStr) {
-		return "", fmt.Errorf("Tweet number is invalid")
+		return "", fmt.Errorf("tweetnumber is invalid")
 	}
 
 	// 数値に変換
 	num, _ := strconv.Atoi(numStr)
 	if num < 0 || num > len(t.tweets)-1 {
-		return "", errors.New("Tweet number is out of range")
+		return "", errors.New("tweetnumber is out of range")
 	}
 	tw := t.tweets[num]
 

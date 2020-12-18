@@ -11,10 +11,10 @@ func init() {
 		Aliases: []string{"mu"},
 		Help:    "mute user",
 		LongHelp: createLongHelp(
-			"Mute user.\nIf you specify a tweet number, the person posting the tweet will be selected.",
+			"Mute user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"mu",
-			"mute [<userID / tweet number>]",
-			"mute arrow_2nd",
+			"mute [<username/tweetnumber>]",
+			"mute arrow_2nd\n  mute 2",
 		),
 		Func: func(c *ishell.Context) {
 			reactToUser(c.Args, c.Cmd.Name, twitter.Mute)
@@ -26,10 +26,10 @@ func init() {
 		Aliases: []string{"rm"},
 		Help:    "unmute user",
 		LongHelp: createLongHelp(
-			"Unmute user.\nIf you specify a tweet number, the person posting the tweet will be selected.",
+			"Unmute user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"rm",
-			"mute remove [<userID / tweet number>]",
-			"mute remove arrow_2nd",
+			"mute remove [<username/tweetnumber>]",
+			"mute remove arrow_2nd\n  mute rm 2",
 		),
 		Func: func(c *ishell.Context) {
 			reactToUser(c.Args, c.Cmd.Name, twitter.Unmute)

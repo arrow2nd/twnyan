@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
 	"gopkg.in/yaml.v2"
 )
@@ -98,11 +99,11 @@ func (cfg *Configuration) Remove() {
 
 	err := os.Remove(configPath)
 	if err != nil {
-		color.Error.Tips("Failed to delete the file")
+		color.Error.Prompt("Failed to delete the file")
 		return
 	}
 
-	color.Success.Tips("Configuration files have been deleted")
+	util.ShowSuccessMsg("Success", "Configuration files have been deleted", cfg.Color.BoxFg, cfg.Color.Accent3)
 }
 
 func getConfigFilePath() string {

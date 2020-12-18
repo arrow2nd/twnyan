@@ -8,7 +8,7 @@ import (
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
-const version = "1.0.2"
+const version = "1.1.0"
 
 var (
 	shell    = ishell.New()
@@ -25,10 +25,10 @@ func init() {
 		cfg.Load()
 	}
 
-	// プロンプト
+	// プロンプト設定
 	shell.SetPrompt(cfg.Default.Prompt)
 
-	// API認証処理
+	// 認証
 	twitter.SetConfig(&cfg)
 
 	// リストを取得

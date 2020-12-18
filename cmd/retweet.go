@@ -14,7 +14,7 @@ func init() {
 		LongHelp: createLongHelp(
 			"Retweet tweet.\nIf there is more than one, please separate them with a space.",
 			"rt",
-			"retweet [<tweet number>]...",
+			"retweet [<tweetnumber>]...",
 			"retweet 0 1",
 		),
 		Func: func(c *ishell.Context) {
@@ -29,10 +29,28 @@ func init() {
 		LongHelp: createLongHelp(
 			"Quote tweet.\nIf there is no tweet text, \"にゃーん\" will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
 			"qt",
-			"retweet quote [<tweet number>] [text] [image]...",
+			"retweet quote [<tweetnumber>] [text] [image]...",
 			"retweet quote 0 cute!! cat.png",
 		),
-		Func: quote,
+		Func: func(c *ishell.Context) {
+			// 引数エラー
+			if len(c.Args) < 1 {
+				showWrongMsg(c.Cmd.Name)
+				return
+			}
+
+			// URL取得
+			uri, err := tweets.GetTweetURL(c.Args[0])
+			if err != nil {
+				color.Error.Prompt(err.Error())
+				return
+			}
+
+			// URLを付与してツイート
+			status, media := parseTweetCmdArgs(c.Args[1:])
+			status += " " + uri
+			twitter.PostTweet(status, "", media)
+		},
 	})
 
 	rtCmd.AddCmd(&ishell.Cmd{
@@ -42,7 +60,7 @@ func init() {
 		LongHelp: createLongHelp(
 			"UnRetweet tweet.\nIf there is more than one, please separate them with a space.",
 			"rm",
-			"retweet remove [<tweet number>]...",
+			"retweet remove [<tweetnumber>]...",
 			"retweet remove 0 1",
 		),
 		Func: func(c *ishell.Context) {
@@ -51,22 +69,4 @@ func init() {
 	})
 
 	shell.AddCmd(rtCmd)
-}
-
-func quote(c *ishell.Context) {
-	if len(c.Args) < 1 {
-		showWrongMsg(c.Cmd.Name)
-		return
-	}
-
-	// URL取得
-	uri, err := tweets.GetTweetURL(c.Args[0])
-	if err != nil {
-		color.Error.Tips(err.Error())
-		return
-	}
-
-	status, media := parseTweetCmdArgs(c.Args[1:])
-	status += " " + uri
-	twitter.PostTweet(status, "", media)
 }

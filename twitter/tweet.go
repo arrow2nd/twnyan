@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
 	"golang.org/x/sync/errgroup"
 )
@@ -20,7 +21,7 @@ func PostTweet(status, replyToID string, files []string) {
 	// 画像をアップロード
 	val, err := upload(files)
 	if err != nil {
-		color.Error.Tips("%s", err)
+		color.Error.Prompt("%s", err)
 		return
 	}
 
@@ -37,7 +38,7 @@ func PostTweet(status, replyToID string, files []string) {
 		return
 	}
 
-	showSuccessMsg(tweet.FullText, "Tweeted!:", cfg.Color.Accent3)
+	util.ShowSuccessMsg("Tweeted", tweet.FullText, cfg.Color.BoxFg, cfg.Color.Accent3)
 }
 
 // upload 画像をアップロードする
@@ -108,5 +109,5 @@ func DeleteTweet(tweetID string) {
 		return
 	}
 
-	showSuccessMsg(tweet.FullText, "Delected!:", cfg.Color.Accent3)
+	util.ShowSuccessMsg("Deleted", tweet.FullText, cfg.Color.BoxFg, cfg.Color.Accent3)
 }

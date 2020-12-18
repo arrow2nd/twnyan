@@ -1,12 +1,14 @@
 package util
 
 import (
-	"errors"
+	"fmt"
+	"html"
 	"log"
 	"os"
 	"regexp"
 	"time"
 
+	"github.com/gookit/color"
 	"github.com/mattn/go-runewidth"
 	"golang.org/x/crypto/ssh/terminal"
 )
@@ -21,9 +23,18 @@ func GetWindowWidth() int {
 	return w
 }
 
+// ShowSuccessMsg 処理完了メッセージを表示
+func ShowSuccessMsg(tips, text, fg, bg string) {
+	AllReplace(&text, "[\n\r]", "")
+	text = html.UnescapeString(text)
+	cutText := CutString(text, GetWindowWidth()-len(tips)-2)
+	tips = color.HEXStyle(fg, bg).Sprintf(" %s ", tips)
+	fmt.Printf("%s %s\n", tips, cutText)
+}
+
 // CutString 文字列を指定した長さに丸める
 func CutString(str string, width int) string {
-	return runewidth.Truncate(str, width, "...")
+	return runewidth.Truncate(str, width, "…")
 }
 
 // ChkRegexp 文字列が含まれるかどうか
@@ -52,32 +63,28 @@ func IndexOf(array []string, str string) int {
 	return -1
 }
 
-// FetchStringSpecifiedType 引数から指定した形の文字列を取り出す
-func FetchStringSpecifiedType(args []string, aType ...string) ([]string, error) {
-	if l := len(args); l <= 0 || l > len(aType) {
-		return nil, errors.New("No arguments or too many")
-	}
-
-	results := make([]string, len(aType))
-	for _, v := range args {
-		for i, t := range aType {
-			if results[i] != "" {
-				continue
-			}
-			isNum := IsNumber(v)
-			if t == "num" && isNum || t == "str" && !isNum {
-				results[i] = v
-				break
-			}
-		}
-	}
-	return results, nil
-}
-
 // IsSameDate 今日の日付かどうか
 func IsSameDate(a time.Time) bool {
 	t := time.Now()
 	t1 := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	t2 := time.Date(a.Year(), a.Month(), a.Day(), 0, 0, 0, 0, t.Location())
 	return t1.Equal(t2)
+}
+
+// WriteFile ファイル出力
+func WriteFile(fileName, str string) error {
+	// ファイル作成
+	file, err := os.Create(fileName)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// 書き込み
+	_, err = file.WriteString(str)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
