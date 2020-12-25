@@ -13,7 +13,7 @@ This is a Twitter client by cats for cats🐾
 - Support for interactive mode
 
 ## Screenshot
-<image src="https://user-images.githubusercontent.com/44780846/102610268-3b2ed680-4170-11eb-8095-56811ee546b4.gif" width=70%>
+<image src="https://user-images.githubusercontent.com/44780846/102610268-3b2ed680-4170-11eb-8095-56811ee546b4.gif" width=90%>
 
 ## How to install
 **(Recommended)**
@@ -32,7 +32,7 @@ Download a zip file from ReleasePage that fits your environment and pass the Pat
 - To run in a WSL environment, you need to be able to use xdg-open
 
 ## initialization
-<image src="https://user-images.githubusercontent.com/44780846/102592746-432e4c80-4157-11eb-8581-29a1f8f850c9.png" width=60%>
+<image src="https://user-images.githubusercontent.com/44780846/102592746-432e4c80-4157-11eb-8581-29a1f8f850c9.png" width=90%>
 
 The first time you start the program, the browser will start and the authentication page will be displayed.
 
