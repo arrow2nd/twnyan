@@ -62,8 +62,8 @@ func (cfg *Configuration) Save() {
 	}
 
 	// 保存
-	configPath := getConfigFilePath()
-	err = ioutil.WriteFile(configPath, buf, os.ModePerm)
+	filePath := getFilePath()
+	err = ioutil.WriteFile(filePath, buf, os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,15 +71,14 @@ func (cfg *Configuration) Save() {
 
 // Load ファイル読み込み
 func (cfg *Configuration) Load() error {
-	configPath := getConfigFilePath()
-
 	// 設定ファイルの存在チェック
-	if _, err := os.Stat(configPath); err != nil {
+	filePath := getFilePath()
+	if _, err := os.Stat(filePath); err != nil {
 		return errors.New("Not found")
 	}
 
 	// 読込
-	buf, err := ioutil.ReadFile(configPath)
+	buf, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -95,9 +94,16 @@ func (cfg *Configuration) Load() error {
 
 // Remove ファイル削除
 func (cfg *Configuration) Remove() {
-	configPath := getConfigFilePath()
+	// 実行確認
+	if !util.ExecConfirmation("Delete the configuration file. Are you sure?", "Deletion canceled") {
+		return
+	}
 
-	err := os.Remove(configPath)
+	// ファイルパスを取得
+	filePath := getFilePath()
+
+	// 削除
+	err := os.Remove(filePath)
 	if err != nil {
 		color.Error.Prompt("Failed to delete the file")
 		return
@@ -106,7 +112,8 @@ func (cfg *Configuration) Remove() {
 	util.ShowSuccessMsg("Success", "Configuration files have been deleted", cfg.Color.BoxFg, cfg.Color.Accent3)
 }
 
-func getConfigFilePath() string {
+// getFilePath 設定ファイルのパスを取得
+func getFilePath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)

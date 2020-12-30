@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/gookit/color"
@@ -30,6 +31,23 @@ func ShowSuccessMsg(tips, text, fg, bg string) {
 	cutText := CutString(text, GetWindowWidth()-len(tips)-2)
 	tips = color.HEXStyle(fg, bg).Sprintf(" %s ", tips)
 	fmt.Printf("%s %s\n", tips, cutText)
+}
+
+// ExecConfirmation 実行確認
+func ExecConfirmation(msg, cancelMsg string) bool {
+	// 確認
+	yn := ""
+	color.Danger.Tips("%s (y/N)", msg)
+	fmt.Print("> ")
+	fmt.Scanf("%s", &yn)
+
+	// キャンセル
+	if strings.ToLower(yn) != "y" {
+		color.Info.Tips("%s", cancelMsg)
+		return false
+	}
+
+	return true
 }
 
 // CutString 文字列を指定した長さに丸める
