@@ -173,10 +173,10 @@ func createUserString(user *anaconda.User) string {
 	// ユーザータイプ
 	badge := ""
 	if user.Verified {
-		badge += color.HEX(cfg.Color.Verified).Sprint(" *verified*")
+		badge += color.HEX(cfg.Color.Verified).Sprint(" verified")
 	}
 	if user.Protected {
-		badge += color.HEX(cfg.Color.Protected).Sprint(" *protected*")
+		badge += color.HEX(cfg.Color.Protected).Sprint(" protected")
 	}
 
 	return fmt.Sprintf("%s %s%s", name, screenName, badge)
