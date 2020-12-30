@@ -11,7 +11,6 @@ import (
 
 // Setup 初期設定
 func Setup() {
-	// logo
 	color.FgRed.Println(" _ ")
 	color.FgLightRed.Println("| |___      ___ __  _   _  __ _ _ __")
 	color.FgYellow.Println("| __\\ \\ /\\ / / '_ \\| | | |/ _` | '_ \\")
@@ -53,22 +52,22 @@ func defaultConfig() *Configuration {
 	data := Configuration{}
 
 	// 配色
-	data.Color.Accent1 = "#EF7701"
-	data.Color.Accent2 = "#EF9C02"
-	data.Color.Accent3 = "#FCC01D"
+	data.Color.Accent1 = "#E06C75"
+	data.Color.Accent2 = "#C678DD"
+	data.Color.Accent3 = "#56B6C2"
 	data.Color.BoxFg = "#000000"
 	data.Color.UserName = "#FAF8F7"
 	data.Color.UserID = "#9C9C9C"
 	data.Color.Separator = "#9C9C9C"
-	data.Color.Reply = "#4DD0E1"
-	data.Color.Hashtag = "#64B5F6"
-	data.Color.Fav = "#F06292"
-	data.Color.RT = "#4DB6AC"
-	data.Color.Verified = "#4E88E5"
+	data.Color.Reply = "#56B6C2"
+	data.Color.Hashtag = "#61AFEF"
+	data.Color.Fav = "#E887B9"
+	data.Color.RT = "#98C379"
+	data.Color.Verified = "#5685D1"
 	data.Color.Protected = "#787878"
-	data.Color.Follow = "#1E88E5"
-	data.Color.Block = "#EF5350"
-	data.Color.Mute = "#FFF176"
+	data.Color.Follow = "#1877C9"
+	data.Color.Block = "#E06C75"
+	data.Color.Mute = "#E5C07B"
 
 	// デフォルト値
 	data.Default.Counts = "25"
