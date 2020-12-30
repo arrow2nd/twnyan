@@ -29,7 +29,7 @@ jobs:
       - run: mkdir release
       - run: go mod vendor
       - run: gox -os="linux darwin windows" -arch="amd64" -mod="vendor" -output="{{.Dir}}-{{.OS}}-{{.Arch}}/{{.Dir}}" -ldflags="-s -w"
-      - run: for os in linux darwin windows;do cp README.md README_JP.md LICENSE.txt twnyan-$os-amd64/;zip -r ./release/twnyan-$os-amd64.zip twnyan-$os-amd64/;done
+      - run: for os in linux darwin windows;do cp README.md README_EN.md LICENSE.txt twnyan-$os-amd64/;zip -r ./release/twnyan-$os-amd64.zip twnyan-$os-amd64/;done
       - run: ghr -u $CIRCLE_PROJECT_USERNAME $CIRCLE_TAG release/
 
 workflows:

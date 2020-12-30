@@ -8,7 +8,7 @@ import (
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
-const version = "1.1.0"
+const version = "1.1.1"
 
 var (
 	shell    = ishell.New()
