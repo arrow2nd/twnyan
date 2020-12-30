@@ -2,334 +2,338 @@
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 
-This is a Twitter client by cats for cats🐾
+いつでも「にゃーん」したいねこのためのTwitterクライアント
 
-> **[日本語](README_JP.md)**
+> **[English](README_EN.md)**
 
-## Features
-- Multi-byte character support
-- It's easy to tweet "にゃーん"
-- ~Needlessly~ flexible color settings
-- Support for interactive mode
+## 特徴
+- マルチバイト文字対応
+- にゃーん機能搭載
+- ~そこそこ~柔軟な色設定
+- 対話モード対応
 
-## Screenshot
-<image src="https://user-images.githubusercontent.com/44780846/102610268-3b2ed680-4170-11eb-8095-56811ee546b4.gif" width=90%>
+## スクリーンショット
+<image src="https://user-images.githubusercontent.com/44780846/103337211-e4a19080-4abd-11eb-9c14-4d01a4c86060.gif" width=90%>
 
-## How to install
-**(Recommended)**
+## 動作条件
+- Windows/Linux
+- 絵文字が表示可能なターミナル
+
+### 備考
+- Macでの動作は確認できていません
+- WSL環境で実行する場合、xdg-openが使用できる必要があります<br>~微妙な~解決策は[ここ](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)
+
+## インストール方法
+**（おすすめ）**
 
 ```$ go get -u github.com/arrow2nd/twnyan```
 
-### Use binary files
-Download a zip file from ReleasePage that fits your environment and pass the Path through the binary file.
+### バイナリファイルを使う
+Releaseから環境にあったzipをダウンロードして、バイナリファイルにPathを通してください。
 
-## Operating conditions
-- Windows/Linux
-- A terminal that can display emoji
-
-### Remarks
-- I have not been able to confirm that it works on a Mac
-- To run in a WSL environment, you need to be able to use xdg-open
-
-## initialization
+## 初期設定
 <image src="https://user-images.githubusercontent.com/44780846/102592746-432e4c80-4157-11eb-8581-29a1f8f850c9.png" width=90%>
 
-The first time you start the program, the browser will start and the authentication page will be displayed.
+初回起動時にブラウザが起動して認証ページが表示されます。
 
-Follow the steps on the screen and enter the displayed PIN code into twnyan.
+画面に従って手順を進め、表示されるPINコードをtwnyanに入力してください。
 
-## Usage
-```$ twnyan [command] [argument]```
+## 使い方
+<image src="https://user-images.githubusercontent.com/44780846/103337424-a6f13780-4abe-11eb-8cf3-084840e1d548.gif" width=90%>
 
-If you omit the command ```$ twnyan```, it will start in interactive mode.
+```$ twnyan [コマンド] [引数]```
 
-You can manipulate tweets (like, RT, etc.) by specifying the number of the tweet.
+コマンドを省略して、```$ twnyan```とすると対話モードで起動します。
 
-## Command list
+ツイートへの操作（いいね・RTなど）はツイートに割り振られている番号を指定して行います。
+
+### にゃーん
+```$ twnyan tw```
+
+これで「にゃーん」できます。(画像が添付されている場合はにゃーんしません)
+
+## コマンド一覧
 
 <details>
-<summary>Open</summary>
+<summary>開く</summary>
 
 ## tweet
-```Alias: tw```
+```エイリアス: tw```
 
-Manipulates tweets.
-### tweet [text] [imagefile]
-Post tweet.
+ツイートの操作を行います。
+### tweet [テキスト] [画像ファイル]
+ツイートを投稿します。
 
-| Arguments  | Hints                                                                            | Examples                            |
-| ---------- | -------------------------------------------------------------------------------- | ----------------------------------- |
-| text       | If there is no text and image file, the message will be posted with a "にゃーん" | ```tweet```                         |
-| image file | If there is more than one, please separate them with a space                     | ```tweet 🍣 sushi1.png sushi2.png``` |
+| 引数         | ヒント                                                     | 例                                  |
+| ------------ | ---------------------------------------------------------- | ----------------------------------- |
+| テキスト     | テキストと画像ファイルが無い場合「にゃーん」と投稿されます | ```tweet```                         |
+| 画像ファイル | 複数ある場合は半角スペースで区切って下さい                 | ```tweet 🍣 sushi1.png sushi2.png``` |
 
-- You can also omit the text and just post an image (e.g. ```tweet cat.png```)
+- テキストを省略して、画像のみの投稿も可能です。(e.g. ```tweet cat.png```)
 
-### tweet remove [\<tweetnumber\>]...
-```Alias: rm```
+### tweet remove [<ツイート番号>]...
+```エイリアス: rm```
 
-Delete tweet.
+ツイートを削除します。
 
-| Arguments   | Hints                                                      | Examples               |
-| ----------- | ---------------------------------------------------------- | ---------------------- |
-| tweetNumber | Separate each tweet with a space if there is more than one | ```tweet remove 2 5``` |
+| 引数         | ヒント                                     | 例                     |
+| ------------ | ------------------------------------------ | ---------------------- |
+| ツイート番号 | 複数ある場合は半角スペースで区切って下さい | ```tweet remove 2 5``` |
 
 ## timeline
-```Alias: tl```
+```エイリアス: tl```
 
-Get a home timeline.
-### timeline [counts]
+ホームタイムラインを表示します。
+### timeline [取得件数]
 
-| Arguments | Hints                                                                | Examples          |
-| --------- | -------------------------------------------------------------------- | ----------------- |
-| counts    | If you omit it, the default value is given in the configuration file | ```timeline 39``` |
+| 引数     | ヒント                                                   | 例                |
+| -------- | -------------------------------------------------------- | ----------------- |
+| 取得件数 | 省略した場合、設定ファイル内のデフォルト値が指定されます | ```timeline 39``` |
 
 ## mention
-```Alias: mt```
+```エイリアス: mt```
 
-Get a Mentions to you.
-### mention [counts]
+自分宛てのメンションを取得します。
+### mention [取得件数]
 
-| Arguments | Hints                                                                | Examples         |
-| --------- | -------------------------------------------------------------------- | ---------------- |
-| counts    | If you omit it, the default value is given in the configuration file | ```mention 20``` |
+| 引数     | ヒント                                                   | 例               |
+| -------- | -------------------------------------------------------- | ---------------- |
+| 取得件数 | 省略した場合、設定ファイル内のデフォルト値が指定されます | ```mention 20``` |
 
 ## list
-```Alias: ls```
+```エイリアス: ls```
 
-Get a timeline of the list.
-### list [\<listname\>] [counts]
+リストのタイムラインを表示します。
+### list [<リスト名>] [取得件数]
 
-| Arguments | Hints                                                                        | Examples                      |
-| --------- | ---------------------------------------------------------------------------- | ----------------------------- |
-| list name | If you are running in interactive mode, you can complete it with the Tab key | ```list Cats```               |
-| counts    | If you omit it, the default value is given in the configuration file         | ```list "Cat Gathering" 30``` |
+| 引数     | ヒント                                                   | 例                         |
+| -------- | -------------------------------------------------------- | -------------------------- |
+| リスト名 | 対話モードで起動している場合、Tabキーで補完が可能です    | ```list ねこたち```        |
+| 取得件数 | 省略した場合、設定ファイル内のデフォルト値が指定されます | ```list "ねこ集会 Ⅱ" 30``` |
 
 ## user
-```Alias: ur```
+```エイリアス: ur```
 
-Get a user timeline.
-### user [<username/tweetnumber>] [counts]
-Get a timeline of the specified user.
+ユーザータイムラインを表示します。
+### user [<ユーザー名/ツイート番号>] [取得件数]
+指定したユーザーのタイムラインを表示します。
 
-| Arguments            | Hints                                                                | Examples                          |
-| -------------------- | -------------------------------------------------------------------- | --------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional       | ```user github```<br>```user 1``` |
-| counts               | If you omit it, the default value is given in the configuration file | ```user twitter 15```             |
+| 引数                    | ヒント                                                   | 例                                |
+| ----------------------- | -------------------------------------------------------- | --------------------------------- |
+| ユーザー名/ツイート番号 | どちらかが指定できます<br>ユーザー名の'@'は省略可能です  | ```user github```<br>```user 1``` |
+| 取得件数                | 省略した場合、設定ファイル内のデフォルト値が指定されます | ```user twitter 15```             |
 
-### user myuser [counts]
-Get your own timeline.
+### user myuser [取得件数]
+自分のタイムラインを表示します。
 
-| Arguments | Hints                                                                | Examples             |
-| --------- | -------------------------------------------------------------------- | -------------------- |
-| counts    | If you omit it, the default value is given in the configuration file | ```user myuser 50``` |
+| 引数     | ヒント                                                   | 例                   |
+| -------- | -------------------------------------------------------- | -------------------- |
+| 取得件数 | 省略した場合、設定ファイル内のデフォルト値が指定されます | ```user myuser 50``` |
 
 ## search
-```Alias: sh```
+```エイリアス: sh```
 
-Searches for tweets tweets in the past 7 days.
-### search [\<keyword\>] [counts]
+過去7日間のツイートを検索します。
+### search [<キーワード>] [取得件数]
 
-| Arguments | Hints                                                                | Examples               |
-| --------- | -------------------------------------------------------------------- | ---------------------- |
-| keyword   | Please enclose any spaces in double quotes                           | ```search "cat dog"``` |
-| counts    | If you omit it, the default value is given in the configuration file | ```search sushi 5```   |
+| 引数       | ヒント                                                                     | 例                     |
+| ---------- | -------------------------------------------------------------------------- | ---------------------- |
+| キーワード | 先頭が記号、またはスペースを含む場合はダブルクォーテーションで囲んで下さい | ```search "cat dog"``` |
+| 取得件数   | 省略した場合、設定ファイル内のデフォルト値が指定されます                   | ```search sushi 5```   |
 
 ## favorite
-```Alias: fv, like```
+```エイリアス: fv, like```
 
-Manipulate "like".
-### favorite [\<tweetnumber\>]
-Like tweet.
+いいねの操作を行います。
+### favorite [<ツイート番号>]
+ツイートにいいね！します。
 
-| Arguments   | Hints                                                      | Examples           |
-| ----------- | ---------------------------------------------------------- | ------------------ |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```favorite 1 2``` |
+| 引数         | ヒント                                     | 例                 |
+| ------------ | ------------------------------------------ | ------------------ |
+| ツイート番号 | 複数ある場合は半角スペースで区切って下さい | ```favorite 1 2``` |
 
-### favorite remove [\<tweetnumber\>]
-```Alias: rm```
+### favorite remove [<ツイート番号>]
+```エイリアス: rm```
 
-UnLike tweet.
+ツイートのいいね！を取り消します。
 
-| Arguments   | Hints                                                      | Examples                  |
-| ----------- | ---------------------------------------------------------- | ------------------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```favorite remove 1 2``` |
+| 引数         | ヒント                                     | 例                        |
+| ------------ | ------------------------------------------ | ------------------------- |
+| ツイート番号 | 複数ある場合は半角スペースで区切って下さい | ```favorite remove 1 2``` |
 
 ## retweet
-```Alias: rt```
+```エイリアス: rt```
 
-Manipulate retweets.
-### retweet [\<tweetnumber\>]...
-Retweet tweet.
+リツイートの操作を行います。
+### retweet [<ツイート番号>]...
+ツイートをリツイートします。
 
-| Arguments   | Hints                                                      | Examples          |
-| ----------- | ---------------------------------------------------------- | ----------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```retweet 1 5``` |
+| 引数         | ヒント                                     | 例                |
+| ------------ | ------------------------------------------ | ----------------- |
+| ツイート番号 | 複数ある場合は半角スペースで区切って下さい | ```retweet 1 5``` |
 
-### retweet quote [\<tweetnumber\>] [text] [imagefile]
-```Alias: qt```
+### retweet quote [<ツイート番号>] [テキスト] [画像ファイル]
+```エイリアス: qt```
 
-Quote tweet.
+ツイートを引用リツイートします。
 
-| Arguments   | Hints                                                                            | Examples                                      |
-| ----------- | -------------------------------------------------------------------------------- | --------------------------------------------- |
-| tweetnumber | Specify the number of the tweet to quote                                         | ```retweet quote 1 good!!!```                 |
-| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```retweet quote 1```                         |
-| imagefile   | If there is more than one, please separate them with a space                     | ```retweet quote 1 🍣 sushi1.png sushi2.png``` |
+| 引数         | ヒント                                                     | 例                                 |
+| ------------ | ---------------------------------------------------------- | ---------------------------------- |
+| ツイート番号 | 引用するツイートの番号を指定してください                   | ```retweet quote 1 これすき```     |
+| テキスト     | テキストと画像ファイルが無い場合「にゃーん」と投稿されます | ```retweet quote 1```              |
+| 画像ファイル | 複数ある場合は半角スペースで区切って下さい                 | ```retweet quote 1 🍣 sushi1.png``` |
 
-### retweet remove [\<tweetnumber\>]...
-```Alias: rm```
+### retweet remove [<ツイート番号>]...
+```エイリアス: rm```
 
-UnRetweet tweet.
+リツイートを取り消します。
 
-| Arguments   | Hints                                                      | Examples                 |
-| ----------- | ---------------------------------------------------------- | ------------------------ |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```retweet remove 1 5``` |
+| 引数         | ヒント                                     | 例                       |
+| ------------ | ------------------------------------------ | ------------------------ |
+| ツイート番号 | 複数ある場合は半角スペースで区切って下さい | ```retweet remove 1 5``` |
 
 ## reply
-```Alias: rp```
+```エイリアス: rp```
 
-Post a reply.
-### reply [\<tweetnumber\>] [text] [imagefile]
+ツイートにリプライを送信します。
+### reply [<ツイート番号>] [テキスト] [画像ファイル]
 
-| Arguments   | Hints                                                                            | Examples                         |
-| ----------- | -------------------------------------------------------------------------------- | -------------------------------- |
-| tweetnumber | Specify the number of the tweet you want to reply to.                            | ```reply 1 meow```               |
-| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```reply 1```                    |
-| image file  | If there is more than one, please separate them with a space                     | ```reply 1 good!!! sushi1.png``` |
+| 引数         | ヒント                                                     | 例                                           |
+| ------------ | ---------------------------------------------------------- | -------------------------------------------- |
+| ツイート番号 | リプライ先のツイートの番号を指定してください               | ```reply 1 ねこだ！！！```                   |
+| テキスト     | テキストと画像ファイルが無い場合「にゃーん」と投稿されます | ```reply 1```                                |
+| 画像ファイル | 複数ある場合は半角スペースで区切って下さい                 | ```reply 2 寿司みて sushi1.png sushi2.png``` |
 
-- You can also omit the text and just post an image. (e.g. ```reply 1 dog.png```)
+- テキストを省略して、画像のみの投稿も可能です (e.g. ```reply dog.png```)
 
 ## follow
-```Alias: fw```
+```エイリアス: fw```
 
-Performs a follow operation.
-### follow [<username/tweetnumber>]
-Follow user.
+フォローの操作を行います。
+### follow [<ユーザー名/ツイート番号>]
+ユーザーをフォローします。
 
-| Arguments            | Hints                                                          | Examples                              |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```follow github```<br>```follow 1``` |
+| 引数                    | ヒント                                                  | 例                                    |
+| ----------------------- | ------------------------------------------------------- | ------------------------------------- |
+| ユーザー名/ツイート番号 | どちらかが指定できます<br>ユーザー名の'@'は省略可能です | ```follow github```<br>```follow 1``` |
 
-### follow remove [<username/tweetnumber>]
-```Alias: rm```
+### follow remove [<ユーザー名/ツイート番号>]
+```エイリアス: rm```
 
-Unfollow user.
+ユーザーのフォローを解除します。
 
-| Arguments            | Hints                                                          | Examples                                               |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```follow remove arrow_2nd```<br>```follow remove 1``` |
+| 引数                    | ヒント                                                  | 例                                                     |
+| ----------------------- | ------------------------------------------------------- | ------------------------------------------------------ |
+| ユーザー名/ツイート番号 | どちらかが指定できます<br>ユーザー名の'@'は省略可能です | ```follow remove arrow_2nd```<br>```follow remove 1``` |
 
 ## block
-```Alias: bk```
+```エイリアス: bk```
 
-Performs a block operation.
-### block [<username/tweetnumber>]
-Block user.
+ブロックの操作を行います。
+### block [<ユーザー名/ツイート番号>]
+ユーザーをブロックします。
 
-| Arguments            | Hints                                                          | Examples                               |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```block arrow_2nd```<br>```block 1``` |
+| 引数                    | ヒント                                                  | 例                                     |
+| ----------------------- | ------------------------------------------------------- | -------------------------------------- |
+| ユーザー名/ツイート番号 | どちらかが指定できます<br>ユーザー名の'@'は省略可能です | ```block arrow_2nd```<br>```block 1``` |
 
-### block remove [<username/tweetnumber>]
-```Alias: rm```
+### block remove [<ユーザー名/ツイート番号>]
+```エイリアス: rm```
 
-Unblock user.
+ユーザーのブロックを解除します。
 
-| Arguments            | Hints                                                          | Examples                                             |
-| -------------------- | -------------------------------------------------------------- | ---------------------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```block remove arrow_2nd```<br>```block remove 1``` |
+| 引数                    | ヒント                                                  | 例                                                   |
+| ----------------------- | ------------------------------------------------------- | ---------------------------------------------------- |
+| ユーザー名/ツイート番号 | どちらかが指定できます<br>ユーザー名の'@'は省略可能です | ```block remove arrow_2nd```<br>```block remove 1``` |
 
 ## mute
-```Alias: mu```
+```エイリアス: mu```
 
-Performs a mute operation.
-### mute [<username/tweetnumber>]
-Mute user.
+ミュートの操作を行います。
+### mute [<ユーザー名/ツイート番号>]
+ユーザーをミュートします。
 
-| Arguments            | Hints                                                          | Examples                             |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------ |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```mute arrow_2nd```<br>```mute 1``` |
+| 引数                    | ヒント                                                  | 例                                   |
+| ----------------------- | ------------------------------------------------------- | ------------------------------------ |
+| ユーザー名/ツイート番号 | どちらかが指定できます<br>ユーザー名の'@'は省略可能です | ```mute arrow_2nd```<br>```mute 1``` |
 
-### mute remove [<username/tweetnumber>]
-```Alias: rm```
+### mute remove [<ユーザー名/ツイート番号>]
+```エイリアス: rm```
 
-Unmute user.
+ユーザーのミュートを解除します。
 
-| Arguments            | Hints                                                          | Examples                                           |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```mute remove arrow_2nd```<br>```mute remove 1``` |
+| 引数                    | ヒント                                                  | 例                                                 |
+| ----------------------- | ------------------------------------------------------- | -------------------------------------------------- |
+| ユーザー名/ツイート番号 | どちらかが指定できます<br>ユーザー名の'@'は省略可能です | ```mute remove arrow_2nd```<br>```mute remove 1``` |
 
 ## open
-```Alias: op```
+```エイリアス: op```
 
-View the tweet in your browser.
-### open [\<tweetnumber\>]
+指定したツイートをブラウザで開きます。
+### open [<ツイート番号>]
 
-| Arguments   | Hints                                                          | Examples     |
-| ----------- | -------------------------------------------------------------- | ------------ |
-| tweetnumber | Specify the number of the tweet to be displayed in the browser | ```open 2``` |
+| 引数         | ヒント                                             | 例           |
+| ------------ | -------------------------------------------------- | ------------ |
+| ツイート番号 | ブラウザで表示するツイートの番号を指定してください | ```open 2``` |
 
 ## export
-```Alias: ep```
+```エイリアス: ep```
 
-Specify a file name excluding the file extension
-Exports the currently displayed timeline or tweets to a file.
-### export [\<format\>] [\<filename\>]
+表示中のタイムライン/ツイートをファイルに出力します。
+### export [<フォーマット>] [<ファイル名>]
 
-| Arguments | Hints                                                                                                      | Examples                 |
-| --------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| format    | json/yaml can be specified<br>If you are running in interactive mode, you can complete it with the Tab key | ```export json tweets``` |
-| filename  | Specify a file name excluding the file extension                                                           | ```export yaml test```   |
+| 引数         | ヒント                                             | 例                       |
+| ------------ | -------------------------------------------------- | ------------------------ |
+| フォーマット | json/yamlが指定できます<br>Tabキーで補完が可能です | ```export json tweets``` |
+| ファイル名   | 拡張子を除くファイル名を指定してください           | ```export yaml test```   |
 
 ## config
-Manipulation of configuration files.
+設定ファイルの操作を行います。
 ### config reset
-Regenerate the configuration file.
+設定を初期化します。
 ### config remove
-Deletes the configuration file.
+設定ファイルを削除します。
 
 </details>
 
-## Configuration Files
-The configuration file is saved directly under your home directory as ```.twnyan.yaml```
+## 設定ファイル
+設定ファイルはホームディレクトリ直下に```.twnyan.yaml```として保存されます。
 
 <details>
-<summary>Open</summary>
+<summary>開く</summary>
 
 ## ColorData
-Color setting.
+色の設定です。16進数カラーコードで指定します。
 
-Specify it with a hexadecimal color code.
-
-| Name      | Description                                |
-| --------- | ------------------------------------------ |
-| Accent1   | Background color of tweetNos, etc.         |
-| Accent2   | Posting times for tweets, etc.             |
-| Accent3   | Somewhere                                  |
-| BoxFg     | Text color of tweetNos, etc.               |
-| UserName  | Username                                   |
-| UserID    | UserID                                     |
-| Separator | Separator（--------）                      |
-| Reply     | Reply ID and Reply Display                 |
-| Hashtag   | Hashtag                                    |
-| Fav       | Likes                                      |
-| RT        | Number of retweets and display of retweets |
-| Verified  | Authenticated Users                        |
-| Protected | Protected Users                            |
-| Follow    | Following and FollowedBy                   |
-| Block     | Blocking                                   |
-| Mute      | Muting                                     |
+| 名前      | 説明                         |
+| --------- | ---------------------------- |
+| Accent1   | ツイート番号の背景色など     |
+| Accent2   | ツイートの投稿時間など       |
+| Accent3   | どこか                       |
+| BoxFg     | ツイート番号の文字色など     |
+| UserName  | ユーザー名                   |
+| UserID    | ユーザーID                   |
+| Separator | セパレータ（--------）       |
+| Reply     | リプライ先のID、リプライ表示 |
+| Hashtag   | ハッシュタグ                 |
+| Fav       | いいね数                     |
+| RT        | リツイート数、リツイート表示 |
+| Verified  | 認証済み表示                 |
+| Protected | 鍵アカウント表示             |
+| Follow    | フォロー表示                 |
+| Block     | ブロック表示                 |
+| Mute      | ミュート表示                 |
  
 ## DefaultData
-The default value is set.
+デフォルト値の設定です。
 
-| Name       | Description               |
-| ---------- | ------------------------- |
-| Counts     | Default number of fetches |
-| Prompt     | Prompt character          |
-| DateFormat | Date Format               |
-| TimeFormat | Time Format               |
+| 名前       | 説明                 |
+| ---------- | -------------------- |
+| Counts     | デフォルトの取得件数 |
+| Prompt     | プロンプトの表示文字 |
+| DateFormat | 日付のフォーマット   |
+| TimeFormat | 時刻のフォーマット   |
 
-The format is the same as the format string of the [time package](https://golang.org/pkg/time/#pkg-constants)
+フォーマットは[timeパッケージのフォーマット文字列](https://golang.org/pkg/time/#pkg-constants)と同じ書式です。
 
 </details>
