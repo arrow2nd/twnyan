@@ -47,13 +47,13 @@ func getFriendships(u *anaconda.User) string {
 	for _, v := range friendships[0].Connections {
 		switch v {
 		case "followed_by":
-			status += color.HEX(cfg.Color.Follow).Sprint("[followed-by] ")
+			status += color.HEXStyle(cfg.Color.BoxFg, cfg.Color.Follow).Sprint(" followed-by ") + " "
 		case "following":
-			status += color.HEX(cfg.Color.Follow).Sprintf("[%s] ", v)
+			status += color.HEXStyle(cfg.Color.BoxFg, cfg.Color.Follow).Sprintf(" %s ", v) + " "
 		case "blocking":
-			status += color.HEX(cfg.Color.Block).Sprintf("[%s] ", v)
+			status += color.HEXStyle(cfg.Color.BoxFg, cfg.Color.Block).Sprintf(" %s ", v) + " "
 		case "muting":
-			status += color.HEX(cfg.Color.Mute).Sprintf("[%s] ", v)
+			status += color.HEXStyle(cfg.Color.BoxFg, cfg.Color.Mute).Sprintf(" %s ", v) + " "
 		}
 	}
 
