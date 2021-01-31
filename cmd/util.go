@@ -25,13 +25,12 @@ func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 
 // parseTLCmdArgs タイムライン系コマンドの引数をパースする
 func (cmd *Cmd) parseTLCmdArgs(args []string) (string, string, error) {
-	// 引数エラー
+	// 引数をチェック
 	if len(args) <= 0 {
 		return "", "", errors.New("No arguments")
 	}
-	// 文字列、デフォルトの取得件数
 	str, counts := args[0], cmd.cfg.Option.Counts
-	// 取得件数
+	// 取得件数の指定があれば置換
 	if len(args) >= 2 {
 		counts = args[1]
 	}
@@ -40,7 +39,7 @@ func (cmd *Cmd) parseTLCmdArgs(args []string) (string, string, error) {
 
 // getCountsFromCmdArg 引数から取得件数を取得
 func (cmd *Cmd) getCountsFromCmdArg(args []string) string {
-	// 引数無し・数値以外ならデフォルト値を返す
+	// 引数無し、数値以外ならデフォルト値を返す
 	if len(args) <= 0 || !util.IsNumber(args[0]) {
 		return cmd.cfg.Option.Counts
 	}
@@ -49,36 +48,50 @@ func (cmd *Cmd) getCountsFromCmdArg(args []string) string {
 
 // reactToTweet ツイートにリアクションする
 func (cmd *Cmd) reactToTweet(args []string, cmdName string, function func(string) error) {
+	// 引数をチェック
 	if len(args) <= 0 {
 		showWrongMsg(cmdName)
 		return
 	}
+	// 引数の数だけ処理
 	for _, v := range args {
 		id, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
 		if err != nil {
 			color.Error.Prompt(err.Error())
 			return
 		}
-		function(id)
+		err = function(id)
+		if err != nil {
+			color.Error.Prompt(err.Error())
+			return
+		}
 	}
 }
 
 // reactToUser ユーザーにリアクションする
 func (cmd *Cmd) reactToUser(args []string, cmdName string, function func(string) error) {
+	var err error
+	// 引数をチェック
 	if len(args) <= 0 {
 		showWrongMsg(cmdName)
 		return
 	}
+
 	screenName := args[0]
+
+	// ツイート番号ならスクリーンネームに置換
 	if util.IsNumber(args[0]) {
-		var err error
 		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenname")
 		if err != nil {
 			color.Error.Prompt(err.Error())
 			return
 		}
 	}
-	function(screenName)
+
+	err = function(screenName)
+	if err != nil {
+		color.Error.Prompt(err.Error())
+	}
 }
 
 // CreateLongHelp 詳しいヘルプ文を作成
