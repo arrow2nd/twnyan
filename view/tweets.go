@@ -29,7 +29,7 @@ func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
 	}
 	// RTなら元のツイートに置換
 	if t.RetweetedStatus != nil {
-		header += color.HEX(v.cfg.Color.Retweet).Sprintf("RT by %s @%s\n", t.User.Name, t.User.ScreenName)
+		header += color.HEX(v.cfg.Color.Retweet).Sprintf("RT by %s @%s\n", v.truncateUserName(t.User.Name), t.User.ScreenName)
 		t = t.RetweetedStatus
 	}
 	// リプライなら宛先を追加

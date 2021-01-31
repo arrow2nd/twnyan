@@ -47,10 +47,8 @@ func (v *View) DrawUser(u *anaconda.User, c []string) {
 }
 
 func (v *View) createUserStr(u *anaconda.User) string {
-	width := util.GetWindowWidth()
-
 	// ユーザー名、スクリーンネーム
-	name := runewidth.Truncate(u.Name, width/2, "…")
+	name := v.truncateUserName(u.Name)
 	name = color.HEX(v.cfg.Color.UserName).Sprint(name)
 	screenName := color.HEX(v.cfg.Color.ScreenName).Sprintf("@%s", u.ScreenName)
 
@@ -66,6 +64,11 @@ func (v *View) createUserStr(u *anaconda.User) string {
 	// 結合
 	text := fmt.Sprintf("%s %s%s", name, screenName, badge)
 	return text
+}
+
+func (v *View) truncateUserName(un string) string {
+	width := util.GetWindowWidth()
+	return runewidth.Truncate(un, width/2, "…")
 }
 
 func (v *View) createConnectionStr(c []string) string {
