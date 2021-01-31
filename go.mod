@@ -15,20 +15,21 @@ require (
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/flynn-archive/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
-	github.com/gookit/color v1.3.5
-	github.com/mattn/go-runewidth v0.0.9
-	github.com/pkg/browser v0.0.0-20201207095918-0426ae3fba23
+	github.com/gookit/color v1.3.6
+	github.com/mattn/go-runewidth v0.0.10
+	github.com/pkg/browser v0.0.0-20210115035449-ce105d075bb4
+	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect
-	golang.org/x/crypto v0.0.0-20201217014255-9d1352758620
-	golang.org/x/net v0.0.0-20201216054612-986b41b23924 // indirect
+	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
+	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
-	golang.org/x/sys v0.0.0-20201218084310-7d0127a74742 // indirect
+	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
 	golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf // indirect
 	gopkg.in/abiosoft/ishell.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
 replace (
-	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db => github.com/arrow2nd/readline v0.0.0-20201119043036-5ad5643ca11c
+	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db => github.com/arrow2nd/readline v0.0.0-20210131072404-666394925404
 	github.com/flynn-archive/go-shlex v0.0.0-20150515145356-3f9db97f8568 => github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 )
