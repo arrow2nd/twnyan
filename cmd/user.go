@@ -54,12 +54,22 @@ func (cmd *Cmd) newUserCmd() {
 }
 
 func (cmd *Cmd) loadUserTL(screenName, counts string) {
+	// ユーザータイムライン取得
 	v := api.CreateURLValues(counts)
 	v.Add("screen_name", screenName)
 	t, err := cmd.api.GetTimeline("user", v)
 	if err != nil {
 		return
 	}
+	// 関係取得
+	u := (*t)[0].User
+	fs, err := cmd.api.GetFriendships(u.IdStr)
+	if err != nil {
+		return
+	}
+	// ツイート登録
 	cmd.view.RegisterTweets(t)
+	// 描画
 	cmd.view.DrawTweets()
+	cmd.view.DrawUser(&u, fs)
 }
