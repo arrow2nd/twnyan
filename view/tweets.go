@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"html"
+	"regexp"
 	"strconv"
 
 	"github.com/ChimeraCoder/anaconda"
@@ -12,16 +13,20 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-// DrawTweets ツイートを描画
+// DrawTweets ツイート描画
 func (v *View) DrawTweets() {
 	for i := len(v.tweets) - 1; i >= 0; i-- {
-		v.drawTweet(i, &v.tweets[i])
+		v.drawTweet(i, false, &v.tweets[i])
 	}
 }
 
-func (v *View) drawTweet(i int, t *anaconda.Tweet) {
+func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
 	header := ""
-	width := util.GetWindowWidth()
+
+	// QTならセパレータを挿入
+	if isQuote {
+		header += v.createSeparator()
+	}
 	// RTなら元のツイートに置換
 	if t.RetweetedStatus != nil {
 		header += color.HEX(v.cfg.Color.Retweet).Sprintf("RT by %s @%s\n", t.User.Name, t.User.ScreenName)
@@ -31,17 +36,81 @@ func (v *View) drawTweet(i int, t *anaconda.Tweet) {
 	if t.InReplyToScreenName != "" {
 		header += color.HEX(v.cfg.Color.Reply).Sprintf("Reply to @%s\n", t.InReplyToScreenName)
 	}
-	// ヘッダー作成
+
+	// ツイート番号
+	index := "↪"
+	if !isQuote {
+		index = color.HEXStyle(v.cfg.Color.BoxForground, v.cfg.Color.Accent1).Sprintf(" %d ", i)
+	}
+	// ユーザー情報
 	userInfo := v.createUserStr(&t.User)
+	// 投稿時刻
 	pt, _ := t.CreatedAtTime()
 	postTime := v.createTimeStr(pt)
+	// いいね、RT数
 	fav := v.createReactionCountStr(t.FavoriteCount, t.Favorited, "Fav")
 	rt := v.createReactionCountStr(t.RetweetCount, t.Retweeted, "RT")
-	header += fmt.Sprintf("%s %s %s%s", userInfo, postTime, fav, rt)
-	// テキスト作成
-	text := runewidth.Wrap(html.UnescapeString(t.FullText), width)
+	// ヘッダー
+	header += fmt.Sprintf("%s %s %s%s%s", index, userInfo, postTime, fav, rt)
+	// ツイート内容
+	text := v.createTweetText(t)
+
 	// 表示
-	fmt.Printf("%s\n%s\n\n", header, text)
+	fmt.Printf("%s\n%s", header, text)
+	// QTなら引用元を表示
+	if t.QuotedStatus != nil {
+		v.drawTweet(0, true, t.QuotedStatus)
+		return
+	}
+	fmt.Print("\n")
+}
+
+func (v *View) createTweetText(t *anaconda.Tweet) string {
+	width := util.GetWindowWidth()
+
+	// 画面幅でワープ
+	text := runewidth.Wrap(html.UnescapeString(t.FullText), width)
+	text += "\n"
+
+	// ハッシュタグをハイライト
+	if len(t.Entities.Hashtags) != 0 {
+		for _, h := range t.Entities.Hashtags {
+			rep := regexp.MustCompile(fmt.Sprintf("[#＃](%s)([\\s])", h.Text))
+			text = rep.ReplaceAllString(text, color.HEX(v.cfg.Color.Hashtag).Sprintf("#$1$2"))
+		}
+	}
+	// メンションをハイライト
+	if len(t.Entities.User_mentions) != 0 {
+		rep := regexp.MustCompile("(^|[^\\w@#$%&])[@＠](\\w+)")
+		text = rep.ReplaceAllString(text, "$1"+color.HEX(v.cfg.Color.Reply).Sprintf("@$2"))
+	}
+
+	return text
+}
+
+func (v *View) createReactionCountStr(count int, flg bool, unit string) string {
+	// 表示色
+	colorCode := v.cfg.Color.Favorite
+	if unit == "RT" {
+		colorCode = v.cfg.Color.Retweet
+	}
+
+	// カウントが0なら処理を終了
+	if count <= 0 {
+		return ""
+	} else if count > 1 {
+		unit += "s"
+	}
+
+	// 文字列作成
+	text := " "
+	if flg {
+		text += color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", count, unit)
+	} else {
+		text += color.HEX(colorCode).Sprintf("%d%s", count, unit)
+	}
+
+	return text
 }
 
 // RegisterTweets ツイートを登録
@@ -71,11 +140,13 @@ func (v *View) GetDataFromTweetNum(numStr, dataType string) (string, error) {
 	if num < 0 || num > len(v.tweets)-1 {
 		return "", errors.New("tweetnumber is out of range")
 	}
-	// ツイートを取得
+
+	// ツイート取得
 	tweet := v.tweets[num]
 	if tweet.RetweetedStatus != nil {
 		tweet = *tweet.RetweetedStatus
 	}
+
 	// 指定されたデータを返す
 	switch dataType {
 	case "screenname":
