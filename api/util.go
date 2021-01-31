@@ -14,8 +14,9 @@ func CreateURLValues(cnt string) url.Values {
 	return v
 }
 
+// parseAPIError エラーメッセージをパース
 func parseAPIError(err error) string {
 	bytes := []byte(err.Error())
 	errMsg := regexp.MustCompile("\"(message|error)\":\\s*\"(.+)\"").FindSubmatch(bytes)
-	return fmt.Sprint(errMsg[2])
+	return fmt.Sprintf("%s", errMsg[2])
 }
