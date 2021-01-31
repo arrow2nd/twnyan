@@ -3,44 +3,58 @@ package cmd
 import (
 	"os"
 
+	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/config"
-	"github.com/arrow2nd/twnyan/twitter"
+	"github.com/arrow2nd/twnyan/view"
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
-const version = "1.1.1"
+// Cmd コマンド
+type Cmd struct {
+	shell *ishell.Shell
+	cfg   *config.Config
+	api   *api.TwitterAPI
+	view  *view.View
+}
 
-var (
-	shell    = ishell.New()
-	cfg      config.Configuration
-	tweets   twitter.Tweets
-	listName []string
-	listID   []int64
-)
-
-func init() {
-	// 設定読み込み
-	if err := cfg.Load(); err != nil {
-		config.Setup()
-		cfg.Load()
+// New コマンド構造体作成
+func New(c *config.Config, a *api.TwitterAPI) *Cmd {
+	nc := &Cmd{
+		shell: ishell.New(),
+		cfg:   c,
+		api:   a,
+		view:  view.New(c),
 	}
+	return nc
+}
 
+// Init 初期化
+func (cmd *Cmd) Init() {
+	// コマンド登録
+	cmd.newTweetCmd()
+	cmd.newReplyCmd()
+	cmd.newTimelineCmd()
+	cmd.newMentionCmd()
+	cmd.newListCmd()
+	cmd.newSearchCmd()
+	cmd.newUserCmd()
+	cmd.newFaoriteCmd()
+	cmd.newRetweetCmd()
+	cmd.newFollowCmd()
+	cmd.newBlockCmd()
+	cmd.newMuteCmd()
+	cmd.newOpenCmd()
+	cmd.newVersionCmd()
 	// プロンプト設定
-	shell.SetPrompt(cfg.Default.Prompt)
-
-	// 認証
-	twitter.SetConfig(&cfg)
-
-	// リストを取得
-	listName, listID = twitter.GetLists()
+	cmd.shell.SetPrompt(cmd.cfg.Option.Prompt)
 }
 
 // Run 実行
-func Run() {
+func (cmd *Cmd) Run() {
 	if len(os.Args) > 1 {
-		shell.Process(os.Args[1:]...)
+		cmd.shell.Process(os.Args[1:]...)
 	} else {
-		shell.Process("timeline")
-		shell.Run()
+		cmd.shell.Process("timeline")
+		cmd.shell.Run()
 	}
 }

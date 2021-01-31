@@ -9,9 +9,8 @@ import (
 )
 
 // parseTweetCmdArgs ツイート系コマンドの引数をパースする
-func parseTweetCmdArgs(args []string) (string, []string) {
+func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 	status, media := "にゃーん", []string{}
-
 	if len(args) > 0 {
 		if util.ChkRegexp("\\.\\w{3,4}$", args[0]) {
 			status = ""
@@ -21,48 +20,41 @@ func parseTweetCmdArgs(args []string) (string, []string) {
 			media = args[1:]
 		}
 	}
-
 	return status, media
 }
 
 // parseTLCmdArgs タイムライン系コマンドの引数をパースする
-func parseTLCmdArgs(args []string) (string, string, error) {
+func (cmd *Cmd) parseTLCmdArgs(args []string) (string, string, error) {
 	// 引数エラー
 	if len(args) <= 0 {
 		return "", "", errors.New("No arguments")
 	}
-
 	// 文字列、デフォルトの取得件数
-	str, counts := args[0], cfg.Default.Counts
-
+	str, counts := args[0], cmd.cfg.Option.Counts
 	// 取得件数
 	if len(args) >= 2 {
 		counts = args[1]
 	}
-
 	return str, counts, nil
 }
 
 // getCountsFromCmdArg 引数から取得件数を取得
-func getCountsFromCmdArg(args []string) string {
+func (cmd *Cmd) getCountsFromCmdArg(args []string) string {
 	// 引数無し・数値以外ならデフォルト値を返す
 	if len(args) <= 0 || !util.IsNumber(args[0]) {
-		return cfg.Default.Counts
+		return cmd.cfg.Option.Counts
 	}
-
 	return args[0]
 }
 
 // reactToTweet ツイートにリアクションする
-func reactToTweet(args []string, cmdName string, function func(string)) {
-	// 引数エラー
+func (cmd *Cmd) reactToTweet(args []string, cmdName string, function func(string) error) {
 	if len(args) <= 0 {
 		showWrongMsg(cmdName)
 		return
 	}
-
 	for _, v := range args {
-		id, err := tweets.GetDataFromTweetNum(v, "TweetID")
+		id, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
 		if err != nil {
 			color.Error.Prompt(err.Error())
 			return
@@ -72,42 +64,21 @@ func reactToTweet(args []string, cmdName string, function func(string)) {
 }
 
 // reactToUser ユーザーにリアクションする
-func reactToUser(args []string, cmdName string, function func(string)) {
-	// 引数エラー
+func (cmd *Cmd) reactToUser(args []string, cmdName string, function func(string) error) {
 	if len(args) <= 0 {
 		showWrongMsg(cmdName)
 		return
 	}
-
 	screenName := args[0]
-
-	// ツイート番号ならスクリーンネームに置換
 	if util.IsNumber(args[0]) {
 		var err error
-		screenName, err = tweets.GetDataFromTweetNum(args[0], "ScreenName")
+		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenname")
 		if err != nil {
 			color.Error.Prompt(err.Error())
 			return
 		}
 	}
-
 	function(screenName)
-}
-
-// createCompleter 入力補完用リストを作成
-func createCompleter(list []string) []string {
-	if list == nil {
-		return nil
-	}
-	r := make([]string, len(list))
-	for i, v := range list {
-		if util.ChkRegexp("\\s", v) {
-			r[i] = fmt.Sprintf("\"%s\"", v)
-		} else {
-			r[i] = v
-		}
-	}
-	return r
 }
 
 // CreateLongHelp 詳しいヘルプ文を作成

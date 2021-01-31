@@ -1,48 +1,55 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
-func init() {
-	shell.AddCmd(&ishell.Cmd{
+func (cmd *Cmd) newListCmd() {
+	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "list",
 		Aliases: []string{"ls"},
-		Help:    "get the list timeline",
+		Func: func(c *ishell.Context) {
+			name, counts, err := cmd.parseTLCmdArgs(c.Args)
+			if err != nil {
+				showWrongMsg(c.Cmd.Name)
+				return
+			}
+			i := util.IndexOf(cmd.api.ListNames, name)
+			if i == -1 {
+				color.Error.Prompt("No list exists!")
+				return
+			}
+			t, err := cmd.api.GetListTimeline(cmd.api.ListIDs[i], counts)
+			if err != nil {
+				return
+			}
+			cmd.view.RegisterTweets(t)
+			cmd.view.DrawTweets()
+		},
+		Help: "get the list timeline",
 		LongHelp: createLongHelp(
 			"Get the list timeline.\nYou can use the tab key to complete the list name.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
 			"ls",
 			"list [<listname>] [counts]",
 			"list cats 50",
 		),
-		Func: func(c *ishell.Context) {
-			// 引数をパース
-			name, counts, err := parseTLCmdArgs(c.Args)
-			if err != nil {
-				showWrongMsg(c.Cmd.Name)
-				return
-			}
-
-			// リストの存在チェック
-			idx := util.IndexOf(listName, name)
-			if idx == -1 {
-				color.Error.Prompt("No list exists!")
-				return
-			}
-
-			// リストTL読み込み
-			err = tweets.LoadListTL(listID[idx], counts)
-			if err != nil {
-				return
-			}
-
-			// 表示
-			tweets.DrawTweets()
-		},
 		Completer: func([]string) []string {
-			return createCompleter(listName)
+			if cmd.api.ListNames == nil {
+				return nil
+			}
+			cmp := make([]string, len(cmd.api.ListNames))
+			for i, v := range cmd.api.ListNames {
+				if util.ChkRegexp("\\s", v) {
+					cmp[i] = fmt.Sprintf("\"%s\"", v)
+				} else {
+					cmp[i] = v
+				}
+			}
+			return cmp
 		},
 	})
 }

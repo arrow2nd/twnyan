@@ -1,9 +1,12 @@
 package cmd
 
-import "gopkg.in/abiosoft/ishell.v2"
+import (
+	"github.com/arrow2nd/twnyan/api"
+	"gopkg.in/abiosoft/ishell.v2"
+)
 
-func init() {
-	shell.AddCmd(&ishell.Cmd{
+func (cmd *Cmd) newMentionCmd() {
+	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "mention",
 		Aliases: []string{"mt"},
 		Help:    "get a Mentions to you",
@@ -14,17 +17,14 @@ func init() {
 			"mention 50",
 		),
 		Func: func(c *ishell.Context) {
-			// 取得件数
-			counts := getCountsFromCmdArg(c.Args)
-
-			// メンションTL読み込み
-			err := tweets.LoadMentionTL(counts)
+			counts := cmd.getCountsFromCmdArg(c.Args)
+			v := api.CreateURLValues(counts)
+			t, err := cmd.api.GetTimeline("mention", v)
 			if err != nil {
 				return
 			}
-
-			// 表示
-			tweets.DrawTweets()
+			cmd.view.RegisterTweets(t)
+			cmd.view.DrawTweets()
 		},
 	})
 }

@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strings"
 	"time"
 
 	"github.com/gookit/color"
@@ -31,23 +30,6 @@ func ShowSuccessMsg(tips, text, fg, bg string) {
 	cutText := CutString(text, GetWindowWidth()-len(tips)-2)
 	tips = color.HEXStyle(fg, bg).Sprintf(" %s ", tips)
 	fmt.Printf("%s %s\n", tips, cutText)
-}
-
-// ExecConfirmation 実行確認
-func ExecConfirmation(msg, cancelMsg string) bool {
-	// 確認
-	yn := ""
-	color.Danger.Tips("%s (y/N)", msg)
-	fmt.Print("> ")
-	fmt.Scanf("%s", &yn)
-
-	// キャンセル
-	if strings.ToLower(yn) != "y" {
-		color.Info.Tips("%s", cancelMsg)
-		return false
-	}
-
-	return true
 }
 
 // CutString 文字列を指定した長さに丸める
@@ -87,22 +69,4 @@ func IsSameDate(a time.Time) bool {
 	t1 := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	t2 := time.Date(a.Year(), a.Month(), a.Day(), 0, 0, 0, 0, t.Location())
 	return t1.Equal(t2)
-}
-
-// WriteFile ファイル出力
-func WriteFile(fileName, str string) error {
-	// ファイル作成
-	file, err := os.Create(fileName)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	// 書き込み
-	_, err = file.WriteString(str)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

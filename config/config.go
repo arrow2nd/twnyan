@@ -1,122 +1,101 @@
 package config
 
-import (
-	"errors"
-	"io/ioutil"
-	"log"
-	"os"
-	"path"
-
-	"github.com/arrow2nd/twnyan/util"
-	"github.com/gookit/color"
-	"gopkg.in/yaml.v2"
+const (
+	crdFile = ".cred.yaml"
+	optFile = "option.yaml"
+	colFile = "color.yaml"
 )
 
-// Configuration 設定情報
-type Configuration struct {
-	Credentials Credentials
-	Color       ColorScheme
-	Default     DefaultValue
+// Config 設定構造体
+type Config struct {
+	Cred   *cred
+	Option *option
+	Color  *color
 }
 
-// Credentials トークン情報
-type Credentials struct {
+type cred struct {
 	Token  string
 	Secret string
 }
 
-// ColorScheme 配色
-type ColorScheme struct {
-	Accent1   string
-	Accent2   string
-	Accent3   string
-	BoxFg     string
-	UserName  string
-	UserID    string
-	Separator string
-	Reply     string
-	Hashtag   string
-	Fav       string
-	RT        string
-	Verified  string
-	Protected string
-	Follow    string
-	Block     string
-	Mute      string
-}
-
-// DefaultValue デフォルト値
-type DefaultValue struct {
-	Counts     string
+type option struct {
+	ConfigDir  string
 	Prompt     string
+	Counts     string
 	DateFormat string
 	TimeFormat string
 }
 
-// Save ファイル保存
-func (cfg *Configuration) Save() {
-	// byteに変換
-	buf, err := yaml.Marshal(cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// 保存
-	filePath := getFilePath()
-	err = ioutil.WriteFile(filePath, buf, os.ModePerm)
-	if err != nil {
-		log.Fatal(err)
-	}
+type color struct {
+	Accent1      string
+	Accent2      string
+	Accent3      string
+	Dim          string
+	BoxForground string
+	Separator    string
+	UserName     string
+	ScreenName   string
+	Reply        string
+	Hashtag      string
+	Favorite     string
+	Retweet      string
+	Verified     string
+	Protected    string
+	Follow       string
+	Block        string
+	Mute         string
 }
 
-// Load ファイル読み込み
-func (cfg *Configuration) Load() error {
-	// 設定ファイルの存在チェック
-	filePath := getFilePath()
-	if _, err := os.Stat(filePath); err != nil {
-		return errors.New("Not found")
+// New 設定構造体作成
+func New() *Config {
+	cfg := &Config{
+		Cred: &cred{
+			Token:  "",
+			Secret: "",
+		},
+		Option: &option{
+			ConfigDir:  getConfigDir(),
+			Counts:     "25",
+			DateFormat: "2006/01/02",
+			TimeFormat: "15:04:05",
+		},
+		Color: &color{
+			Accent1:      "#e06c75",
+			Accent2:      "#c678dd",
+			Accent3:      "#56b6c2",
+			Dim:          "#343a44",
+			BoxForground: "#000000",
+			Separator:    "#9c9c9c",
+			UserName:     "#faf8f7",
+			ScreenName:   "#9c9c9c",
+			Reply:        "#56b6c2",
+			Hashtag:      "#61afef",
+			Favorite:     "#e887b9",
+			Retweet:      "#98c379",
+			Verified:     "#5685d1",
+			Protected:    "#787878",
+			Follow:       "#1877c9",
+			Block:        "#e06c75",
+			Mute:         "#e5c07b",
+		},
 	}
-
-	// 読込
-	buf, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// 構造体にマッピング
-	err = yaml.Unmarshal(buf, cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return nil
+	return cfg
 }
 
-// Remove ファイル削除
-func (cfg *Configuration) Remove() {
-	// 実行確認
-	if !util.ExecConfirmation("Delete the configuration file. Are you sure?", "Deletion canceled") {
-		return
-	}
-
-	// ファイルパスを取得
-	filePath := getFilePath()
-
-	// 削除
-	err := os.Remove(filePath)
-	if err != nil {
-		color.Error.Prompt("Failed to delete the file")
-		return
-	}
-
-	util.ShowSuccessMsg("Success", "Configuration files have been deleted", cfg.Color.BoxFg, cfg.Color.Accent3)
+// Save 保存
+func (cfg *Config) Save() {
+	saveYaml(cfg.Option.ConfigDir, crdFile, cfg.Cred)
+	saveYaml(cfg.Option.ConfigDir, optFile, cfg.Option)
+	saveYaml(cfg.Option.ConfigDir, colFile, cfg.Color)
 }
 
-// getFilePath 設定ファイルのパスを取得
-func getFilePath() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatal(err)
+// Load 読込
+func (cfg *Config) Load() bool {
+	if !configFileExists(cfg.Option.ConfigDir) {
+		return false
 	}
-	return path.Join(home, ".twnyan.yaml")
+	loadYaml(cfg.Option.ConfigDir, crdFile, cfg.Cred)
+	loadYaml(cfg.Option.ConfigDir, optFile, cfg.Option)
+	loadYaml(cfg.Option.ConfigDir, colFile, cfg.Color)
+	return true
 }
