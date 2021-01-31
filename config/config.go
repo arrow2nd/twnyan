@@ -41,7 +41,8 @@ type color struct {
 	Retweet      string
 	Verified     string
 	Protected    string
-	Follow       string
+	Following    string
+	FollowedBy   string
 	Block        string
 	Mute         string
 }
@@ -74,7 +75,8 @@ func New() *Config {
 			Retweet:      "#98c379",
 			Verified:     "#5685d1",
 			Protected:    "#787878",
-			Follow:       "#1877c9",
+			Following:    "#1877c9",
+			FollowedBy:   "#18a0c9",
 			Block:        "#e06c75",
 			Mute:         "#e5c07b",
 		},
