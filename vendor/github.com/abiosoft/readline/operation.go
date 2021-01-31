@@ -172,19 +172,19 @@ func (o *Operation) ioloop() {
 			}
 		case CharTab:
 			if o.GetConfig().AutoComplete == nil {
-				o.t.Bell()
+				//o.t.Bell()
 				break
 			}
 			if o.OnComplete() {
 				keepInCompleteMode = true
 			} else {
-				o.t.Bell()
+				//o.t.Bell()
 				break
 			}
 
 		case CharBckSearch:
 			if !o.SearchMode(S_DIR_BCK) {
-				o.t.Bell()
+				//o.t.Bell()
 				break
 			}
 			keepInSearchMode = true
@@ -192,7 +192,7 @@ func (o *Operation) ioloop() {
 			o.buf.KillFront()
 		case CharFwdSearch:
 			if !o.SearchMode(S_DIR_FWD) {
-				o.t.Bell()
+				//o.t.Bell()
 				break
 			}
 			keepInSearchMode = true
@@ -219,7 +219,7 @@ func (o *Operation) ioloop() {
 			}
 
 			if o.buf.Len() == 0 {
-				o.t.Bell()
+				//o.t.Bell()
 				break
 			}
 			o.buf.Backspace()
@@ -267,20 +267,20 @@ func (o *Operation) ioloop() {
 			if buf != nil {
 				o.buf.Set(buf)
 			} else {
-				o.t.Bell()
+				// o.t.Bell()
 			}
 		case CharNext:
 			buf, ok := o.history.Next()
 			if ok {
 				o.buf.Set(buf)
 			} else {
-				o.t.Bell()
+				// o.t.Bell()
 			}
 		case CharDelete:
 			if o.buf.Len() > 0 || !o.IsNormalMode() {
 				o.t.KickRead()
 				if !o.buf.Delete() {
-					o.t.Bell()
+					// o.t.Bell()
 				}
 				break
 			}

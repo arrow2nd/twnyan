@@ -6,7 +6,7 @@ github.com/ChimeraCoder/anaconda
 github.com/ChimeraCoder/tokenbucket
 # github.com/abiosoft/ishell v2.0.0+incompatible
 ## explicit
-# github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db => github.com/arrow2nd/readline v0.0.0-20201119043036-5ad5643ca11c
+# github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db => github.com/arrow2nd/readline v0.0.0-20210131072404-666394925404
 ## explicit
 github.com/abiosoft/readline
 # github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330
@@ -31,31 +31,34 @@ github.com/flynn-archive/go-shlex
 # github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 ## explicit
 github.com/garyburd/go-oauth/oauth
-# github.com/gookit/color v1.3.5
+# github.com/gookit/color v1.3.6
 ## explicit
 github.com/gookit/color
 # github.com/mattn/go-colorable v0.1.8
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.12
 github.com/mattn/go-isatty
-# github.com/mattn/go-runewidth v0.0.9
+# github.com/mattn/go-runewidth v0.0.10
 ## explicit
 github.com/mattn/go-runewidth
-# github.com/pkg/browser v0.0.0-20201207095918-0426ae3fba23
+# github.com/pkg/browser v0.0.0-20210115035449-ce105d075bb4
 ## explicit
 github.com/pkg/browser
+# github.com/rivo/uniseg v0.2.0
+## explicit
+github.com/rivo/uniseg
 # github.com/stretchr/testify v1.6.1
 ## explicit
-# golang.org/x/crypto v0.0.0-20201217014255-9d1352758620
+# golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 ## explicit
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20201216054612-986b41b23924
+# golang.org/x/net v0.0.0-20210119194325-5f4716e94777
 ## explicit
 golang.org/x/net/context
 # golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 ## explicit
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.0.0-20201218084310-7d0127a74742
+# golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c
 ## explicit
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
