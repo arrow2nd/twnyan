@@ -2,35 +2,19 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"net/url"
 
 	"github.com/ChimeraCoder/anaconda"
 )
 
 // GetFriendships ユーザーとの関係を取得
-func (ta *TwitterAPI) GetFriendships(u *anaconda.User) (string, error) {
-	v := url.Values{"user_id": {u.IdStr}}
+func (ta *TwitterAPI) GetFriendships(userID string) ([]string, error) {
+	v := url.Values{"user_id": {userID}}
 	friendships, err := ta.API.GetFriendshipsLookup(v)
 	if err != nil {
-		return "", errors.New(parseAPIError(err))
+		return nil, errors.New(parseAPIError(err))
 	}
-
-	status := ""
-	for _, v := range friendships[0].Connections {
-		switch v {
-		case "followed_by":
-			status += fmt.Sprintf("[blue]Followed by[while] ")
-		case "following":
-			status += fmt.Sprintf("[blue]Following[while] ")
-		case "blocking":
-			status += fmt.Sprintf("[red]Blocking[white] ")
-		case "muting":
-			status += fmt.Sprintf("[yellow]Muting[white] ")
-		}
-	}
-
-	return status, nil
+	return friendships[0].Connections, nil
 }
 
 // GetTimeline タイムラインを取得
@@ -48,7 +32,6 @@ func (ta *TwitterAPI) GetTimeline(mode string, v url.Values) (*[]anaconda.Tweet,
 	case "user":
 		timeline, err = ta.API.GetUserTimeline(v)
 	}
-
 	if err != nil {
 		return nil, errors.New(parseAPIError(err))
 	}
