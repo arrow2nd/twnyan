@@ -15,36 +15,33 @@ import (
 )
 
 // PostTweet ツイートを投稿
-func (ta *TwitterAPI) PostTweet(status, replyToID string, files []string) error {
+func (ta *TwitterAPI) PostTweet(status, replyToID string, files []string) (string, error) {
 	// 画像をアップロード
 	val, err := ta.uploadImage(files)
 	if err != nil {
-		return err
+		return "", err
 	}
-
 	// リプライ先設定
 	if replyToID != "" {
 		val.Add("in_reply_to_status_id", replyToID)
 		val.Add("auto_populate_reply_metadata", "true")
 	}
-
 	// ツイート
-	_, err = ta.API.PostTweet(status, val)
+	tweet, err := ta.API.PostTweet(status, val)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-
-	return nil
+	return tweet.FullText, nil
 }
 
 // DeleteTweet ツイートを削除
-func (ta *TwitterAPI) DeleteTweet(tweetID string) error {
+func (ta *TwitterAPI) DeleteTweet(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-	_, err := ta.API.DeleteTweet(id, true)
+	tweet, err := ta.API.DeleteTweet(id, true)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	return tweet.FullText, nil
 }
 
 // uploadImage 画像をアップロード

@@ -2,99 +2,106 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 )
 
 // Favorite いいねする
-func (tw *TwitterAPI) Favorite(tweetID string) error {
+func (tw *TwitterAPI) Favorite(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-	_, err := tw.API.Favorite(id)
+	tweet, err := tw.API.Favorite(id)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	return tweet.FullText, nil
 }
 
 // Unfavorite いいねを取り消す
-func (tw *TwitterAPI) Unfavorite(tweetID string) error {
+func (tw *TwitterAPI) Unfavorite(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-	_, err := tw.API.Unfavorite(id)
+	tweet, err := tw.API.Unfavorite(id)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	return tweet.FullText, nil
 }
 
 // Retweet リツイートする
-func (tw *TwitterAPI) Retweet(tweetID string) error {
+func (tw *TwitterAPI) Retweet(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-	_, err := tw.API.Retweet(id, true)
+	tweet, err := tw.API.Retweet(id, true)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	return tweet.RetweetedStatus.FullText, nil
 }
 
 // UnRetweet リツイートを取り消す
-func (tw *TwitterAPI) UnRetweet(tweetID string) error {
+func (tw *TwitterAPI) UnRetweet(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-	_, err := tw.API.UnRetweet(id, true)
+	tweet, err := tw.API.UnRetweet(id, true)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	return tweet.RetweetedStatus.FullText, nil
 }
 
 // Follow フォローする
-func (tw *TwitterAPI) Follow(screenname string) error {
-	_, err := tw.API.FollowUser(screenname)
+func (tw *TwitterAPI) Follow(screenname string) (string, error) {
+	user, err := tw.API.FollowUser(screenname)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+	return str, nil
 }
 
 // Unfollow フォローを解除する
-func (tw *TwitterAPI) Unfollow(screenname string) error {
-	_, err := tw.API.UnfollowUser(screenname)
+func (tw *TwitterAPI) Unfollow(screenname string) (string, error) {
+	user, err := tw.API.UnfollowUser(screenname)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+	return str, nil
 }
 
 // Block ブロックする
-func (tw *TwitterAPI) Block(screenname string) error {
-	_, err := tw.API.BlockUser(screenname, nil)
+func (tw *TwitterAPI) Block(screenname string) (string, error) {
+	user, err := tw.API.BlockUser(screenname, nil)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+	return str, nil
 }
 
 // Unblock ブロックを解除する
-func (tw *TwitterAPI) Unblock(screenname string) error {
-	_, err := tw.API.UnblockUser(screenname, nil)
+func (tw *TwitterAPI) Unblock(screenname string) (string, error) {
+	user, err := tw.API.UnblockUser(screenname, nil)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+	return str, nil
 }
 
 // Mute ミュートする
-func (tw *TwitterAPI) Mute(screenname string) error {
-	_, err := tw.API.MuteUser(screenname, nil)
+func (tw *TwitterAPI) Mute(screenname string) (string, error) {
+	user, err := tw.API.MuteUser(screenname, nil)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+	return str, nil
 }
 
 // Unmute ミュートを解除する
-func (tw *TwitterAPI) Unmute(screenname string) error {
-	_, err := tw.API.UnmuteUser(screenname, nil)
+func (tw *TwitterAPI) Unmute(screenname string) (string, error) {
+	user, err := tw.API.UnmuteUser(screenname, nil)
 	if err != nil {
-		return errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIError(err))
 	}
-	return nil
+	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+	return str, nil
 }
