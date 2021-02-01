@@ -110,7 +110,7 @@ func (cmd *Cmd) drawMessage(tips, text, bgColor string) {
 func (cmd *Cmd) drawErrorMessage(text string) {
 	width := util.GetWindowWidth()
 	text = util.TruncateStr(text, width-9)
-	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
+	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s \n", text)
 	cmd.shell.Print(errMsg)
 }
 
