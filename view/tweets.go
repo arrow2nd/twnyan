@@ -25,7 +25,7 @@ func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
 
 	// QTならセパレータを挿入
 	if isQuote {
-		header += v.createSeparator()
+		header += v.createSeparatorStr(true)
 	}
 	// RTなら元のツイートに置換
 	if t.RetweetedStatus != nil {
@@ -46,7 +46,7 @@ func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
 	userInfo := v.createUserStr(&t.User)
 	// 投稿時刻
 	pt, _ := t.CreatedAtTime()
-	postTime := v.createTimeStr(pt)
+	postTime := v.createPostTimeStr(pt)
 	// いいね、RT数
 	fav := v.createReactionCountStr(t.FavoriteCount, t.Favorited, "Fav")
 	rt := v.createReactionCountStr(t.RetweetCount, t.Retweeted, "RT")
@@ -56,13 +56,13 @@ func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
 	text := v.createTweetText(t)
 
 	// 表示
-	fmt.Printf("%s\n%s", header, text)
+	v.shell.Printf("%s\n%s", header, text)
 	// QTなら引用元を表示
 	if t.QuotedStatus != nil {
 		v.drawTweet(0, true, t.QuotedStatus)
 		return
 	}
-	fmt.Print("\n")
+	v.shell.Print("\n")
 }
 
 func (v *View) createTweetText(t *anaconda.Tweet) string {
