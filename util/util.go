@@ -2,13 +2,10 @@ package util
 
 import (
 	"fmt"
-	"html"
-	"log"
 	"os"
 	"regexp"
 	"time"
 
-	"github.com/gookit/color"
 	"github.com/mattn/go-runewidth"
 	"golang.org/x/crypto/ssh/terminal"
 )
@@ -18,27 +15,19 @@ func GetWindowWidth() int {
 	fd := int(os.Stdout.Fd())
 	w, _, err := terminal.GetSize(fd)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error: Could not get window size")
+		panic(err)
 	}
 	return w
 }
 
-// ShowSuccessMsg 処理完了メッセージを表示
-func ShowSuccessMsg(tips, text, fg, bg string) {
-	AllReplace(&text, "[\n\r]", "")
-	text = html.UnescapeString(text)
-	cutText := CutString(text, GetWindowWidth()-len(tips)-2)
-	tips = color.HEXStyle(fg, bg).Sprintf(" %s ", tips)
-	fmt.Printf("%s %s\n", tips, cutText)
-}
-
-// CutString 文字列を指定した長さに丸める
-func CutString(str string, width int) string {
+// TruncateStr 文字列を指定した長さに丸める
+func TruncateStr(str string, width int) string {
 	return runewidth.Truncate(str, width, "…")
 }
 
-// ChkRegexp 文字列が含まれるかどうか
-func ChkRegexp(reg, str string) bool {
+// ContainsStr 指定した文字列が含まれるかどうか
+func ContainsStr(reg, str string) bool {
 	return regexp.MustCompile(reg).Match([]byte(str))
 }
 
