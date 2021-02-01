@@ -30,7 +30,7 @@ type color struct {
 	Accent1      string
 	Accent2      string
 	Accent3      string
-	Dim          string
+	Error        string
 	BoxForground string
 	Separator    string
 	UserName     string
@@ -64,9 +64,9 @@ func New() *Config {
 			Accent1:      "#e06c75",
 			Accent2:      "#c678dd",
 			Accent3:      "#56b6c2",
-			Dim:          "#343a44",
+			Error:        "#e06c75",
 			BoxForground: "#000000",
-			Separator:    "#9c9c9c",
+			Separator:    "#707070",
 			UserName:     "#faf8f7",
 			ScreenName:   "#9c9c9c",
 			Reply:        "#56b6c2",
