@@ -24,8 +24,9 @@ func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 		shell: ishell.New(),
 		cfg:   c,
 		api:   a,
-		view:  view.New(c),
+		view:  nil,
 	}
+	nc.view = view.New(nc.shell, nc.cfg)
 	return nc
 }
 
@@ -47,7 +48,7 @@ func (cmd *Cmd) Init() {
 	cmd.newOpenCmd()
 	cmd.newVersionCmd()
 	// プロンプト設定
-	prompt := fmt.Sprintf("@%s: ", cmd.api.OwnUser.ScreenName)
+	prompt := fmt.Sprintf("@%s : ", cmd.api.OwnUser.ScreenName)
 	cmd.shell.SetPrompt(prompt)
 }
 
