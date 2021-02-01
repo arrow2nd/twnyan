@@ -9,7 +9,7 @@ func (cmd *Cmd) newMuteCmd() {
 		Name:    "mute",
 		Aliases: []string{"mu"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToUser(c.Args, c.Cmd.Name, cmd.api.Mute)
+			cmd.actionOnUser("MUTED", c.Cmd.Name, cmd.cfg.Color.Mute, c.Args, cmd.api.Mute)
 		},
 		Help: "mute user",
 		LongHelp: createLongHelp(
@@ -24,7 +24,7 @@ func (cmd *Cmd) newMuteCmd() {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToUser(c.Args, c.Cmd.Name, cmd.api.Unmute)
+			cmd.actionOnUser("UNMUTED", "mute "+c.Cmd.Name, cmd.cfg.Color.Mute, c.Args, cmd.api.Unmute)
 		},
 		Help: "unmute user",
 		LongHelp: createLongHelp(

@@ -9,7 +9,7 @@ func (cmd *Cmd) newFollowCmd() {
 		Name:    "follow",
 		Aliases: []string{"fw"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToUser(c.Args, c.Cmd.Name, cmd.api.Follow)
+			cmd.actionOnUser("FOLLOWED", c.Cmd.Name, cmd.cfg.Color.Following, c.Args, cmd.api.Follow)
 		},
 		Help: "follow user",
 		LongHelp: createLongHelp(
@@ -24,7 +24,7 @@ func (cmd *Cmd) newFollowCmd() {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToUser(c.Args, c.Cmd.Name, cmd.api.Unfollow)
+			cmd.actionOnUser("UNFOLLOWED", "follow "+c.Cmd.Name, cmd.cfg.Color.Following, c.Args, cmd.api.Unfollow)
 		},
 		Help: "unfollow user",
 		LongHelp: createLongHelp(

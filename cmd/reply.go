@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/gookit/color"
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
@@ -10,17 +9,26 @@ func (cmd *Cmd) newReplyCmd() {
 		Name:    "reply",
 		Aliases: []string{"rp"},
 		Func: func(c *ishell.Context) {
+			// 引数をチェック
 			if len(c.Args) < 1 {
-				showWrongMsg(c.Cmd.Name)
+				cmd.drawWrongArgMessage(c.Cmd.Name)
 				return
 			}
+			// リプライ先のツイートIDを取得
 			tweetID, err := cmd.view.GetDataFromTweetNum(c.Args[0], "tweetID")
 			if err != nil {
-				color.Error.Prompt(err.Error())
+				cmd.drawErrorMessage(err.Error())
 				return
 			}
+			// 引数をパース
 			status, media := cmd.parseTweetCmdArgs(c.Args[1:])
-			cmd.api.PostTweet(status, tweetID, media)
+			// リプライ
+			tweetStr, err := cmd.api.PostTweet(status, tweetID, media)
+			if err != nil {
+				cmd.drawErrorMessage(err.Error())
+				return
+			}
+			cmd.drawMessage("REPLYED", tweetStr, cmd.cfg.Color.Reply)
 		},
 		Help: "post a reply",
 		LongHelp: createLongHelp(

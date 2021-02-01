@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/gookit/color"
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
@@ -10,7 +9,7 @@ func (cmd *Cmd) newRetweetCmd() {
 		Name:    "retweet",
 		Aliases: []string{"rt"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToTweet(c.Args, c.Cmd.Name, cmd.api.Retweet)
+			cmd.actionOnTweet("RETWEETED", c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.Retweet)
 		},
 		Help: "retweet tweet",
 		LongHelp: createLongHelp("Retweet tweet.\nIf there is more than one, please separate them with a space.",
@@ -24,18 +23,27 @@ func (cmd *Cmd) newRetweetCmd() {
 		Name:    "quote",
 		Aliases: []string{"qt"},
 		Func: func(c *ishell.Context) {
+			// 引数をチェック
 			if len(c.Args) < 1 {
-				showWrongMsg(c.Cmd.Name)
+				cmd.drawWrongArgMessage(c.Cmd.Name)
 				return
 			}
+			// 引用するツイートのURLを取得
 			uri, err := cmd.view.GetTweetURL(c.Args[0])
 			if err != nil {
-				color.Error.Prompt(err.Error())
+				cmd.drawErrorMessage(err.Error())
 				return
 			}
+			// 引数をパース
 			status, media := cmd.parseTweetCmdArgs(c.Args[1:])
+			// URLを追加してツイート
 			status += " " + uri
-			cmd.api.PostTweet(status, "", media)
+			tweetStr, err := cmd.api.PostTweet(status, "", media)
+			if err != nil {
+				cmd.drawErrorMessage(err.Error())
+				return
+			}
+			cmd.drawMessage("QUOTED", tweetStr, cmd.cfg.Color.Retweet)
 		},
 		Help: "quote tweet",
 		LongHelp: createLongHelp(
@@ -50,7 +58,7 @@ func (cmd *Cmd) newRetweetCmd() {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToTweet(c.Args, "retweet "+c.Cmd.Name, cmd.api.UnRetweet)
+			cmd.actionOnTweet("UN-RETWEETED", "retweet "+c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.UnRetweet)
 		},
 		Help: "un-retweet tweet",
 		LongHelp: createLongHelp(

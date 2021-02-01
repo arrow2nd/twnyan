@@ -9,7 +9,7 @@ func (cmd *Cmd) newBlockCmd() {
 		Name:    "block",
 		Aliases: []string{"bk"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToUser(c.Args, c.Cmd.Name, cmd.api.Block)
+			cmd.actionOnUser("BLOCKED", c.Cmd.Name, cmd.cfg.Color.Block, c.Args, cmd.api.Block)
 		},
 		Help: "block user",
 		LongHelp: createLongHelp(
@@ -24,13 +24,13 @@ func (cmd *Cmd) newBlockCmd() {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.reactToUser(c.Args, c.Cmd.Name, cmd.api.Unblock)
+			cmd.actionOnUser("UNBLOCKED", "block "+c.Cmd.Name, cmd.cfg.Color.Block, c.Args, cmd.api.Unblock)
 		},
 		Help: "unblock user",
 		LongHelp: createLongHelp(
 			"Unblock user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"rm",
-			"block remove [<username/tweetnumber>]",
+			"block remove [<userName/tweetnumber>]",
 			"block remove arrow_2nd\n  block rm 2",
 		),
 	})

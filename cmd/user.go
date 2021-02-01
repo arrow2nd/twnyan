@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/util"
-	"github.com/gookit/color"
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
@@ -12,19 +11,22 @@ func (cmd *Cmd) newUserCmd() {
 		Name:    "user",
 		Aliases: []string{"ur"},
 		Func: func(c *ishell.Context) {
+			// 引数をパース
 			value, counts, err := cmd.parseTLCmdArgs(c.Args)
 			if err != nil {
-				showWrongMsg(c.Cmd.Name)
+				cmd.drawWrongArgMessage(c.Cmd.Name)
 				return
 			}
+			// ツイート番号ならスクリーンネームに置換
 			if util.IsNumber(value) {
 				value, err = cmd.view.GetDataFromTweetNum(value, "screenname")
 				if err != nil {
-					color.Error.Prompt(err.Error())
+					cmd.drawErrorMessage(err.Error())
 					return
 				}
 			}
-			cmd.loadUserTL(value, counts)
+			// ユーザータイムラインを取得
+			cmd.loadUserTimeline(value, counts)
 		},
 		Help: "get a user timeline",
 		LongHelp: createLongHelp(
@@ -45,31 +47,32 @@ func (cmd *Cmd) newUserCmd() {
 			"user own 25",
 		),
 		Func: func(c *ishell.Context) {
-			counts := cmd.getCountsFromCmdArg(c.Args)
-			cmd.loadUserTL("", counts)
+			counts := cmd.getCountFromCmdArg(c.Args)
+			cmd.loadUserTimeline("", counts)
 		},
 	})
 
 	cmd.shell.AddCmd(uc)
 }
 
-func (cmd *Cmd) loadUserTL(screenName, counts string) {
-	// ユーザータイムライン取得
+func (cmd *Cmd) loadUserTimeline(screenName, counts string) {
+	// ユーザータイムラインを取得
 	v := api.CreateURLValues(counts)
 	v.Add("screen_name", screenName)
 	t, err := cmd.api.GetTimeline("user", v)
 	if err != nil {
+		cmd.drawErrorMessage(err.Error())
 		return
 	}
-	// 関係取得
+	// ユーザーとの関係を取得
 	u := (*t)[0].User
 	fs, err := cmd.api.GetFriendships(u.IdStr)
 	if err != nil {
+		cmd.drawErrorMessage(err.Error())
 		return
 	}
-	// ツイート登録
-	cmd.view.RegisterTweets(t)
 	// 描画
+	cmd.view.RegisterTweets(t)
 	cmd.view.DrawTweets()
 	cmd.view.DrawUser(&u, fs)
 }

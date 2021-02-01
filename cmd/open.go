@@ -11,16 +11,19 @@ func (cmd *Cmd) newOpenCmd() {
 		Name:    "open",
 		Aliases: []string{"op"},
 		Func: func(c *ishell.Context) {
+			// 引数をチェック
 			if len(c.Args) != 1 {
-				showWrongMsg(c.Cmd.Name)
+				cmd.drawWrongArgMessage(c.Cmd.Name)
 				return
 			}
+			// 該当ツイートのURLを取得
 			uri, err := cmd.view.GetTweetURL(c.Args[0])
 			if err != nil {
 				color.Error.Prompt(err.Error())
 				return
 			}
-			// util.ShowSuccessMsg("Open", uri, cfg.Color.BoxFg, cfg.Color.Accent3)
+			cmd.drawMessage("OPENED", uri, cmd.cfg.Color.Accent3)
+			// ブラウザを開く
 			browser.OpenURL(uri)
 		},
 		Help: "view the tweet in your browser",

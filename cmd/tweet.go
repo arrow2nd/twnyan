@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/gookit/color"
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
@@ -11,14 +10,19 @@ func (cmd *Cmd) newTweetCmd() {
 		Aliases: []string{"tw"},
 		Func: func(c *ishell.Context) {
 			status, media := cmd.parseTweetCmdArgs(c.Args)
-			cmd.api.PostTweet(status, "", media)
+			tweetStr, err := cmd.api.PostTweet(status, "", media)
+			if err != nil {
+				cmd.drawErrorMessage(err.Error())
+				return
+			}
+			cmd.drawMessage("TWEETED", tweetStr, cmd.cfg.Color.Accent2)
 		},
 		Help: "post tweet",
 		LongHelp: createLongHelp(
 			"Post tweet.\nIf there is no tweet text, \"にゃーん\" will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
 			"tw",
 			"tweet [text] [image]...",
-			"tweet nyaan! cat.png dog.png",
+			"tweet meow🐱 cat.png supercat.jpg",
 		),
 	}
 
@@ -26,17 +30,24 @@ func (cmd *Cmd) newTweetCmd() {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
+			// 引数をチェック
 			if len(c.Args) <= 0 {
-				showWrongMsg("tweet " + c.Cmd.Name)
+				cmd.drawWrongArgMessage("tweet " + c.Cmd.Name)
 				return
 			}
+			// 引数の数だけ削除処理
 			for _, v := range c.Args {
 				id, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
 				if err != nil {
-					color.Error.Prompt(err.Error())
+					cmd.drawErrorMessage(err.Error())
 					return
 				}
-				cmd.api.DeleteTweet(id)
+				tweetStr, err := cmd.api.DeleteTweet(id)
+				if err != nil {
+					cmd.drawErrorMessage(err.Error())
+					return
+				}
+				cmd.drawMessage("DELETED", tweetStr, cmd.cfg.Color.Accent2)
 			}
 		},
 		Help: "delete tweet",
