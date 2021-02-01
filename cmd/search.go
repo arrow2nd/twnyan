@@ -1,21 +1,27 @@
 package cmd
 
-import "gopkg.in/abiosoft/ishell.v2"
+import (
+	"gopkg.in/abiosoft/ishell.v2"
+)
 
 func (cmd *Cmd) newSearchCmd() {
 	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "search",
 		Aliases: []string{"sh"},
 		Func: func(c *ishell.Context) {
+			// 引数をパース
 			keyword, counts, err := cmd.parseTLCmdArgs(c.Args)
 			if err != nil {
-				showWrongMsg(c.Cmd.Name)
+				cmd.drawWrongArgMessage(c.Cmd.Name)
 				return
 			}
+			// 検索結果を取得
 			t, err := cmd.api.GetSearchResult(keyword, counts)
 			if err != nil {
+				cmd.drawErrorMessage(err.Error())
 				return
 			}
+			// 描画
 			cmd.view.RegisterTweets(t)
 			cmd.view.DrawTweets()
 		},
