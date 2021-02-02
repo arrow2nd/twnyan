@@ -20,7 +20,6 @@ type cred struct {
 
 type option struct {
 	ConfigDir  string
-	Prompt     string
 	Counts     string
 	DateFormat string
 	TimeFormat string
