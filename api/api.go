@@ -39,7 +39,6 @@ func New() *TwitterAPI {
 // Init 初期化
 func (ta *TwitterAPI) Init(token, secret string) error {
 	var err error
-
 	ta.API = anaconda.NewTwitterApi(token, secret)
 
 	// ユーザー情報を取得
@@ -47,7 +46,6 @@ func (ta *TwitterAPI) Init(token, secret string) error {
 	if err != nil {
 		return err
 	}
-
 	// リスト情報を取得
 	ta.ListNames, ta.ListIDs, err = ta.getLists()
 	if err != nil {
@@ -60,18 +58,21 @@ func (ta *TwitterAPI) Init(token, secret string) error {
 // Auth 認証
 func (ta *TwitterAPI) Auth() (string, string) {
 	authAPI := anaconda.NewTwitterApi("", "")
+
+	// 認証URL取得
 	uri, cred, err := authAPI.AuthorizationURL("oob")
 	if err != nil {
 		fmt.Println("Error: Failed to issue the authentication URL")
 		panic(err)
 	}
 
+	// ロゴ
 	color.Red.Println(" __                                     ")
 	color.Yellow.Println("|  |_.--.--.--.-----.--.--.---.-.-----.")
 	color.Green.Println("|   _|  |  |  |     |  |  |  _  |     |")
 	color.Cyan.Println("|____|________|__|__|___  |___._|__|__|")
 	color.Blue.Println("                    |_____|            ")
-
+	// URL
 	fmt.Println("\n🐈 Go to the following URL to authenticate the application and enter the PIN that is displayed")
 	fmt.Printf("[ %s ]\n\n", uri)
 
