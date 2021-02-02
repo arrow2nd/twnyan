@@ -15,18 +15,7 @@ import (
 )
 
 // PostTweet ツイートを投稿
-func (ta *TwitterAPI) PostTweet(status, replyToID string, files []string) (string, error) {
-	// 画像をアップロード
-	val, err := ta.uploadImage(files)
-	if err != nil {
-		return "", err
-	}
-	// リプライ先設定
-	if replyToID != "" {
-		val.Add("in_reply_to_status_id", replyToID)
-		val.Add("auto_populate_reply_metadata", "true")
-	}
-	// ツイート
+func (ta *TwitterAPI) PostTweet(val url.Values, status string) (string, error) {
 	tweet, err := ta.API.PostTweet(status, val)
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
@@ -44,27 +33,22 @@ func (ta *TwitterAPI) DeleteTweet(tweetID string) (string, error) {
 	return tweet.FullText, nil
 }
 
-// uploadImage 画像をアップロード
-func (ta *TwitterAPI) uploadImage(files []string) (url.Values, error) {
-	var (
-		val      = url.Values{}
-		fileNum  = len(files)
-		mediaIds = make([]string, fileNum)
-	)
+// UploadImage 画像をアップロード
+func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
+	fileNum := len(files)
+	mediaIds := make([]string, fileNum)
 
 	// ファイル数チェック
-	if fileNum == 0 {
-		return val, nil
-	} else if fileNum > 4 {
-		return nil, errors.New("You can attach up to 4 images")
+	if fileNum > 4 {
+		return "", errors.New("You can attach up to 4 images")
 	}
 
 	eg, ctx := errgroup.WithContext(context.Background())
 
 	for idx, filename := range files {
-		// 未対応の拡張子ならスキップ
+		// 拡張子をチェック
 		if ext := strings.ToLower(path.Ext(filename)); ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif" {
-			return nil, fmt.Errorf("Unsupported extensions (%s)", ext)
+			return "", fmt.Errorf("Unsupported extensions (%s)", ext)
 		}
 
 		// アップロード処理
@@ -79,14 +63,12 @@ func (ta *TwitterAPI) uploadImage(files []string) (url.Values, error) {
 				if err != nil {
 					return fmt.Errorf("Failed to load file (%s)", filename)
 				}
-
 				// base64にエンコードしてアップロード
 				enc := base64.StdEncoding.EncodeToString(data)
 				media, err := ta.API.UploadMedia(enc)
 				if err != nil {
 					return fmt.Errorf("Upload failed (%s)", filename)
 				}
-
 				mediaIds[idx] = media.MediaIDString
 				return nil
 			}
@@ -95,10 +77,9 @@ func (ta *TwitterAPI) uploadImage(files []string) (url.Values, error) {
 
 	// 待機
 	if err := eg.Wait(); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	// カンマで連結
-	val.Add("media_ids", strings.Join(mediaIds, ","))
-	return val, nil
+	return strings.Join(mediaIds, ","), nil
 }
