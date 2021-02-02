@@ -10,25 +10,8 @@ func (cmd *Cmd) newUserCmd() {
 	uc := &ishell.Cmd{
 		Name:    "user",
 		Aliases: []string{"ur"},
-		Func: func(c *ishell.Context) {
-			// 引数をパース
-			value, counts, err := cmd.parseTLCmdArgs(c.Args)
-			if err != nil {
-				cmd.drawWrongArgMessage(c.Cmd.Name)
-				return
-			}
-			// ツイート番号ならスクリーンネームに置換
-			if util.IsNumber(value) {
-				value, err = cmd.view.GetDataFromTweetNum(value, "screenname")
-				if err != nil {
-					cmd.drawErrorMessage(err.Error())
-					return
-				}
-			}
-			// ユーザータイムラインを取得
-			cmd.loadUserTimeline(value, counts)
-		},
-		Help: "get a user timeline",
+		Func:    cmd.userCmd,
+		Help:    "get a user timeline",
 		LongHelp: createLongHelp(
 			"Get a user timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
 			"ur",
@@ -53,6 +36,25 @@ func (cmd *Cmd) newUserCmd() {
 	})
 
 	cmd.shell.AddCmd(uc)
+}
+
+func (cmd *Cmd) userCmd(c *ishell.Context) {
+	// 引数をパース
+	value, counts, err := cmd.parseTLCmdArgs(c.Args)
+	if err != nil {
+		cmd.drawWrongArgMessage(c.Cmd.Name)
+		return
+	}
+	// ツイート番号ならスクリーンネームに置換
+	if util.IsNumber(value) {
+		value, err = cmd.view.GetDataFromTweetNum(value, "screenname")
+		if err != nil {
+			cmd.drawErrorMessage(err.Error())
+			return
+		}
+	}
+	// ユーザータイムラインを取得
+	cmd.loadUserTimeline(value, counts)
 }
 
 func (cmd *Cmd) loadUserTimeline(screenName, counts string) {
