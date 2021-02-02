@@ -99,7 +99,7 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 // drawMessage メッセージを表示
 func (cmd *Cmd) drawMessage(tips, text, bgColor string) {
 	width := util.GetWindowWidth()
-	util.AllReplace(&text, "[\n\r]", "")
+	util.AllReplace(&text, "[\t\n\r]", " ")
 	text = html.UnescapeString(text)
 	text = util.TruncateStr(text, width-len(tips)-3)
 	tips = color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Sprintf(" %s ", tips)
@@ -110,8 +110,8 @@ func (cmd *Cmd) drawMessage(tips, text, bgColor string) {
 func (cmd *Cmd) drawErrorMessage(text string) {
 	width := util.GetWindowWidth()
 	text = util.TruncateStr(text, width-9)
-	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s \n", text)
-	cmd.shell.Print(errMsg)
+	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
+	cmd.shell.Printf("%s\n", errMsg)
 }
 
 // drawWrongArgError 引数ミスのメッセージを表示
