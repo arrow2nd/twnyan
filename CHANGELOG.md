@@ -1,6 +1,14 @@
 # Change Log
 
 ## [Unreleased]
+### Added
+- 改行を含むツイートに対応
+### Removed
+- Exportコマンドを削除
+- Configコマンドを削除
+### Changed
+- 表示のデザインを変更
+- 設定ファイルのパス、形式を変更
 
 ## [1.1.1] - 2020-12-30
 ### Added
