@@ -47,7 +47,7 @@ func (cmd *Cmd) newReplyCmd() {
 		},
 		Help: "post a reply",
 		LongHelp: createLongHelp(
-			"Post a reply.\nIf there is no tweet text, \"にゃーん\" will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			"Post a reply.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
 			"rp",
 			"reply [<tweetnumber>] [text] [image]...",
 			"reply 2 meow cat.jpg",

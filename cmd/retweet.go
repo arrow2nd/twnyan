@@ -13,8 +13,9 @@ func (cmd *Cmd) newRetweetCmd() {
 		Func: func(c *ishell.Context) {
 			cmd.actionOnTweet("RETWEETED", c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.Retweet)
 		},
-		Help: "retweet tweet",
-		LongHelp: createLongHelp("Retweet tweet.\nIf there is more than one, please separate them with a space.",
+		Help: "retweet a tweet",
+		LongHelp: createLongHelp(
+			"Retweet a tweet.\nIf there is more than one, please separate them with a space.",
 			"rt",
 			"retweet [<tweetnumber>]...",
 			"retweet 0 1",
@@ -57,9 +58,9 @@ func (cmd *Cmd) newRetweetCmd() {
 			}
 			cmd.drawMessage("QUOTED", tweetStr, cmd.cfg.Color.Retweet)
 		},
-		Help: "quote tweet",
+		Help: "quote a tweet",
 		LongHelp: createLongHelp(
-			"Quote tweet.\nIf there is no tweet text, \"にゃーん\" will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			"Quote a tweet.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
 			"qt",
 			"retweet quote [<tweetnumber>] [text] [image]...",
 			"retweet quote 0 cute!! cat.png",
@@ -72,9 +73,9 @@ func (cmd *Cmd) newRetweetCmd() {
 		Func: func(c *ishell.Context) {
 			cmd.actionOnTweet("UN-RETWEETED", "retweet "+c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.UnRetweet)
 		},
-		Help: "un-retweet tweet",
+		Help: "un-retweet a tweet",
 		LongHelp: createLongHelp(
-			"UnRetweet tweet.\nIf there is more than one, please separate them with a space.",
+			"UnRetweet a tweet.\nIf there is more than one, please separate them with a space.",
 			"rm",
 			"retweet remove [<tweetnumber>]...",
 			"retweet remove 0 1",

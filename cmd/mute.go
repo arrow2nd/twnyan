@@ -11,9 +11,9 @@ func (cmd *Cmd) newMuteCmd() {
 		Func: func(c *ishell.Context) {
 			cmd.actionOnUser("MUTED", c.Cmd.Name, cmd.cfg.Color.Mute, c.Args, cmd.api.Mute)
 		},
-		Help: "mute user",
+		Help: "mute a user",
 		LongHelp: createLongHelp(
-			"Mute user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
+			"Mute a user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"mu",
 			"mute [<username/tweetnumber>]",
 			"mute arrow_2nd\n  mute 2",
@@ -26,9 +26,9 @@ func (cmd *Cmd) newMuteCmd() {
 		Func: func(c *ishell.Context) {
 			cmd.actionOnUser("UNMUTED", "mute "+c.Cmd.Name, cmd.cfg.Color.Mute, c.Args, cmd.api.Unmute)
 		},
-		Help: "unmute user",
+		Help: "unmute a user",
 		LongHelp: createLongHelp(
-			"Unmute user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
+			"Unmute a user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
 			"rm",
 			"mute remove [<username/tweetnumber>]",
 			"mute remove arrow_2nd\n  mute rm 2",

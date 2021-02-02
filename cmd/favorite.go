@@ -7,14 +7,14 @@ import (
 func (cmd *Cmd) newFaoriteCmd() {
 	fc := &ishell.Cmd{
 		Name:    "like",
-		Aliases: []string{"fav", "fv"},
+		Aliases: []string{"lk", "fv"},
 		Func: func(c *ishell.Context) {
 			cmd.actionOnTweet("LIKED", c.Cmd.Name, cmd.cfg.Color.Favorite, c.Args, cmd.api.Favorite)
 		},
-		Help: "like tweet",
+		Help: "like a tweet",
 		LongHelp: createLongHelp(
-			"Like tweet.\nIf there is more than one, please separate them with a space.",
-			"fav, fv",
+			"Like a tweet.\nIf there is more than one, please separate them with a space.",
+			"lk, fv",
 			"like [<tweetnumber>]...",
 			"like 0 1",
 		),
@@ -26,9 +26,9 @@ func (cmd *Cmd) newFaoriteCmd() {
 		Func: func(c *ishell.Context) {
 			cmd.actionOnTweet("UN-LIKED", "like "+c.Cmd.Name, cmd.cfg.Color.Favorite, c.Args, cmd.api.Unfavorite)
 		},
-		Help: "un-like tweet",
+		Help: "un-like a tweet",
 		LongHelp: createLongHelp(
-			"UnLike tweet.\nIf there is more than one, please separate them with a space.",
+			"UnLike a tweet.\nIf there is more than one, please separate them with a space.",
 			"rm",
 			"like remove [<tweetnumber>]...",
 			"like remove 0 1",
