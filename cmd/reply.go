@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"net/url"
+
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
@@ -21,9 +23,22 @@ func (cmd *Cmd) newReplyCmd() {
 				return
 			}
 			// 引数をパース
-			status, media := cmd.parseTweetCmdArgs(c.Args[1:])
+			status, files := cmd.parseTweetCmdArgs(c.Args[1:])
+			// リプライ先を設定
+			val := url.Values{}
+			val.Add("in_reply_to_status_id", tweetID)
+			val.Add("auto_populate_reply_metadata", "true")
+			// 画像をアップロード
+			if len(files) != 0 {
+				mediaIDs, err := cmd.upload(files)
+				if err != nil {
+					cmd.drawErrorMessage(err.Error())
+					return
+				}
+				val.Add("media_ids", mediaIDs)
+			}
 			// リプライ
-			tweetStr, err := cmd.api.PostTweet(status, tweetID, media)
+			tweetStr, err := cmd.api.PostTweet(val, status)
 			if err != nil {
 				cmd.drawErrorMessage(err.Error())
 				return

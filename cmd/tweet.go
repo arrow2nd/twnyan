@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"net/url"
+
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
@@ -9,8 +11,20 @@ func (cmd *Cmd) newTweetCmd() {
 		Name:    "tweet",
 		Aliases: []string{"tw"},
 		Func: func(c *ishell.Context) {
-			status, media := cmd.parseTweetCmdArgs(c.Args)
-			tweetStr, err := cmd.api.PostTweet(status, "", media)
+			val := url.Values{}
+			// 引数をパース
+			status, files := cmd.parseTweetCmdArgs(c.Args)
+			// 画像をアップロード
+			if len(files) != 0 {
+				mediaIDs, err := cmd.upload(files)
+				if err != nil {
+					cmd.drawErrorMessage(err.Error())
+					return
+				}
+				val.Add("media_ids", mediaIDs)
+			}
+			// ツイート
+			tweetStr, err := cmd.api.PostTweet(val, status)
 			if err != nil {
 				cmd.drawErrorMessage(err.Error())
 				return
@@ -60,4 +74,19 @@ func (cmd *Cmd) newTweetCmd() {
 	})
 
 	cmd.shell.AddCmd(tc)
+}
+
+// upload 画像をアップロード
+func (cmd *Cmd) upload(medias []string) (string, error) {
+	// プログレスバー開始
+	cmd.shell.Print("Uploading...🐾 ")
+	cmd.shell.ProgressBar().Indeterminate(true)
+	cmd.shell.ProgressBar().Start()
+	// アップロード
+	mediaIDs, err := cmd.api.UploadImage(medias)
+	cmd.shell.ProgressBar().Stop()
+	if err != nil {
+		return "", err
+	}
+	return mediaIDs, nil
 }

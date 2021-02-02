@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"net/url"
+
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
@@ -23,6 +25,7 @@ func (cmd *Cmd) newRetweetCmd() {
 		Name:    "quote",
 		Aliases: []string{"qt"},
 		Func: func(c *ishell.Context) {
+			val := url.Values{}
 			// 引数をチェック
 			if len(c.Args) < 1 {
 				cmd.drawWrongArgMessage(c.Cmd.Name)
@@ -35,10 +38,19 @@ func (cmd *Cmd) newRetweetCmd() {
 				return
 			}
 			// 引数をパース
-			status, media := cmd.parseTweetCmdArgs(c.Args[1:])
+			status, files := cmd.parseTweetCmdArgs(c.Args[1:])
+			// 画像をアップロード
+			if len(files) != 0 {
+				mediaIDs, err := cmd.upload(files)
+				if err != nil {
+					cmd.drawErrorMessage(err.Error())
+					return
+				}
+				val.Add("media_ids", mediaIDs)
+			}
 			// URLを追加してツイート
 			status += " " + uri
-			tweetStr, err := cmd.api.PostTweet(status, "", media)
+			tweetStr, err := cmd.api.PostTweet(val, status)
 			if err != nil {
 				cmd.drawErrorMessage(err.Error())
 				return
