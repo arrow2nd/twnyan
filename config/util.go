@@ -10,11 +10,11 @@ import (
 )
 
 func getConfigDir() string {
-	dirPath, err := os.UserConfigDir()
+	dirPath, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
 	}
-	return filepath.Join(dirPath, "twnyan")
+	return filepath.Join(dirPath, ".twnyan")
 }
 
 func configFileExists(dir string) bool {
