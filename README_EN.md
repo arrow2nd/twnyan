@@ -2,58 +2,66 @@
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 
-This is a Twitter client by cats for cats🐾
+A colorful Twitter client that runs in a terminal🐾
 
 > **[日本語](README.md)**
 
 ## Features
+- Flexible settings
 - Multi-byte character support
-- It's easy to tweet "にゃーん"
-- ~Needlessly~ flexible color settings
-- Support for interactive mode
+- Interactive mode support
+- Very colorful
 
 ## Screenshot
-<image src="https://user-images.githubusercontent.com/44780846/103337211-e4a19080-4abd-11eb-9c14-4d01a4c86060.gif" width=90%>
+![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
-## Operating conditions
+## System requirements
 - Windows/Linux
 - A terminal that can display emoji
 
 ### Remarks
-- I have not been able to confirm that it works on a Mac
-- To run in a WSL environment, you need to be able to use xdg-open
+- Not confirmed to work on Mac
+- If you want to run in WSL environment, you need to be able to use xdg-open
 
-## How to install
+## Install
 **(Recommended)**
 
 ```$ go get -u github.com/arrow2nd/twnyan```
 
 ### Use binary files
-Download a zip file from ReleasePage that fits your environment and pass the Path through the binary file.
+Download the latest version of the zip file for your environment from [Releases](https://github.com/arrow2nd/twnyan/releases).
 
-## initialization
-<image src="https://user-images.githubusercontent.com/44780846/102592746-432e4c80-4157-11eb-8581-29a1f8f850c9.png" width=90%>
+## Uninstall
+1. ```$ go clean -i github.com/arrow2nd/twnyan```
+2. ```$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan```
+3. v1.x.x : ```$ rm ~/.twnyan.yaml```<br>v2.x.x : ```$ rm -rf ~/.twnyan```
 
-The first time you start the program, the browser will start and the authentication page will be displayed.
+## Initialization
+![setup](https://user-images.githubusercontent.com/44780846/106611478-5c764580-65ab-11eb-8267-675f6525e675.png)
 
-Follow the steps on the screen and enter the displayed PIN code into twnyan.
+1. Access the authentication page that appears the first time you start the program
+2. Follow the steps on the screen and enter the PIN code that appears on the screen into twnyan
+3. done!
 
 ## Usage
-<image src="https://user-images.githubusercontent.com/44780846/103337424-a6f13780-4abe-11eb-8cf3-084840e1d548.gif" width=90%>
+### Command line mode
+![cmdline](https://user-images.githubusercontent.com/44780846/106699170-b287cf00-6625-11eb-8374-8565286db3e2.gif)
 
 ```$ twnyan [command] [argument]```
 
-If you omit the command ```$ twnyan```, it will start in interactive mode.
-
-You can manipulate tweets (like, RT, etc.) by specifying the number of the tweet.
-
+Also, some commands cannot be used in command line mode.
 ### にゃーん
+![nyaan](https://user-images.githubusercontent.com/44780846/106699001-558c1900-6625-11eb-948e-6212ab0cba40.gif)
+
 ```$ twnyan tw```
 
-This way, it will be tweeted as "にゃーん".
-(This does not apply if there is an image attached.)
+If you omit the tweet text, it will be tweeted as "にゃーん". (If an image is attached, the tweet will not "にゃーん")
 
 > "にゃーん" is the Japanese word for a cat's meow.
+### Interactive mode
+```$ twnyan```
+
+You can control tweets (like, RT, etc.) by specifying the number (tweetnumber) displayed at the top of the tweet.
 
 ## Command list
 
@@ -62,10 +70,8 @@ This way, it will be tweeted as "にゃーん".
 
 ## tweet
 ```Alias: tw```
-
-Manipulates tweets.
 ### tweet [text] [imagefile]
-Post tweet.
+Post a tweet.
 
 | Arguments  | Hints                                                                            | Examples                            |
 | ---------- | -------------------------------------------------------------------------------- | ----------------------------------- |
@@ -74,10 +80,17 @@ Post tweet.
 
 - You can also omit the text and just post an image (e.g. ```tweet cat.png```)
 
+### tweet multi
+```Alias: ml```
+
+Post a tweet that contains a new line.
+- To finish typing, type a semicolon (;) at the end of the sentence
+- If you leave it blank (enter only a semicolon), the tweet will be canceled
+
 ### tweet remove [\<tweetnumber\>]...
 ```Alias: rm```
 
-Delete tweet.
+Delete a tweet.
 
 | Arguments   | Hints                                                      | Examples               |
 | ----------- | ---------------------------------------------------------- | ---------------------- |
@@ -126,12 +139,12 @@ Get a timeline of the specified user.
 | username/tweetnumber | Either can be specified<br>The '@' in the username is optional       | ```user github```<br>```user 1``` |
 | counts               | If you omit it, the default value is given in the configuration file | ```user twitter 15```             |
 
-### user myuser [counts]
+### user own [counts]
 Get your own timeline.
 
-| Arguments | Hints                                                                | Examples             |
-| --------- | -------------------------------------------------------------------- | -------------------- |
-| counts    | If you omit it, the default value is given in the configuration file | ```user myuser 50``` |
+| Arguments | Hints                                                                | Examples          |
+| --------- | -------------------------------------------------------------------- | ----------------- |
+| counts    | If you omit it, the default value is given in the configuration file | ```user own 50``` |
 
 ## search
 ```Alias: sh```
@@ -144,32 +157,28 @@ Searches for tweets tweets in the past 7 days.
 | keyword   | Please enclose any spaces in double quotes                           | ```search "cat dog"``` |
 | counts    | If you omit it, the default value is given in the configuration file | ```search sushi 5```   |
 
-## favorite
-```Alias: fv, like```
+## like
+```Alias: lk, fv```
+### like [\<tweetnumber\>]
+Like a tweet.
 
-Manipulate "like".
-### favorite [\<tweetnumber\>]
-Like tweet.
+| Arguments   | Hints                                                      | Examples       |
+| ----------- | ---------------------------------------------------------- | -------------- |
+| tweetnumber | Separate each tweet with a space if there is more than one | ```like 1 2``` |
 
-| Arguments   | Hints                                                      | Examples           |
-| ----------- | ---------------------------------------------------------- | ------------------ |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```favorite 1 2``` |
-
-### favorite remove [\<tweetnumber\>]
+### like remove [\<tweetnumber\>]
 ```Alias: rm```
 
-UnLike tweet.
+UnLike a tweet.
 
-| Arguments   | Hints                                                      | Examples                  |
-| ----------- | ---------------------------------------------------------- | ------------------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```favorite remove 1 2``` |
+| Arguments   | Hints                                                      | Examples              |
+| ----------- | ---------------------------------------------------------- | --------------------- |
+| tweetnumber | Separate each tweet with a space if there is more than one | ```like remove 1 2``` |
 
 ## retweet
 ```Alias: rt```
-
-Manipulate retweets.
 ### retweet [\<tweetnumber\>]...
-Retweet tweet.
+Retweet a tweet.
 
 | Arguments   | Hints                                                      | Examples          |
 | ----------- | ---------------------------------------------------------- | ----------------- |
@@ -178,7 +187,7 @@ Retweet tweet.
 ### retweet quote [\<tweetnumber\>] [text] [imagefile]
 ```Alias: qt```
 
-Quote tweet.
+Quote a tweet.
 
 | Arguments   | Hints                                                                            | Examples                                      |
 | ----------- | -------------------------------------------------------------------------------- | --------------------------------------------- |
@@ -211,10 +220,8 @@ Post a reply.
 
 ## follow
 ```Alias: fw```
-
-Performs a follow operation.
 ### follow [<username/tweetnumber>]
-Follow user.
+Follow a user.
 
 | Arguments            | Hints                                                          | Examples                              |
 | -------------------- | -------------------------------------------------------------- | ------------------------------------- |
@@ -223,7 +230,7 @@ Follow user.
 ### follow remove [<username/tweetnumber>]
 ```Alias: rm```
 
-Unfollow user.
+Unfollow a user.
 
 | Arguments            | Hints                                                          | Examples                                               |
 | -------------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
@@ -231,10 +238,8 @@ Unfollow user.
 
 ## block
 ```Alias: bk```
-
-Performs a block operation.
 ### block [<username/tweetnumber>]
-Block user.
+Block a user.
 
 | Arguments            | Hints                                                          | Examples                               |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------- |
@@ -243,7 +248,7 @@ Block user.
 ### block remove [<username/tweetnumber>]
 ```Alias: rm```
 
-Unblock user.
+Unblock a user.
 
 | Arguments            | Hints                                                          | Examples                                             |
 | -------------------- | -------------------------------------------------------------- | ---------------------------------------------------- |
@@ -251,10 +256,8 @@ Unblock user.
 
 ## mute
 ```Alias: mu```
-
-Performs a mute operation.
 ### mute [<username/tweetnumber>]
-Mute user.
+Mute a user.
 
 | Arguments            | Hints                                                          | Examples                             |
 | -------------------- | -------------------------------------------------------------- | ------------------------------------ |
@@ -263,7 +266,7 @@ Mute user.
 ### mute remove [<username/tweetnumber>]
 ```Alias: rm```
 
-Unmute user.
+Unmute a user.
 
 | Arguments            | Hints                                                          | Examples                                           |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------------------- |
@@ -279,67 +282,62 @@ View the tweet in your browser.
 | ----------- | -------------------------------------------------------------- | ------------ |
 | tweetnumber | Specify the number of the tweet to be displayed in the browser | ```open 2``` |
 
-## export
-```Alias: ep```
+## clear
+Initialize the screen.
 
-Specify a file name excluding the file extension
-Exports the currently displayed timeline or tweets to a file.
-### export [\<format\>] [\<filename\>]
+## help
+Displays help.
 
-| Arguments | Hints                                                                                                      | Examples                 |
-| --------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
-| format    | json/yaml can be specified<br>If you are running in interactive mode, you can complete it with the Tab key | ```export json tweets``` |
-| filename  | Specify a file name excluding the file extension                                                           | ```export yaml test```   |
+You can also use ```[command] help``` to display help for a command.
 
-## config
-Manipulation of configuration files.
-### config reset
-Regenerate the configuration file.
-### config remove
-Deletes the configuration file.
+## exit
+Exits the interactive mode.
 
 </details>
 
-## Configuration Files
-The configuration file is saved directly under your home directory as ```.twnyan.yaml```
+## Configuration directory
+The configuration directory will be created directly under your home directory as ``.twnyan``
 
 <details>
 <summary>Open</summary>
 
-## ColorData
-Color setting.
+### .cred.yaml
+A file of authentication information.
 
-Specify it with a hexadecimal color code.
+### option.yaml
+A file of option setting.
 
-| Name      | Description                                |
-| --------- | ------------------------------------------ |
-| Accent1   | Background color of tweetNos, etc.         |
-| Accent2   | Posting times for tweets, etc.             |
-| Accent3   | Somewhere                                  |
-| BoxFg     | Text color of tweetNos, etc.               |
-| UserName  | Username                                   |
-| UserID    | UserID                                     |
-| Separator | Separator（--------）                      |
-| Reply     | Reply ID and Reply Display                 |
-| Hashtag   | Hashtag                                    |
-| Fav       | Likes                                      |
-| RT        | Number of retweets and display of retweets |
-| Verified  | Authenticated Users                        |
-| Protected | Protected Users                            |
-| Follow    | Following and FollowedBy                   |
-| Block     | Blocking                                   |
-| Mute      | Muting                                     |
- 
-## DefaultData
-The default value is set.
+| 名前       | 説明                                |
+| ---------- | ----------------------------------- |
+| ConfigDir  | Path of the configuration directory |
+| Counts     | Default number of acquisitions      |
+| DateFormat | Date Format                         |
+| TimeFormat | Time Format                         |
 
-| Name       | Description               |
-| ---------- | ------------------------- |
-| Counts     | Default number of fetches |
-| Prompt     | Prompt character          |
-| DateFormat | Date Format               |
-| TimeFormat | Time Format               |
+- The format of the date and time is the same as the format string of the [time package](https://golang.org/pkg/time/#pkg-constants)
 
-The format is the same as the format string of the [time package](https://golang.org/pkg/time/#pkg-constants)
+### color.yaml
+A file of  color settings.
+
+| 名前         | 説明                                           |
+| ------------ | ---------------------------------------------- |
+| Accent1      | Accent Color 1                                 |
+| Accent2      | Accent Color 2                                 |
+| Accent3      | Accent Color 3                                 |
+| Error        | Background color of error messages             |
+| BoxForground | Text color when reversing                      |
+| Separator    | Separator                                      |
+| UserName     | User Name                                      |
+| ScreenName   | Screen Name                                    |
+| Reply        | Indication of reply, color of user replying to |
+| Hashtag      | Hashtag                                        |
+| Favorite     | Display of likes, color of the number of likes |
+| Retweet      | Display of Retweet, color of retweet count     |
+| Verified     | Verified account                               |
+| Protected    | Private account                                |
+| Following    | Folloing                                       |
+| FollowedBy   | Followed by                                    |
+| Block        | Block                                          |
+| Mute         | Mute                                           |
 
 </details>

@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [2.0.0] - 2021-02-03
 ### Added
 - 改行を含むツイートに対応
 ### Removed
