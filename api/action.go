@@ -43,7 +43,7 @@ func (tw *TwitterAPI) UnRetweet(tweetID string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
-	return tweet.RetweetedStatus.FullText, nil
+	return tweet.FullText, nil
 }
 
 // Follow フォローする
