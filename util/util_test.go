@@ -14,9 +14,9 @@ func TestIsNumber(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "123は3桁以内の数値か",
+			name: "765は3桁以内の数値か",
 			args: args{
-				str: "123",
+				str: "765",
 			},
 			want: true,
 		},
@@ -28,16 +28,16 @@ func TestIsNumber(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "1111は3桁以内の数値か",
+			name: "346283は3桁以内の数値か",
 			args: args{
-				str: "1111",
+				str: "346283",
 			},
 			want: false,
 		},
 		{
-			name: "abcは3桁以内の数値か",
+			name: "hotaruは3桁以内の数値か",
 			args: args{
-				str: "abc",
+				str: "hotaru",
 			},
 			want: false,
 		},
@@ -62,28 +62,27 @@ func TestIndexOf(t *testing.T) {
 		want int
 	}{
 		{
-			name: "[a,b,c]にbはあるか",
+			name: "[hotaru,nono,hiromi]にnonoはあるか",
 			args: args{
 				array: []string{
-					"a",
-					"b",
-					"c",
+					"hotaru",
+					"nono",
+					"hiromi",
 				},
-				str: "b",
+				str: "nono",
 			},
 			want: 1,
 		},
 		{
-			name: "[bb,aa,abc,ef,a]にefgはあるか",
+			name: "[hotaru,hiromi,chiduru,yasuha]にtomoはあるか",
 			args: args{
 				array: []string{
-					"bb",
-					"aa",
-					"abc",
-					"ef",
-					"a",
+					"hotaru",
+					"hiromi",
+					"chiduru",
+					"yasuha",
 				},
-				str: "efg",
+				str: "tomo",
 			},
 			want: -1,
 		},
@@ -92,6 +91,42 @@ func TestIndexOf(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := IndexOf(tt.args.array, tt.args.str); got != tt.want {
 				t.Errorf("IndexOf() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestContainsStr(t *testing.T) {
+	type args struct {
+		reg string
+		str string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "テスト: [0-9]+Hotaru",
+			args: args{
+				reg: "[0-9]+Hotaru",
+				str: "ShiragikuHotaru",
+			},
+			want: false,
+		},
+		{
+			name: "テスト: [A-Za-z]+Asahi",
+			args: args{
+				reg: "[A-Za-z]+Asahi",
+				str: "SerizawaAsahi",
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ContainsStr(tt.args.reg, tt.args.str); got != tt.want {
+				t.Errorf("ContainsStr() = %v, want %v", got, tt.want)
 			}
 		})
 	}
