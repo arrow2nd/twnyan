@@ -26,7 +26,7 @@ func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 		api:   a,
 		view:  nil,
 	}
-	nc.view = view.New(nc.shell, nc.cfg)
+	nc.view = view.New(nc.cfg)
 	return nc
 }
 

@@ -4,7 +4,7 @@ import (
 	"gopkg.in/abiosoft/ishell.v2"
 )
 
-const ver = "2.0.0"
+const ver = "2.0.1"
 
 func (c *Cmd) newVersionCmd() {
 	c.shell.AddCmd(&ishell.Cmd{
