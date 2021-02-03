@@ -26,7 +26,7 @@ func TruncateStr(str string, width int) string {
 	return runewidth.Truncate(str, width, "…")
 }
 
-// ContainsStr 指定した文字列が含まれるかどうか
+// ContainsStr 正規表現が文字列にマッチするか
 func ContainsStr(reg, str string) bool {
 	return regexp.MustCompile(reg).Match([]byte(str))
 }

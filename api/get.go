@@ -19,10 +19,8 @@ func (ta *TwitterAPI) GetFriendships(userID string) ([]string, error) {
 
 // GetTimeline タイムラインを取得
 func (ta *TwitterAPI) GetTimeline(mode string, v url.Values) (*[]anaconda.Tweet, error) {
-	var (
-		timeline []anaconda.Tweet
-		err      error
-	)
+	var err error
+	timeline := []anaconda.Tweet{}
 
 	switch mode {
 	case "home":
