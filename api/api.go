@@ -40,7 +40,7 @@ func New() *TwitterAPI {
 func (ta *TwitterAPI) Init(token, secret string) error {
 	var err error
 	ta.API = anaconda.NewTwitterApi(token, secret)
-
+	ta.API.ReturnRateLimitError(true)
 	// ユーザー情報を取得
 	ta.OwnUser, err = ta.getSelf()
 	if err != nil {
@@ -51,7 +51,6 @@ func (ta *TwitterAPI) Init(token, secret string) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
