@@ -22,7 +22,7 @@
 
 ### 備考
 - Macでの動作は確認できていません
-- WSL環境で実行する場合、xdg-openが使用できる必要があります<br>~微妙な~[解決策](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)
+- WSL環境で実行する場合、xdg-openが使用できる必要があります（~微妙な~[解決策](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)）
 
 ## インストール
 **（おすすめ）**
@@ -38,7 +38,7 @@
 3. v1.x.x : ```$ rm ~/.twnyan.yaml```<br>v2.x.x : ```$ rm -rf ~/.twnyan```
 
 ## 初期設定
-![setup](https://user-images.githubusercontent.com/44780846/106611478-5c764580-65ab-11eb-8267-675f6525e675.png)
+![auth](https://user-images.githubusercontent.com/44780846/106747441-4a59dd00-6667-11eb-8248-3468cb39f7d1.png)
 
 1. 初回起動時に表示される認証ページのURLにブラウザでアクセスする
 2. 画面に従って手順を進め、表示されるPINコードをtwnyanに入力する

@@ -37,7 +37,7 @@ Download the latest version of the zip file for your environment from [Releases]
 3. v1.x.x : ```$ rm ~/.twnyan.yaml```<br>v2.x.x : ```$ rm -rf ~/.twnyan```
 
 ## Initialization
-![setup](https://user-images.githubusercontent.com/44780846/106611478-5c764580-65ab-11eb-8267-675f6525e675.png)
+![auth](https://user-images.githubusercontent.com/44780846/106747441-4a59dd00-6667-11eb-8248-3468cb39f7d1.png)
 
 1. Access the authentication page that appears the first time you start the program
 2. Follow the steps on the screen and enter the PIN code that appears on the screen into twnyan
