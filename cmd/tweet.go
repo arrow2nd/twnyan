@@ -75,8 +75,8 @@ func (cmd *Cmd) multiCmd(c *ishell.Context) {
 	// マルチライン入力
 	cmd.drawMessage("MULTILINE MODE", "Enter a semicolon to end the input", cmd.cfg.Color.Accent3)
 	status := c.ReadMultiLines(";")
-	// 空白ならキャンセル
-	if status == "" {
+	// セミコロンのみならキャンセル
+	if status == ";" {
 		cmd.drawMessage("CANCELED", "Tweet post cancelled", cmd.cfg.Color.Accent3)
 		return
 	}
