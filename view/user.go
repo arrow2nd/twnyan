@@ -30,20 +30,20 @@ func (v *View) DrawUser(u *anaconda.User, c []string) {
 	followersCount := color.HEX(v.cfg.Color.Accent3).Sprintf("%d Followers", u.FollowersCount)
 
 	// 描画
-	v.shell.Printf("%s %s\n", userInfo, connection)
-	v.shell.Print(v.createSeparatorStr(false))
-	v.shell.Printf("%s %s %s\n", tweetsCount, followingCount, followersCount)
+	fmt.Printf("%s %s\n", userInfo, connection)
+	fmt.Print(v.createSeparatorStr(false))
+	fmt.Printf("%s %s %s\n", tweetsCount, followingCount, followersCount)
 	if bio != "" {
 		util.AllReplace(&bio, "\n", "\n     ")
-		v.shell.Printf("📄 : %s\n", bio)
+		fmt.Printf("📄 : %s\n", bio)
 	}
 	if locate != "" {
-		v.shell.Printf("📍 : %s\n", locate)
+		fmt.Printf("📍 : %s\n", locate)
 	}
 	if url != "" {
-		v.shell.Printf("🔗 : %s\n", url)
+		fmt.Printf("🔗 : %s\n", url)
 	}
-	v.shell.Print("\n")
+	fmt.Print("\n")
 }
 
 func (v *View) createUserStr(u *anaconda.User) string {

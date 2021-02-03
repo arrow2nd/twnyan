@@ -56,13 +56,13 @@ func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
 	text := v.createTweetText(t)
 
 	// 表示
-	v.shell.Printf("%s\n%s", header, text)
+	fmt.Printf("%s\n%s", header, text)
 	// QTなら引用元を表示
 	if t.QuotedStatus != nil {
 		v.drawTweet(0, true, t.QuotedStatus)
 		return
 	}
-	v.shell.Print("\n")
+	fmt.Print("\n")
 }
 
 func (v *View) createTweetText(t *anaconda.Tweet) string {

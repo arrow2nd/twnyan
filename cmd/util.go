@@ -103,7 +103,7 @@ func (cmd *Cmd) drawMessage(tips, text, bgColor string) {
 	text = html.UnescapeString(text)
 	text = util.TruncateStr(text, width-len(tips)-3)
 	tips = color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Sprintf(" %s ", tips)
-	cmd.shell.Printf("%s %s\n", tips, text)
+	fmt.Printf("%s %s\n", tips, text)
 }
 
 // drawErrorMsg エラーメッセージを表示
@@ -111,7 +111,7 @@ func (cmd *Cmd) drawErrorMessage(text string) {
 	width := util.GetWindowWidth()
 	text = util.TruncateStr(text, width-9)
 	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
-	cmd.shell.Printf("%s\n", errMsg)
+	fmt.Printf("%s\n", errMsg)
 }
 
 // drawWrongArgError 引数ミスのメッセージを表示

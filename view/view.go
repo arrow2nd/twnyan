@@ -9,21 +9,18 @@ import (
 	"github.com/arrow2nd/twnyan/config"
 	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
-	"gopkg.in/abiosoft/ishell.v2"
 )
 
 // View 表示
 type View struct {
 	tweets []anaconda.Tweet
-	shell  *ishell.Shell
 	cfg    *config.Config
 }
 
 // New 表示
-func New(s *ishell.Shell, c *config.Config) *View {
+func New(c *config.Config) *View {
 	v := &View{
 		tweets: []anaconda.Tweet{},
-		shell:  s,
 		cfg:    c,
 	}
 	return v

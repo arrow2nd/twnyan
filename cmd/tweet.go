@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"net/url"
 
 	"gopkg.in/abiosoft/ishell.v2"
@@ -116,7 +117,7 @@ func (cmd *Cmd) tweetRemoveCmd(c *ishell.Context) {
 // upload 画像をアップロード
 func (cmd *Cmd) upload(medias []string) (string, error) {
 	// プログレスバー開始
-	cmd.shell.Print("Uploading...🐾 ")
+	fmt.Print("Uploading...🐾 ")
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 	// アップロード
