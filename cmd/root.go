@@ -55,7 +55,10 @@ func (cmd *Cmd) Init() {
 // Run 実行
 func (cmd *Cmd) Run() {
 	if len(os.Args) > 1 {
-		cmd.shell.Process(os.Args[1:]...)
+		err := cmd.shell.Process(os.Args[1:]...)
+		if err != nil {
+			cmd.drawErrorMessage(err.Error())
+		}
 	} else {
 		cmd.shell.Process("timeline")
 		cmd.shell.Run()
