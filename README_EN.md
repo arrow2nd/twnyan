@@ -187,11 +187,11 @@ UnRetweet tweet.
 ### quote [\<tweetnumber\>] [text] [imagefile]
 Quote a tweet.
 
-| Arguments   | Hints                                                                            | Examples                                      |
-| ----------- | -------------------------------------------------------------------------------- | --------------------------------------------- |
-| tweetnumber | Specify the number of the tweet to quote                                         | ```retweet quote 1 good!!!```                 |
-| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```retweet quote 1```                         |
-| imagefile   | If there is more than one, please separate them with a space                     | ```retweet quote 1 🍣 sushi1.png sushi2.png``` |
+| Arguments   | Hints                                                                            | Examples                              |
+| ----------- | -------------------------------------------------------------------------------- | ------------------------------------- |
+| tweetnumber | Specify the number of the tweet to quote                                         | ```quote 1 good!!!```                 |
+| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```quote 1```                         |
+| imagefile   | If there is more than one, please separate them with a space                     | ```quote 1 🍣 sushi1.png sushi2.png``` |
 ### quote multi
 ```Alias: ml```
 
