@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/arrow2nd/twnyan/api"
@@ -42,14 +41,14 @@ func (cmd *Cmd) Init() {
 	cmd.newUserCmd()
 	cmd.newFaoriteCmd()
 	cmd.newRetweetCmd()
+	cmd.newQuoteCmd()
 	cmd.newFollowCmd()
 	cmd.newBlockCmd()
 	cmd.newMuteCmd()
 	cmd.newOpenCmd()
 	cmd.newVersionCmd()
 	// プロンプト設定
-	prompt := fmt.Sprintf("@%s : ", cmd.api.OwnUser.ScreenName)
-	cmd.shell.SetPrompt(prompt)
+	cmd.setDefaultPrompt()
 }
 
 // Run 実行
