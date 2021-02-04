@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"net/url"
 
 	"gopkg.in/abiosoft/ishell.v2"
@@ -24,10 +23,10 @@ func (cmd *Cmd) newTweetCmd() {
 	tc.AddCmd(&ishell.Cmd{
 		Name:    "multi",
 		Aliases: []string{"ml"},
-		Func:    cmd.multiCmd,
-		Help:    "post a tweet that contains a new line",
+		Func:    cmd.tweetMultiCmd,
+		Help:    "post a multi-line tweet",
 		LongHelp: createLongHelp(
-			"Post a tweet that contains a new line.\nEnter a semicolon to end the input.\nAlso, if it is blank, the tweet will be canceled.",
+			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAlso, if it is blank, the tweet will be canceled.",
 			"ml",
 			"tweet multi",
 			"tweet multi",
@@ -51,45 +50,20 @@ func (cmd *Cmd) newTweetCmd() {
 }
 
 func (cmd *Cmd) tweetCmd(c *ishell.Context) {
-	val := url.Values{}
 	// 引数をパース
 	status, files := cmd.parseTweetCmdArgs(c.Args)
-	// 画像をアップロード
-	if len(files) != 0 {
-		mediaIDs, err := cmd.upload(files)
-		if err != nil {
-			cmd.drawErrorMessage(err.Error())
-			return
-		}
-		val.Add("media_ids", mediaIDs)
-	}
 	// ツイート
-	tweetStr, err := cmd.api.PostTweet(val, status)
-	if err != nil {
-		cmd.drawErrorMessage(err.Error())
-		return
-	}
-	cmd.drawMessage("TWEETED", tweetStr, cmd.cfg.Color.Accent2)
+	cmd.tweet(status, files)
 }
 
-func (cmd *Cmd) multiCmd(c *ishell.Context) {
-	// マルチライン入力
-	cmd.drawMessage("MULTILINE MODE", "Enter a semicolon to end the input", cmd.cfg.Color.Accent3)
-	status := c.ReadMultiLines(";")
-	// セミコロンのみならキャンセル
-	if status == ";" {
-		cmd.drawMessage("CANCELED", "Tweet post cancelled", cmd.cfg.Color.Accent3)
+func (cmd *Cmd) tweetMultiCmd(c *ishell.Context) {
+	// 入力
+	status, files := cmd.inputMultiLine()
+	if status == "" {
 		return
 	}
-	// セミコロンを除去
-	status = status[:len(status)-1]
 	// ツイート
-	tweetStr, err := cmd.api.PostTweet(url.Values{}, status)
-	if err != nil {
-		cmd.drawErrorMessage(err.Error())
-		return
-	}
-	cmd.drawMessage("TWEETED", tweetStr, cmd.cfg.Color.Accent2)
+	cmd.tweet(status, files)
 }
 
 func (cmd *Cmd) tweetRemoveCmd(c *ishell.Context) {
@@ -114,17 +88,19 @@ func (cmd *Cmd) tweetRemoveCmd(c *ishell.Context) {
 	}
 }
 
-// upload 画像をアップロード
-func (cmd *Cmd) upload(medias []string) (string, error) {
-	// プログレスバー開始
-	fmt.Print("Uploading...🐾 ")
-	cmd.shell.ProgressBar().Indeterminate(true)
-	cmd.shell.ProgressBar().Start()
-	// アップロード
-	mediaIDs, err := cmd.api.UploadImage(medias)
-	cmd.shell.ProgressBar().Stop()
+func (cmd *Cmd) tweet(status string, files []string) {
+	val := url.Values{}
+	// 画像をアップロード
+	err := cmd.upload(files, &val)
 	if err != nil {
-		return "", err
+		cmd.drawErrorMessage(err.Error())
+		return
 	}
-	return mediaIDs, nil
+	// ツイート
+	tweetStr, err := cmd.api.PostTweet(val, status)
+	if err != nil {
+		cmd.drawErrorMessage(err.Error())
+		return
+	}
+	cmd.drawMessage("TWEETED", tweetStr, cmd.cfg.Color.Accent2)
 }

@@ -4,10 +4,18 @@ import (
 	"errors"
 	"fmt"
 	"html"
+	"net/url"
+	"strings"
 
 	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
 )
+
+// setDefaultPrompt デフォルトのプロンプトを設定
+func (cmd *Cmd) setDefaultPrompt() {
+	prompt := fmt.Sprintf("@%s : ", cmd.api.OwnUser.ScreenName)
+	cmd.shell.SetPrompt(prompt)
+}
 
 // parseTweetCmdArgs ツイート系コマンドの引数をパース
 func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
@@ -45,6 +53,52 @@ func (cmd *Cmd) getCountFromCmdArg(args []string) string {
 		return cmd.cfg.Option.Counts
 	}
 	return args[0]
+}
+
+// inputMultiLine マルチラインツイート入力
+func (cmd *Cmd) inputMultiLine() (string, []string) {
+	// プロンプトを変更
+	cmd.shell.SetPrompt("... ")
+	defer cmd.setDefaultPrompt()
+
+	// ツイート文入力
+	cmd.drawMessage("TEXT", "Enter a semicolon to end the input", cmd.cfg.Color.Accent3)
+	status := cmd.shell.ReadMultiLines(";")
+	// セミコロンのみならキャンセル
+	if status == ";" {
+		cmd.drawMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent3)
+		return "", nil
+	}
+	// セミコロンを除去
+	status = status[:len(status)-1]
+
+	// 添付画像ファイル名入力
+	cmd.drawMessage("IMAGE", "Enter the name of the image file to be attached (Please separate with a space)", cmd.cfg.Color.Accent3)
+	img := cmd.shell.ReadLine()
+	images := strings.Fields(img)
+
+	return status, images
+}
+
+// upload 画像をアップロード
+func (cmd *Cmd) upload(files []string, val *url.Values) error {
+	// ファイルが無ければ処理しない
+	if len(files) <= 0 {
+		return nil
+	}
+	// プログレスバー開始
+	fmt.Print("Uploading...🐾 ")
+	cmd.shell.ProgressBar().Indeterminate(true)
+	cmd.shell.ProgressBar().Start()
+	// アップロード
+	mediaIDs, err := cmd.api.UploadImage(files)
+	cmd.shell.ProgressBar().Stop()
+	if err != nil {
+		return err
+	}
+	// media_idsを追加
+	val.Add("media_ids", mediaIDs)
+	return nil
 }
 
 // actionOnTweet ツイートに対しての操作

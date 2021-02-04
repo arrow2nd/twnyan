@@ -7,7 +7,7 @@ import (
 )
 
 func (cmd *Cmd) newReplyCmd() {
-	cmd.shell.AddCmd(&ishell.Cmd{
+	rc := &ishell.Cmd{
 		Name:    "reply",
 		Aliases: []string{"rp"},
 		Func:    cmd.replyCmd,
@@ -18,7 +18,22 @@ func (cmd *Cmd) newReplyCmd() {
 			"reply [<tweetnumber>] [text] [image]...",
 			"reply 2 meow cat.jpg",
 		),
+	}
+
+	rc.AddCmd(&ishell.Cmd{
+		Name:    "multi",
+		Aliases: []string{"ml"},
+		Func:    cmd.replyMultiCmd,
+		Help:    "post a multi-line reply",
+		LongHelp: createLongHelp(
+			"Post a multi-line reply.\nEnter a semicolon to end the input.\nAlso, if it is blank, the tweet will be canceled.",
+			"ml",
+			"reply multi [<tweetnumber>]",
+			"reply multi 2",
+		),
 	})
+
+	cmd.shell.AddCmd(rc)
 }
 
 func (cmd *Cmd) replyCmd(c *ishell.Context) {
@@ -27,7 +42,28 @@ func (cmd *Cmd) replyCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage(c.Cmd.Name)
 		return
 	}
+	// 引数をパース
+	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
+	// リプライ
+	cmd.reply(c, status, files)
+}
 
+func (cmd *Cmd) replyMultiCmd(c *ishell.Context) {
+	// 引数をチェック
+	if len(c.Args) < 1 {
+		cmd.drawWrongArgMessage("reply " + c.Cmd.Name)
+		return
+	}
+	// 入力
+	status, files := cmd.inputMultiLine()
+	if status == "" {
+		return
+	}
+	// リプライ
+	cmd.reply(c, status, files)
+}
+
+func (cmd *Cmd) reply(c *ishell.Context, status string, files []string) {
 	// リプライ先のツイートIDを取得
 	tweetID, err := cmd.view.GetDataFromTweetNum(c.Args[0], "tweetID")
 	if err != nil {
@@ -38,19 +74,12 @@ func (cmd *Cmd) replyCmd(c *ishell.Context) {
 	val := url.Values{}
 	val.Add("in_reply_to_status_id", tweetID)
 	val.Add("auto_populate_reply_metadata", "true")
-
-	// 引数をパース
-	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
 	// 画像をアップロード
-	if len(files) != 0 {
-		mediaIDs, err := cmd.upload(files)
-		if err != nil {
-			cmd.drawErrorMessage(err.Error())
-			return
-		}
-		val.Add("media_ids", mediaIDs)
+	err = cmd.upload(files, &val)
+	if err != nil {
+		cmd.drawErrorMessage(err.Error())
+		return
 	}
-
 	// リプライ
 	tweetStr, err := cmd.api.PostTweet(val, status)
 	if err != nil {
