@@ -3,6 +3,7 @@ package view
 import (
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
@@ -15,6 +16,7 @@ import (
 type View struct {
 	tweets []anaconda.Tweet
 	cfg    *config.Config
+	mu     sync.Mutex
 }
 
 // New 表示

@@ -10,7 +10,6 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
-	"github.com/mattn/go-runewidth"
 )
 
 // DrawTweets ツイート描画
@@ -66,10 +65,8 @@ func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
 }
 
 func (v *View) createTweetText(t *anaconda.Tweet) string {
-	width := util.GetWindowWidth()
-
-	// 画面幅でワープ
-	text := runewidth.Wrap(html.UnescapeString(t.FullText), width)
+	// 文字をアンエスケープ
+	text := html.UnescapeString(t.FullText)
 	text += "\n"
 
 	// ハッシュタグをハイライト
@@ -115,6 +112,8 @@ func (v *View) createReactionCountStr(count int, flg bool, unit string) string {
 
 // RegisterTweets ツイートを登録
 func (v *View) RegisterTweets(t *[]anaconda.Tweet) {
+	v.mu.Lock()
+	defer v.mu.Unlock()
 	tmp := []anaconda.Tweet{}
 	v.tweets = append(tmp, *t...)
 }
