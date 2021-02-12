@@ -36,7 +36,6 @@ func (ta *TwitterAPI) DeleteTweet(tweetID string) (string, error) {
 // UploadImage 画像をアップロード
 func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 	fileNum := len(files)
-	mediaIds := make([]string, fileNum)
 
 	// ファイル数チェック
 	if fileNum > 4 {
@@ -44,15 +43,16 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 	}
 
 	eg, ctx := errgroup.WithContext(context.Background())
+	ch := make(chan string, fileNum)
 
-	for idx, filename := range files {
+	for _, filename := range files {
 		// 拡張子をチェック
 		if ext := strings.ToLower(path.Ext(filename)); ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif" {
 			return "", fmt.Errorf("Unsupported extensions (%s)", ext)
 		}
 
 		// アップロード処理
-		idx, filename := idx, filename
+		filename := filename
 		eg.Go(func() error {
 			select {
 			case <-ctx.Done():
@@ -69,7 +69,7 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 				if err != nil {
 					return fmt.Errorf("Upload failed (%s)", filename)
 				}
-				mediaIds[idx] = media.MediaIDString
+				ch <- media.MediaIDString
 				return nil
 			}
 		})
@@ -79,7 +79,13 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 	if err := eg.Wait(); err != nil {
 		return "", err
 	}
+	close(ch)
 
 	// カンマで連結
-	return strings.Join(mediaIds, ","), nil
+	mediaIds := ""
+	for id := range ch {
+		mediaIds += id + ","
+	}
+
+	return mediaIds, nil
 }
