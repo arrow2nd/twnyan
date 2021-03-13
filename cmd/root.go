@@ -3,10 +3,10 @@ package cmd
 import (
 	"os"
 
+	"github.com/arrow2nd/ishell"
 	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/config"
 	"github.com/arrow2nd/twnyan/view"
-	"gopkg.in/abiosoft/ishell.v2"
 )
 
 // Cmd コマンド

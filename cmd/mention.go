@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"github.com/arrow2nd/ishell"
 	"github.com/arrow2nd/twnyan/api"
-	"gopkg.in/abiosoft/ishell.v2"
 )
 
 func (cmd *Cmd) newMentionCmd() {

@@ -3,7 +3,7 @@ package cmd
 import (
 	"net/url"
 
-	"gopkg.in/abiosoft/ishell.v2"
+	"github.com/arrow2nd/ishell"
 )
 
 func (cmd *Cmd) newReplyCmd() {

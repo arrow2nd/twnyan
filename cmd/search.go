@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"gopkg.in/abiosoft/ishell.v2"
+	"github.com/arrow2nd/ishell"
 )
 
 func (cmd *Cmd) newSearchCmd() {

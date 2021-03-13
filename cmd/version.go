@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"gopkg.in/abiosoft/ishell.v2"
+	"github.com/arrow2nd/ishell"
 )
 
-const ver = "2.0.3"
+const ver = "1.2.4"
 
 func (c *Cmd) newVersionCmd() {
 	c.shell.AddCmd(&ishell.Cmd{

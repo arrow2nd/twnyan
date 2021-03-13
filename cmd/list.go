@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/arrow2nd/ishell"
 	"github.com/arrow2nd/twnyan/util"
-	"gopkg.in/abiosoft/ishell.v2"
 )
 
 func (cmd *Cmd) newListCmd() {

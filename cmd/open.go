@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"github.com/arrow2nd/ishell"
 	"github.com/gookit/color"
 	"github.com/pkg/browser"
-	"gopkg.in/abiosoft/ishell.v2"
 )
 
 func (cmd *Cmd) newOpenCmd() {

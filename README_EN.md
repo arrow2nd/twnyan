@@ -2,18 +2,17 @@
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 
+> **[日本語](README.md)**
+
 A colorful Twitter client that runs in a terminal🐾
 
-> **[日本語](README.md)**
+![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
 ## Features
 - Flexible settings
 - Multi-byte character support
 - Interactive mode support
 - Very colorful
-
-## Screenshot
-![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
 ## System requirements
 - Windows/Linux
@@ -24,9 +23,7 @@ A colorful Twitter client that runs in a terminal🐾
 - If you want to run in WSL environment, you need to be able to use xdg-open
 
 ## Install
-**(Recommended)**
-
-```$ go get -u github.com/arrow2nd/twnyan```
+```$ go install github.com/arrow2nd/twnyan@latest```
 
 ### Use binary files
 Download the latest version of the zip file for your environment from [Releases](https://github.com/arrow2nd/twnyan/releases).
@@ -34,7 +31,7 @@ Download the latest version of the zip file for your environment from [Releases]
 ## Uninstall
 1. ```$ go clean -i github.com/arrow2nd/twnyan```
 2. ```$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan```
-3. v1.x.x : ```$ rm ~/.twnyan.yaml```<br>v2.x.x : ```$ rm -rf ~/.twnyan```
+3. twnyan v1.1.x : ```$ rm ~/.twnyan.yaml```<br>twnyan v1.2.x : ```$ rm -rf ~/.twnyan```
 
 ## Initialization
 ![auth](https://user-images.githubusercontent.com/44780846/106747441-4a59dd00-6667-11eb-8248-3468cb39f7d1.png)

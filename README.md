@@ -2,9 +2,11 @@
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 
+> **[English](README_EN.md)**
+
 いつでも「にゃーん」したいねこのためのTwitterクライアント
 
-> **[English](README_EN.md)**
+![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
 ## 特徴
 - にゃーん機能搭載
@@ -12,9 +14,6 @@
 - マルチバイト文字対応
 - 対話モード対応
 - とってもカラフル
-
-## スクリーンショット
-![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
 ## 動作条件
 - Windows/Linux
@@ -25,9 +24,7 @@
 - WSL環境で実行する場合、xdg-openが使用できる必要があります（~微妙な~[解決策](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)）
 
 ## インストール
-**（おすすめ）**
-
-```$ go get -u github.com/arrow2nd/twnyan```
+```$ go install github.com/arrow2nd/twnyan@latest```
 
 ### バイナリファイルを使う
 [Releases](https://github.com/arrow2nd/twnyan/releases)から環境にあった最新verのzipファイルをダウンロードしてください。
@@ -35,7 +32,7 @@
 ## アンインストール
 1. ```$ go clean -i github.com/arrow2nd/twnyan```
 2. ```$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan```
-3. v1.x.x : ```$ rm ~/.twnyan.yaml```<br>v2.x.x : ```$ rm -rf ~/.twnyan```
+3. twnyan v1.1.x : ```$ rm ~/.twnyan.yaml```<br>twnyan v1.2.x : ```$ rm -rf ~/.twnyan```
 
 ## 初期設定
 ![auth](https://user-images.githubusercontent.com/44780846/106747441-4a59dd00-6667-11eb-8248-3468cb39f7d1.png)

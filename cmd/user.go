@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"github.com/arrow2nd/ishell"
 	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/util"
-	"gopkg.in/abiosoft/ishell.v2"
 )
 
 func (cmd *Cmd) newUserCmd() {
