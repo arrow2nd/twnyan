@@ -39,7 +39,7 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 
 	// ファイル数チェック
 	if fileNum > 4 {
-		return "", errors.New("You can attach up to 4 images")
+		return "", errors.New("you can attach up to 4 images")
 	}
 
 	eg, ctx := errgroup.WithContext(context.Background())
@@ -48,7 +48,7 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 	for _, filename := range files {
 		// 拡張子をチェック
 		if ext := strings.ToLower(path.Ext(filename)); ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif" {
-			return "", fmt.Errorf("Unsupported extensions (%s)", ext)
+			return "", fmt.Errorf("unsupported extensions (%s)", ext)
 		}
 
 		// アップロード処理
@@ -61,13 +61,13 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 				// ファイルを読み込む
 				data, err := ioutil.ReadFile(filename)
 				if err != nil {
-					return fmt.Errorf("Failed to load file (%s)", filename)
+					return fmt.Errorf("failed to load file (%s)", filename)
 				}
 				// base64にエンコードしてアップロード
 				enc := base64.StdEncoding.EncodeToString(data)
 				media, err := ta.API.UploadMedia(enc)
 				if err != nil {
-					return fmt.Errorf("Upload failed (%s)", filename)
+					return fmt.Errorf("upload failed (%s)", filename)
 				}
 				ch <- media.MediaIDString
 				return nil

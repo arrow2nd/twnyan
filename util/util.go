@@ -7,13 +7,13 @@ import (
 	"time"
 
 	"github.com/mattn/go-runewidth"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 // GetWindowWidth ウィンドウの幅を取得
 func GetWindowWidth() int {
 	fd := int(os.Stdout.Fd())
-	w, _, err := terminal.GetSize(fd)
+	w, _, err := term.GetSize(fd)
 	if err != nil {
 		fmt.Println("Error: Could not get window size")
 		panic(err)

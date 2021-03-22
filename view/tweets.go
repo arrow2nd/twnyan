@@ -72,13 +72,13 @@ func (v *View) createTweetText(t *anaconda.Tweet) string {
 	// ハッシュタグをハイライト
 	if len(t.Entities.Hashtags) != 0 {
 		for _, h := range t.Entities.Hashtags {
-			rep := regexp.MustCompile(fmt.Sprintf("[#＃](%s)([\\s])", h.Text))
+			rep := regexp.MustCompile(fmt.Sprintf(`[#＃](%s)([\s　])`, h.Text))
 			text = rep.ReplaceAllString(text, color.HEX(v.cfg.Color.Hashtag).Sprintf("#$1$2"))
 		}
 	}
 	// メンションをハイライト
 	if len(t.Entities.User_mentions) != 0 {
-		rep := regexp.MustCompile("(^|[^\\w@#$%&])[@＠](\\w+)")
+		rep := regexp.MustCompile(`(^|[^\w@#$%&])[@＠](\w+)`)
 		text = rep.ReplaceAllString(text, "$1"+color.HEX(v.cfg.Color.Reply).Sprintf("@$2"))
 	}
 
@@ -153,6 +153,6 @@ func (v *View) GetDataFromTweetNum(numStr, dataType string) (string, error) {
 	case "tweetID":
 		return tweet.IdStr, nil
 	default:
-		return "", errors.New("Wrong dataType")
+		return "", errors.New("wrong datatype")
 	}
 }

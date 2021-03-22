@@ -56,7 +56,7 @@ func (ta *TwitterAPI) GetSearchResult(query, count string) (*[]anaconda.Tweet, e
 		return nil, errors.New(parseAPIError(err))
 	}
 	if len(result.Statuses) == 0 {
-		return nil, errors.New("No tweets found")
+		return nil, errors.New("no tweets found")
 	}
 	return &result.Statuses, nil
 }
