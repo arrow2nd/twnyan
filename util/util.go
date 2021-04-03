@@ -63,5 +63,5 @@ func IsSameDate(a time.Time) bool {
 
 // IsEndLFCode 末尾が改行コードかどうか
 func IsEndLFCode(text string) bool {
-	return text == "" || strings.HasSuffix(text, "\n") || strings.HasSuffix(text, "\r")
+	return strings.HasSuffix(text, "\n") || strings.HasSuffix(text, "\r")
 }

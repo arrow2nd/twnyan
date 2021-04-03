@@ -69,7 +69,7 @@ func (cmd *Cmd) inputMultiLine() (string, []string) {
 	// ツイート文入力
 	cmd.drawMessage("INPUT", "End typing with a semicolon (cancel with Ctrl+c on an empty line)", cmd.cfg.Color.Accent3)
 	text := cmd.shell.ReadMultiLines(";")
-	if util.IsEndLFCode(text) {
+	if text == "" || util.IsEndLFCode(text) {
 		cmd.drawMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
 		return "", nil
 	}
@@ -77,10 +77,6 @@ func (cmd *Cmd) inputMultiLine() (string, []string) {
 	// 添付画像ファイル名入力
 	cmd.drawMessage("IMAGE", "Enter the file name of the attached image (separated by a space)", cmd.cfg.Color.Accent3)
 	img := cmd.shell.ReadLine()
-	if util.IsEndLFCode(img) {
-		cmd.drawMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
-		return "", nil
-	}
 
 	// 戻り値を作成
 	tweet := strings.TrimRight(text, ";")
