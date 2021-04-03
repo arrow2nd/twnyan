@@ -1,6 +1,8 @@
 # twnyan
+
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
+[![GitHub license](https://img.shields.io/github/license/arrow2nd/twnyan)](https://github.com/arrow2nd/twnyan/blob/main/LICENSE.txt)
 
 > **[日本語](README.md)**
 
@@ -9,31 +11,40 @@ A colorful Twitter client that runs in a terminal🐾
 ![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
 ## Features
+
 - Flexible settings
 - Multi-byte character support
-- Interactive mode support
+- Interactive mode
 - Very colorful
 
 ## System requirements
-- Windows/Linux
+
+- Windows / Linux
 - A terminal that can display emoji
 
 ### Remarks
+
 - Not confirmed to work on Mac
 - If you want to run in WSL environment, you need to be able to use xdg-open
 
 ## Install
-```$ go install github.com/arrow2nd/twnyan@latest```
+
+### Recommend
+
+`$ go install github.com/arrow2nd/twnyan@latest`
 
 ### Use binary files
+
 Download the latest version of the zip file for your environment from [Releases](https://github.com/arrow2nd/twnyan/releases).
 
 ## Uninstall
-1. ```$ go clean -i github.com/arrow2nd/twnyan```
-2. ```$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan```
-3. twnyan v1.1.x : ```$ rm ~/.twnyan.yaml```<br>twnyan v1.2.x : ```$ rm -rf ~/.twnyan```
+
+1. `$ go clean -i github.com/arrow2nd/twnyan`
+2. `$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan`
+3. twnyan v1.1.x : `$ rm ~/.twnyan.yaml`<br>twnyan v1.2.x : `$ rm -rf ~/.twnyan`
 
 ## Initialization
+
 ![auth](https://user-images.githubusercontent.com/44780846/106747441-4a59dd00-6667-11eb-8248-3468cb39f7d1.png)
 
 1. Access the authentication page that appears the first time you start the program
@@ -41,22 +52,28 @@ Download the latest version of the zip file for your environment from [Releases]
 3. done!
 
 ## Usage
+
 ### Command line mode
+
 ![cmdline](https://user-images.githubusercontent.com/44780846/106699170-b287cf00-6625-11eb-8374-8565286db3e2.gif)
 
-```$ twnyan [command] [argument]```
+`$ twnyan [command] [argument]`
 
 Also, some commands cannot be used in command line mode.
+
 ### にゃーん
+
 ![nyaan](https://user-images.githubusercontent.com/44780846/106699001-558c1900-6625-11eb-948e-6212ab0cba40.gif)
 
-```$ twnyan tw```
+`$ twnyan tw`
 
 If you omit the tweet text, it will be tweeted as "にゃーん". (If an image is attached, the tweet will not "にゃーん")
 
 > "にゃーん" is the Japanese word for a cat's meow.
+
 ### Interactive mode
-```$ twnyan```
+
+`$ twnyan`
 
 You can control tweets (like, RT, etc.) by specifying the number (tweetnumber) displayed at the top of the tweet.
 
@@ -66,238 +83,309 @@ You can control tweets (like, RT, etc.) by specifying the number (tweetnumber) d
 <summary>Open</summary>
 
 ## tweet
-```Alias: tw```
+
+`Alias: tw`
+
 ### tweet [text] [imagefile]
+
 Post a tweet.
 
-| Arguments  | Hints                                                                            | Examples                            |
-| ---------- | -------------------------------------------------------------------------------- | ----------------------------------- |
-| text       | If there is no text and image file, the message will be posted with a "にゃーん" | ```tweet```                         |
-| image file | If there is more than one, please separate them with a space                     | ```tweet 🍣 sushi1.png sushi2.png``` |
+| Arguments  | Hints                                                                            | Examples                         |
+| ---------- | -------------------------------------------------------------------------------- | -------------------------------- |
+| text       | If there is no text and image file, the message will be posted with a "にゃーん" | `tweet`                          |
+| image file | If there is more than one, please separate them with a space                     | `tweet 🍣 sushi1.png sushi2.png` |
 
-- You can also omit the text and just post an image (e.g. ```tweet cat.png```)
+- You can also omit the text and just post an image (e.g. `tweet cat.png`)
+
 ### tweet multi
-```Alias: ml```
+
+`Alias: ml`
 
 Post a multi-line tweet.
+
 - To finish typing, type a semicolon (;) at the end of the sentence
-- If it is blank (enter only a semicolon), the post will be canceled
+- To cancel, press Ctrl+C on an empty line
+
 ### tweet remove [\<tweetnumber\>]...
-```Alias: rm```
+
+`Alias: rm`
 
 Delete a tweet.
 
-| Arguments   | Hints                                                      | Examples               |
-| ----------- | ---------------------------------------------------------- | ---------------------- |
-| tweetNumber | Separate each tweet with a space if there is more than one | ```tweet remove 2 5``` |
+| Arguments   | Hints                                                      | Examples           |
+| ----------- | ---------------------------------------------------------- | ------------------ |
+| tweetNumber | Separate each tweet with a space if there is more than one | `tweet remove 2 5` |
 
 ## timeline
-```Alias: tl```
+
+`Alias: tl`
+
 ### timeline [counts]
+
 Get a home timeline.
 
-| Arguments | Hints                                                                | Examples          |
-| --------- | -------------------------------------------------------------------- | ----------------- |
-| counts    | If you omit it, the default value is given in the configuration file | ```timeline 39``` |
+| Arguments | Hints                                                                | Examples      |
+| --------- | -------------------------------------------------------------------- | ------------- |
+| counts    | If you omit it, the default value is given in the configuration file | `timeline 39` |
 
 ## mention
-```Alias: mt```
+
+`Alias: mt`
+
 ### mention [counts]
+
 Get a Mentions to you.
 
-| Arguments | Hints                                                                | Examples         |
-| --------- | -------------------------------------------------------------------- | ---------------- |
-| counts    | If you omit it, the default value is given in the configuration file | ```mention 20``` |
+| Arguments | Hints                                                                | Examples     |
+| --------- | -------------------------------------------------------------------- | ------------ |
+| counts    | If you omit it, the default value is given in the configuration file | `mention 20` |
 
 ## list
-```Alias: ls```
+
+`Alias: ls`
+
 ### list [\<listname\>] [counts]
+
 Get a timeline of the list.
 
-| Arguments | Hints                                                                        | Examples                      |
-| --------- | ---------------------------------------------------------------------------- | ----------------------------- |
-| list name | If you are running in interactive mode, you can complete it with the Tab key | ```list Cats```               |
-| counts    | If you omit it, the default value is given in the configuration file         | ```list "Cat Gathering" 30``` |
+| Arguments | Hints                                                                        | Examples                  |
+| --------- | ---------------------------------------------------------------------------- | ------------------------- |
+| list name | If you are running in interactive mode, you can complete it with the Tab key | `list Cats`               |
+| counts    | If you omit it, the default value is given in the configuration file         | `list "Cat Gathering" 30` |
 
 ## user
-```Alias: ur```
+
+`Alias: ur`
+
 ### user [<username/tweetnumber>] [counts]
+
 Get a timeline of the specified user.
 
-| Arguments            | Hints                                                                | Examples                          |
-| -------------------- | -------------------------------------------------------------------- | --------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional       | ```user github```<br>```user 1``` |
-| counts               | If you omit it, the default value is given in the configuration file | ```user twitter 15```             |
+| Arguments            | Hints                                                                | Examples                  |
+| -------------------- | -------------------------------------------------------------------- | ------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional       | `user github`<br>`user 1` |
+| counts               | If you omit it, the default value is given in the configuration file | `user twitter 15`         |
+
 ### user own [counts]
+
 Get your own timeline.
 
-| Arguments | Hints                                                                | Examples          |
-| --------- | -------------------------------------------------------------------- | ----------------- |
-| counts    | If you omit it, the default value is given in the configuration file | ```user own 50``` |
+| Arguments | Hints                                                                | Examples      |
+| --------- | -------------------------------------------------------------------- | ------------- |
+| counts    | If you omit it, the default value is given in the configuration file | `user own 50` |
 
 ## search
-```Alias: sh```
+
+`Alias: sh`
+
 ### search [\<keyword\>] [counts]
+
 Searches for tweets tweets in the past 7 days.
 
-| Arguments | Hints                                                                | Examples               |
-| --------- | -------------------------------------------------------------------- | ---------------------- |
-| keyword   | Please enclose any spaces in double quotes                           | ```search "cat dog"``` |
-| counts    | If you omit it, the default value is given in the configuration file | ```search sushi 5```   |
+| Arguments | Hints                                                                | Examples           |
+| --------- | -------------------------------------------------------------------- | ------------------ |
+| keyword   | Please enclose any spaces in double quotes                           | `search "cat dog"` |
+| counts    | If you omit it, the default value is given in the configuration file | `search sushi 5`   |
 
 ## like
-```Alias: lk, fv```
+
+`Alias: lk, fv`
+
 ### like [\<tweetnumber\>]
+
 Like a tweet.
 
-| Arguments   | Hints                                                      | Examples       |
-| ----------- | ---------------------------------------------------------- | -------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```like 1 2``` |
+| Arguments   | Hints                                                      | Examples   |
+| ----------- | ---------------------------------------------------------- | ---------- |
+| tweetnumber | Separate each tweet with a space if there is more than one | `like 1 2` |
+
 ### like remove [\<tweetnumber\>]
-```Alias: rm```
+
+`Alias: rm`
 
 UnLike a tweet.
 
-| Arguments   | Hints                                                      | Examples              |
-| ----------- | ---------------------------------------------------------- | --------------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```like remove 1 2``` |
-
-## retweet
-```Alias: rt```
-### retweet [\<tweetnumber\>]...
-Retweet a tweet.
-
 | Arguments   | Hints                                                      | Examples          |
 | ----------- | ---------------------------------------------------------- | ----------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```retweet 1 5``` |
+| tweetnumber | Separate each tweet with a space if there is more than one | `like remove 1 2` |
+
+## retweet
+
+`Alias: rt`
+
+### retweet [\<tweetnumber\>]...
+
+Retweet a tweet.
+
+| Arguments   | Hints                                                      | Examples      |
+| ----------- | ---------------------------------------------------------- | ------------- |
+| tweetnumber | Separate each tweet with a space if there is more than one | `retweet 1 5` |
+
 ### retweet remove [\<tweetnumber\>]...
-```Alias: rm```
+
+`Alias: rm`
 
 UnRetweet tweet.
 
-| Arguments   | Hints                                                      | Examples                 |
-| ----------- | ---------------------------------------------------------- | ------------------------ |
-| tweetnumber | Separate each tweet with a space if there is more than one | ```retweet remove 1 5``` |
+| Arguments   | Hints                                                      | Examples             |
+| ----------- | ---------------------------------------------------------- | -------------------- |
+| tweetnumber | Separate each tweet with a space if there is more than one | `retweet remove 1 5` |
 
 ## quote
-```Alias: qt```
+
+`Alias: qt`
+
 ### quote [\<tweetnumber\>] [text] [imagefile]
+
 Quote a tweet.
 
-| Arguments   | Hints                                                                            | Examples                              |
-| ----------- | -------------------------------------------------------------------------------- | ------------------------------------- |
-| tweetnumber | Specify the number of the tweet to quote                                         | ```quote 1 good!!!```                 |
-| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```quote 1```                         |
-| imagefile   | If there is more than one, please separate them with a space                     | ```quote 1 🍣 sushi1.png sushi2.png``` |
+| Arguments   | Hints                                                                            | Examples                           |
+| ----------- | -------------------------------------------------------------------------------- | ---------------------------------- |
+| tweetnumber | Specify the number of the tweet to quote                                         | `quote 1 good!!!`                  |
+| text        | If there is no text and image file, the message will be posted with a "にゃーん" | `quote 1`                          |
+| imagefile   | If there is more than one, please separate them with a space                     | `quote 1 🍣 sushi1.png sushi2.png` |
+
 ### quote multi
-```Alias: ml```
+
+`Alias: ml`
 
 Post a multi-line quote retweet.
+
 - To finish typing, type a semicolon (;) at the end of the sentence
 - If blank (enter only a semicolon), the post will be canceled
 
 ## reply
-```Alias: rp```
+
+`Alias: rp`
+
 ### reply [\<tweetnumber\>] [text] [imagefile]
+
 Post a reply.
 
-| Arguments   | Hints                                                                            | Examples                         |
-| ----------- | -------------------------------------------------------------------------------- | -------------------------------- |
-| tweetnumber | Specify the number of the tweet you want to reply to.                            | ```reply 1 meow```               |
-| text        | If there is no text and image file, the message will be posted with a "にゃーん" | ```reply 1```                    |
-| image file  | If there is more than one, please separate them with a space                     | ```reply 1 good!!! sushi1.png``` |
+| Arguments   | Hints                                                                            | Examples                     |
+| ----------- | -------------------------------------------------------------------------------- | ---------------------------- |
+| tweetnumber | Specify the number of the tweet you want to reply to.                            | `reply 1 meow`               |
+| text        | If there is no text and image file, the message will be posted with a "にゃーん" | `reply 1`                    |
+| image file  | If there is more than one, please separate them with a space                     | `reply 1 good!!! sushi1.png` |
 
-- You can also omit the text and just post an image. (e.g. ```reply 1 dog.png```)
+- You can also omit the text and just post an image. (e.g. `reply 1 dog.png`)
+
 ### reply multi
-```Alias: ml```
+
+`Alias: ml`
 
 Post a multi-line reply.
+
 - To finish typing, enter a semicolon (;) at the end of the sentence
 - If blank (enter only a semicolon), the post will be canceled
 
 ## follow
-```Alias: fw```
+
+`Alias: fw`
+
 ### follow [<username/tweetnumber>]
+
 Follow a user.
 
-| Arguments            | Hints                                                          | Examples                              |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```follow github```<br>```follow 1``` |
+| Arguments            | Hints                                                          | Examples                      |
+| -------------------- | -------------------------------------------------------------- | ----------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `follow github`<br>`follow 1` |
+
 ### follow remove [<username/tweetnumber>]
-```Alias: rm```
+
+`Alias: rm`
 
 Unfollow a user.
 
-| Arguments            | Hints                                                          | Examples                                               |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```follow remove arrow_2nd```<br>```follow remove 1``` |
+| Arguments            | Hints                                                          | Examples                                       |
+| -------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `follow remove arrow_2nd`<br>`follow remove 1` |
 
 ## block
-```Alias: bk```
+
+`Alias: bk`
+
 ### block [<username/tweetnumber>]
+
 Block a user.
 
-| Arguments            | Hints                                                          | Examples                               |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```block arrow_2nd```<br>```block 1``` |
+| Arguments            | Hints                                                          | Examples                       |
+| -------------------- | -------------------------------------------------------------- | ------------------------------ |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `block arrow_2nd`<br>`block 1` |
+
 ### block remove [<username/tweetnumber>]
-```Alias: rm```
+
+`Alias: rm`
 
 Unblock a user.
 
-| Arguments            | Hints                                                          | Examples                                             |
-| -------------------- | -------------------------------------------------------------- | ---------------------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```block remove arrow_2nd```<br>```block remove 1``` |
+| Arguments            | Hints                                                          | Examples                                     |
+| -------------------- | -------------------------------------------------------------- | -------------------------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `block remove arrow_2nd`<br>`block remove 1` |
 
 ## mute
-```Alias: mu```
+
+`Alias: mu`
+
 ### mute [<username/tweetnumber>]
+
 Mute a user.
 
-| Arguments            | Hints                                                          | Examples                             |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------ |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```mute arrow_2nd```<br>```mute 1``` |
+| Arguments            | Hints                                                          | Examples                     |
+| -------------------- | -------------------------------------------------------------- | ---------------------------- |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `mute arrow_2nd`<br>`mute 1` |
+
 ### mute remove [<username/tweetnumber>]
-```Alias: rm```
+
+`Alias: rm`
 
 Unmute a user.
 
-| Arguments            | Hints                                                          | Examples                                           |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | ```mute remove arrow_2nd```<br>```mute remove 1``` |
+| Arguments            | Hints                                                          | Examples                                   |
+| -------------------- | -------------------------------------------------------------- | ------------------------------------------ |
+| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `mute remove arrow_2nd`<br>`mute remove 1` |
 
 ## open
-```Alias: op```
+
+`Alias: op`
+
 ### open [\<tweetnumber\>]
+
 View the tweet in your browser.
 
-| Arguments   | Hints                                                          | Examples     |
-| ----------- | -------------------------------------------------------------- | ------------ |
-| tweetnumber | Specify the number of the tweet to be displayed in the browser | ```open 2``` |
+| Arguments   | Hints                                                          | Examples |
+| ----------- | -------------------------------------------------------------- | -------- |
+| tweetnumber | Specify the number of the tweet to be displayed in the browser | `open 2` |
 
 ## clear
+
 Initialize the screen.
 
 ## help
+
 Displays help.
 
-You can also use ```[command] help``` to display help for a command.
+You can also use `[command] help` to display help for a command.
 
 ## exit
+
 Exits the interactive mode.
 
 </details>
 
 ## Configuration directory
-The configuration directory will be created directly under your home directory as ``.twnyan``
+
+The configuration directory will be created directly under your home directory as `.twnyan`
 
 <details>
 <summary>Open</summary>
 
 ### .cred.yaml
+
 A file of authentication information.
 
 ### option.yaml
+
 A file of option setting.
 
 | 名前       | 説明                                |
@@ -310,7 +398,8 @@ A file of option setting.
 - The format of the date and time is the same as the format string of the [time package](https://golang.org/pkg/time/#pkg-constants)
 
 ### color.yaml
-A file of  color settings.
+
+A file of color settings.
 
 | 名前         | 説明                                           |
 | ------------ | ---------------------------------------------- |
