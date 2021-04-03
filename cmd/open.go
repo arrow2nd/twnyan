@@ -33,7 +33,7 @@ func (cmd *Cmd) openCmd(c *ishell.Context) {
 		color.Error.Prompt(err.Error())
 		return
 	}
-	cmd.drawMessage("OPENED", uri, cmd.cfg.Color.Accent3)
+	cmd.drawMessage("OPENED", uri, cmd.cfg.Color.Accent2)
 	// ブラウザを開く
 	browser.OpenURL(uri)
 }
