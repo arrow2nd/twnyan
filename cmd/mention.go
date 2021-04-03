@@ -23,6 +23,7 @@ func (cmd *Cmd) newMentionCmd() {
 func (cmd *Cmd) mentionCmd(c *ishell.Context) {
 	// 引数をパース
 	counts := cmd.getCountFromCmdArg(c.Args)
+
 	// メンションタイムラインを取得
 	v := api.CreateURLValues(counts)
 	t, err := cmd.api.GetTimeline("mention", v)
@@ -30,6 +31,7 @@ func (cmd *Cmd) mentionCmd(c *ishell.Context) {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// 描画
 	cmd.view.RegisterTweets(t)
 	cmd.view.DrawTweets()

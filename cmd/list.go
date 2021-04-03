@@ -30,18 +30,21 @@ func (cmd *Cmd) listCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage(c.Cmd.Name)
 		return
 	}
+
 	// リスト名がリスト内にあるかチェック
 	i := util.IndexOf(cmd.api.ListNames, name)
 	if i == -1 {
 		cmd.drawErrorMessage("No list exists!")
 		return
 	}
+
 	// リストタイムラインを取得
 	t, err := cmd.api.GetListTimeline(cmd.api.ListIDs[i], counts)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// 描画
 	cmd.view.RegisterTweets(t)
 	cmd.view.DrawTweets()
@@ -52,6 +55,7 @@ func (cmd *Cmd) listCmdCompleter([]string) []string {
 	if cmd.api.ListNames == nil {
 		return nil
 	}
+
 	// 補完用スライス作成
 	cmp := make([]string, len(cmd.api.ListNames))
 	for i, v := range cmd.api.ListNames {
@@ -62,5 +66,6 @@ func (cmd *Cmd) listCmdCompleter([]string) []string {
 			cmp[i] = v
 		}
 	}
+
 	return cmp
 }

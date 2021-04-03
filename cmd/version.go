@@ -4,7 +4,7 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-const ver = "1.2.5"
+const ver = "1.2.6"
 
 func (c *Cmd) newVersionCmd() {
 	c.shell.AddCmd(&ishell.Cmd{

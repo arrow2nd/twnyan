@@ -26,10 +26,12 @@ func (ta *TwitterAPI) PostTweet(val url.Values, status string) (string, error) {
 // DeleteTweet ツイートを削除
 func (ta *TwitterAPI) DeleteTweet(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
+
 	tweet, err := ta.API.DeleteTweet(id, true)
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	return tweet.FullText, nil
 }
 

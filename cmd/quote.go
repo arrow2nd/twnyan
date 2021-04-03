@@ -42,8 +42,10 @@ func (cmd *Cmd) quoteCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage(c.Cmd.Name)
 		return
 	}
+
 	// 引数をパース
 	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
+
 	// 引用ツイート
 	cmd.quote(c, status, files)
 }
@@ -54,26 +56,31 @@ func (cmd *Cmd) quoteMultiCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage("quote " + c.Cmd.Name)
 		return
 	}
+
 	// 入力
 	status, files := cmd.inputMultiLine()
+
 	// 引用ツイート
 	cmd.quote(c, status, files)
 }
 
 func (cmd *Cmd) quote(c *ishell.Context, status string, files []string) {
 	val := url.Values{}
+
 	// 引用するツイートのURLを取得
 	uri, err := cmd.view.GetTweetURL(c.Args[0])
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// 画像をアップロード
 	err = cmd.upload(files, &val)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// URLを追加してツイート
 	status += " " + uri
 	tweetStr, err := cmd.api.PostTweet(val, status)
@@ -81,5 +88,6 @@ func (cmd *Cmd) quote(c *ishell.Context, status string, files []string) {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	cmd.drawMessage("QUOTED", tweetStr, cmd.cfg.Color.Retweet)
 }

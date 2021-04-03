@@ -13,6 +13,7 @@ func (tw *TwitterAPI) Favorite(tweetID string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	return tweet.FullText, nil
 }
 
@@ -23,6 +24,7 @@ func (tw *TwitterAPI) Unfavorite(tweetID string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	return tweet.FullText, nil
 }
 
@@ -33,6 +35,7 @@ func (tw *TwitterAPI) Retweet(tweetID string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	return tweet.RetweetedStatus.FullText, nil
 }
 
@@ -43,6 +46,7 @@ func (tw *TwitterAPI) UnRetweet(tweetID string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	return tweet.FullText, nil
 }
 
@@ -52,7 +56,9 @@ func (tw *TwitterAPI) Follow(screenname string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+
 	return str, nil
 }
 
@@ -62,7 +68,9 @@ func (tw *TwitterAPI) Unfollow(screenname string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+
 	return str, nil
 }
 
@@ -72,7 +80,9 @@ func (tw *TwitterAPI) Block(screenname string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+
 	return str, nil
 }
 
@@ -82,7 +92,9 @@ func (tw *TwitterAPI) Unblock(screenname string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+
 	return str, nil
 }
 
@@ -92,7 +104,9 @@ func (tw *TwitterAPI) Mute(screenname string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+
 	return str, nil
 }
 
@@ -102,6 +116,8 @@ func (tw *TwitterAPI) Unmute(screenname string) (string, error) {
 	if err != nil {
 		return "", errors.New(parseAPIError(err))
 	}
+
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
+
 	return str, nil
 }

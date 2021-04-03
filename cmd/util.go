@@ -20,6 +20,7 @@ func (cmd *Cmd) setDefaultPrompt() {
 // parseTweetCmdArgs ツイート系コマンドの引数をパース
 func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 	status, images := "にゃーん", []string{}
+
 	if len(args) > 0 {
 		if util.ContainsStr("\\.\\w{3,4}$", args[0]) {
 			status = ""
@@ -29,6 +30,7 @@ func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 			images = args[1:]
 		}
 	}
+
 	return status, images
 }
 
@@ -39,10 +41,12 @@ func (cmd *Cmd) parseTLCmdArgs(args []string) (string, string, error) {
 		return "", "", errors.New("no arguments")
 	}
 	str, counts := args[0], cmd.cfg.Option.Counts
+
 	// 取得件数の指定があれば置換
 	if len(args) >= 2 {
 		counts = args[1]
 	}
+
 	return str, counts, nil
 }
 
@@ -52,6 +56,7 @@ func (cmd *Cmd) getCountFromCmdArg(args []string) string {
 	if len(args) <= 0 || !util.IsNumber(args[0]) {
 		return cmd.cfg.Option.Counts
 	}
+
 	return args[0]
 }
 
@@ -90,18 +95,22 @@ func (cmd *Cmd) upload(files []string, val *url.Values) error {
 	if len(files) <= 0 {
 		return nil
 	}
+
 	// プログレスバー開始
 	fmt.Print("Uploading...🐾 ")
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
+
 	// アップロード
 	mediaIDs, err := cmd.api.UploadImage(files)
 	cmd.shell.ProgressBar().Stop()
 	if err != nil {
 		return err
 	}
+
 	// media_idsを追加
 	val.Add("media_ids", mediaIDs)
+
 	return nil
 }
 
@@ -112,6 +121,7 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 		cmd.drawWrongArgMessage(cmdName)
 		return
 	}
+
 	// 引数の数だけ処理
 	for _, v := range args {
 		id, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
@@ -119,11 +129,13 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 			cmd.drawErrorMessage(err.Error())
 			return
 		}
+
 		tweetStr, err := actionFunc(id)
 		if err != nil {
 			cmd.drawErrorMessage(err.Error())
 			return
 		}
+
 		cmd.drawMessage(actionName, tweetStr, bgColor)
 	}
 }
@@ -131,11 +143,13 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 // actionOnUser ユーザーに対しての操作
 func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string, actionFunc func(string) (string, error)) {
 	var err error
+
 	// 引数をチェック
 	if len(args) <= 0 {
 		cmd.drawWrongArgMessage(cmdName)
 		return
 	}
+
 	// ツイート番号ならスクリーンネームに置換
 	screenName := args[0]
 	if util.IsNumber(args[0]) {
@@ -145,12 +159,14 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 			return
 		}
 	}
+
 	// 処理を実行
 	userStr, err := actionFunc(screenName)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	cmd.drawMessage(actionName, userStr, bgColor)
 }
 

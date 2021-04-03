@@ -45,6 +45,7 @@ func (cmd *Cmd) userCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage(c.Cmd.Name)
 		return
 	}
+
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsNumber(value) {
 		value, err = cmd.view.GetDataFromTweetNum(value, "screenname")
@@ -53,6 +54,7 @@ func (cmd *Cmd) userCmd(c *ishell.Context) {
 			return
 		}
 	}
+
 	// ユーザータイムラインを取得
 	cmd.loadUserTimeline(value, counts)
 }
@@ -66,6 +68,7 @@ func (cmd *Cmd) loadUserTimeline(screenName, counts string) {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// ユーザーとの関係を取得
 	u := (*t)[0].User
 	fs, err := cmd.api.GetFriendships(u.IdStr)
@@ -73,6 +76,7 @@ func (cmd *Cmd) loadUserTimeline(screenName, counts string) {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// 描画
 	cmd.view.RegisterTweets(t)
 	cmd.view.DrawTweets()

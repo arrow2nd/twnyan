@@ -42,8 +42,10 @@ func (cmd *Cmd) replyCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage(c.Cmd.Name)
 		return
 	}
+
 	// 引数をパース
 	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
+
 	// リプライ
 	cmd.reply(c, status, files)
 }
@@ -54,11 +56,13 @@ func (cmd *Cmd) replyMultiCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage("reply " + c.Cmd.Name)
 		return
 	}
+
 	// 入力
 	status, files := cmd.inputMultiLine()
 	if status == "" {
 		return
 	}
+
 	// リプライ
 	cmd.reply(c, status, files)
 }
@@ -70,21 +74,25 @@ func (cmd *Cmd) reply(c *ishell.Context, status string, files []string) {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// リプライ先を設定
 	val := url.Values{}
 	val.Add("in_reply_to_status_id", tweetID)
 	val.Add("auto_populate_reply_metadata", "true")
+
 	// 画像をアップロード
 	err = cmd.upload(files, &val)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// リプライ
 	tweetStr, err := cmd.api.PostTweet(val, status)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	cmd.drawMessage("REPLYED", tweetStr, cmd.cfg.Color.Reply)
 }

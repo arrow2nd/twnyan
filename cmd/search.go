@@ -26,12 +26,14 @@ func (cmd *Cmd) searchCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage(c.Cmd.Name)
 		return
 	}
+
 	// 検索結果を取得
 	t, err := cmd.api.GetSearchResult(keyword, counts)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// 描画
 	cmd.view.RegisterTweets(t)
 	cmd.view.DrawTweets()

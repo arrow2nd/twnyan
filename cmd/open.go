@@ -27,13 +27,15 @@ func (cmd *Cmd) openCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage(c.Cmd.Name)
 		return
 	}
+
 	// 該当ツイートのURLを取得
 	uri, err := cmd.view.GetTweetURL(c.Args[0])
 	if err != nil {
 		color.Error.Prompt(err.Error())
 		return
 	}
-	cmd.drawMessage("OPENED", uri, cmd.cfg.Color.Accent2)
+
 	// ブラウザを開く
+	cmd.drawMessage("OPENED", uri, cmd.cfg.Color.Accent2)
 	browser.OpenURL(uri)
 }

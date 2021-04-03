@@ -73,6 +73,7 @@ func (v *View) truncateUserName(un string) string {
 
 func (v *View) createConnectionStr(c []string) string {
 	connection := ""
+
 	for _, str := range c {
 		switch str {
 		case "followed_by":
@@ -85,5 +86,6 @@ func (v *View) createConnectionStr(c []string) string {
 			connection += color.HEX(v.cfg.Color.Mute).Sprint("Muting ")
 		}
 	}
+
 	return connection
 }

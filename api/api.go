@@ -39,18 +39,23 @@ func New() *TwitterAPI {
 // Init 初期化
 func (ta *TwitterAPI) Init(token, secret string) error {
 	var err error
+
+	// TwitterApi構造体を作成
 	ta.API = anaconda.NewTwitterApi(token, secret)
 	ta.API.ReturnRateLimitError(true)
+
 	// ユーザー情報を取得
 	ta.OwnUser, err = ta.getSelf()
 	if err != nil {
 		return err
 	}
+
 	// リスト情報を取得
 	ta.ListNames, ta.ListIDs, err = ta.getLists()
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -71,7 +76,8 @@ func (ta *TwitterAPI) Auth() (string, string) {
 	color.Green.Println("|   _|  |  |  |     |  |  |  _  |     |")
 	color.Cyan.Println("|____|________|__|__|___  |___._|__|__|")
 	color.Blue.Println("                    |_____|            ")
-	// URL
+
+	// 認証URL
 	fmt.Println("\n🐈 Go to the following URL to authenticate the application and enter the PIN that is displayed")
 	fmt.Printf("[ %s ]\n\n", uri)
 
@@ -87,6 +93,7 @@ func (ta *TwitterAPI) Auth() (string, string) {
 		panic(err)
 	}
 
+	// 初期化
 	ta.Init(cred.Token, cred.Secret)
 
 	return cred.Token, cred.Secret

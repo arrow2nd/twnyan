@@ -23,6 +23,7 @@ func configFileExists(dir string) bool {
 		filepath.Join(dir, optFile),
 		filepath.Join(dir, colFile),
 	}
+
 	// ディレクトリの存在チェック
 	if _, err := os.Stat(dir); err != nil {
 		if err := os.Mkdir(dir, 0777); err != nil {
@@ -31,12 +32,14 @@ func configFileExists(dir string) bool {
 		}
 		return false
 	}
+
 	// ファイルの存在チェック
 	for _, path := range list {
 		if _, err := os.Stat(path); err != nil {
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -46,6 +49,7 @@ func saveYaml(dir, filename string, in interface{}) {
 	if err != nil {
 		panic(err)
 	}
+
 	// 保存
 	path := filepath.Join(dir, filename)
 	err = ioutil.WriteFile(path, buf, os.ModePerm)
@@ -63,6 +67,7 @@ func loadYaml(dir, filename string, out interface{}) {
 		fmt.Println("Error: Failed to load file")
 		panic(err)
 	}
+
 	// 構造体にマッピング
 	err = yaml.Unmarshal(buf, out)
 	if err != nil {

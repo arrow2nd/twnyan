@@ -23,6 +23,7 @@ func (cmd *Cmd) newTimelineCmd() {
 func (cmd *Cmd) timelineCmd(c *ishell.Context) {
 	// 引数をパース
 	counts := cmd.getCountFromCmdArg(c.Args)
+
 	// タイムラインを取得
 	v := api.CreateURLValues(counts)
 	t, err := cmd.api.GetTimeline("home", v)
@@ -30,6 +31,7 @@ func (cmd *Cmd) timelineCmd(c *ishell.Context) {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// 描画
 	cmd.view.RegisterTweets(t)
 	cmd.view.DrawTweets()

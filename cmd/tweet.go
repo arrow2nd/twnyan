@@ -50,19 +50,15 @@ func (cmd *Cmd) newTweetCmd() {
 }
 
 func (cmd *Cmd) tweetCmd(c *ishell.Context) {
-	// 引数をパース
 	status, files := cmd.parseTweetCmdArgs(c.Args)
-	// ツイート
 	cmd.tweet(status, files)
 }
 
 func (cmd *Cmd) tweetMultiCmd(c *ishell.Context) {
-	// 入力
 	status, files := cmd.inputMultiLine()
 	if status == "" {
 		return
 	}
-	// ツイート
 	cmd.tweet(status, files)
 }
 

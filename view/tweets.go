@@ -124,7 +124,9 @@ func (v *View) GetTweetURL(numStr string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	ID, _ := v.GetDataFromTweetNum(numStr, "tweetID")
+
 	return fmt.Sprintf("https://twitter.com/%s/status/%s", name, ID), nil
 }
 
@@ -134,6 +136,7 @@ func (v *View) GetDataFromTweetNum(numStr, dataType string) (string, error) {
 	if !util.IsNumber(numStr) {
 		return "", fmt.Errorf("tweetnumber is invalid")
 	}
+
 	// ツイート番号が範囲内かチェック
 	num, _ := strconv.Atoi(numStr)
 	if num < 0 || num > len(v.tweets)-1 {
