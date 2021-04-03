@@ -26,7 +26,7 @@ func (cmd *Cmd) newTweetCmd() {
 		Func:    cmd.tweetMultiCmd,
 		Help:    "post a multi-line tweet",
 		LongHelp: createLongHelp(
-			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAlso, if it is blank, the tweet will be canceled.",
+			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, press Ctrl+c on an empty line.",
 			"ml",
 			"tweet multi",
 			"tweet multi",
@@ -72,6 +72,7 @@ func (cmd *Cmd) tweetRemoveCmd(c *ishell.Context) {
 		cmd.drawWrongArgMessage("tweet " + c.Cmd.Name)
 		return
 	}
+
 	// 引数の数だけ削除処理
 	for _, v := range c.Args {
 		id, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
@@ -79,28 +80,33 @@ func (cmd *Cmd) tweetRemoveCmd(c *ishell.Context) {
 			cmd.drawErrorMessage(err.Error())
 			return
 		}
+
 		tweetStr, err := cmd.api.DeleteTweet(id)
 		if err != nil {
 			cmd.drawErrorMessage(err.Error())
 			return
 		}
+
 		cmd.drawMessage("DELETED", tweetStr, cmd.cfg.Color.Accent2)
 	}
 }
 
 func (cmd *Cmd) tweet(status string, files []string) {
 	val := url.Values{}
+
 	// 画像をアップロード
 	err := cmd.upload(files, &val)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	// ツイート
 	tweetStr, err := cmd.api.PostTweet(val, status)
 	if err != nil {
 		cmd.drawErrorMessage(err.Error())
 		return
 	}
+
 	cmd.drawMessage("TWEETED", tweetStr, cmd.cfg.Color.Accent2)
 }

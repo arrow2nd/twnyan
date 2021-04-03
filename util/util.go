@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/mattn/go-runewidth"
@@ -58,4 +59,9 @@ func IsSameDate(a time.Time) bool {
 	t1 := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	t2 := time.Date(a.Year(), a.Month(), a.Day(), 0, 0, 0, 0, t.Location())
 	return t1.Equal(t2)
+}
+
+// IsEndLFCode 末尾が改行コードかどうか
+func IsEndLFCode(text string) bool {
+	return text == "" || strings.HasSuffix(text, "\n") || strings.HasSuffix(text, "\r")
 }

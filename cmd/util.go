@@ -36,7 +36,7 @@ func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 func (cmd *Cmd) parseTLCmdArgs(args []string) (string, string, error) {
 	// 引数をチェック
 	if len(args) <= 0 {
-		return "", "", errors.New("No arguments")
+		return "", "", errors.New("no arguments")
 	}
 	str, counts := args[0], cmd.cfg.Option.Counts
 	// 取得件数の指定があれば置換
@@ -62,22 +62,26 @@ func (cmd *Cmd) inputMultiLine() (string, []string) {
 	defer cmd.setDefaultPrompt()
 
 	// ツイート文入力
-	cmd.drawMessage("TEXT", "Enter a semicolon to end the input", cmd.cfg.Color.Accent3)
-	status := cmd.shell.ReadMultiLines(";")
-	// セミコロンのみならキャンセル
-	if status == ";" {
-		cmd.drawMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent3)
+	cmd.drawMessage("INPUT", "End typing with a semicolon (cancel with Ctrl+c on an empty line)", cmd.cfg.Color.Accent3)
+	text := cmd.shell.ReadMultiLines(";")
+	if util.IsEndLFCode(text) {
+		cmd.drawMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
 		return "", nil
 	}
-	// セミコロンを除去
-	status = status[:len(status)-1]
 
 	// 添付画像ファイル名入力
-	cmd.drawMessage("IMAGE", "Enter the name of the image file to be attached (Please separate with a space)", cmd.cfg.Color.Accent3)
+	cmd.drawMessage("IMAGE", "Enter the file name of the attached image (separated by a space)", cmd.cfg.Color.Accent3)
 	img := cmd.shell.ReadLine()
+	if util.IsEndLFCode(img) {
+		cmd.drawMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
+		return "", nil
+	}
+
+	// 戻り値を作成
+	tweet := strings.TrimRight(text, ";")
 	images := strings.Fields(img)
 
-	return status, images
+	return tweet, images
 }
 
 // upload 画像をアップロード
