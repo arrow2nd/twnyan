@@ -40,7 +40,6 @@ func (cmd *Cmd) addUserCmd() {
 	cmd.shell.AddCmd(userCmd)
 }
 
-// userCmd userコマンド
 func (cmd *Cmd) userCmd(c *ishell.Context) {
 	screenName, count, err := cmd.parseTimelineCmdArgs(c.Args)
 	if err != nil {

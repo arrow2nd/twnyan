@@ -16,7 +16,7 @@ type Cmd struct {
 	view  *view.View
 }
 
-// New コマンド構造体作成
+// New 構造体を初期化
 func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 	nc := &Cmd{
 		shell: ishell.New(),
