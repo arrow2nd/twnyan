@@ -23,7 +23,7 @@ func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 
 	if len(args) > 0 {
 		// 1つ目の引数に拡張子が含まれるなら、画像のみのツイートと解釈
-		if util.ContainsString("\\.\\w{3,4}$", args[0]) {
+		if util.MatchesRegexp("\\.\\w{3,4}$", args[0]) {
 			text = ""
 			images = args[0:]
 		} else {

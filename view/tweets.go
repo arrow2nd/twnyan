@@ -118,22 +118,22 @@ func (v *View) createCountString(countNum int, reverseFlg bool, unitStr string) 
 }
 
 // RegisterTweets ツイートを登録
-func (v *View) RegisterTweets(t *[]anaconda.Tweet) {
+func (v *View) RegisterTweets(tweets *[]anaconda.Tweet) {
 	v.mu.Lock()
 	defer v.mu.Unlock()
 
 	tmp := []anaconda.Tweet{}
-	v.tweets = append(tmp, *t...)
+	v.tweets = append(tmp, *tweets...)
 }
 
 // GetTweetURL ツイートのURLを取得
-func (v *View) GetTweetURL(numStr string) (string, error) {
-	name, err := v.GetDataFromTweetNum(numStr, "screenname")
+func (v *View) GetTweetURL(tweetNumStr string) (string, error) {
+	name, err := v.GetDataFromTweetNum(tweetNumStr, "screenname")
 	if err != nil {
 		return "", err
 	}
 
-	ID, _ := v.GetDataFromTweetNum(numStr, "tweetID")
+	ID, _ := v.GetDataFromTweetNum(tweetNumStr, "tweetID")
 
 	return fmt.Sprintf("https://twitter.com/%s/status/%s", name, ID), nil
 }

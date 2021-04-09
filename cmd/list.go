@@ -59,7 +59,7 @@ func (cmd *Cmd) listCmdCompleter([]string) []string {
 	cmp := make([]string, len(cmd.api.ListNames))
 	for i, name := range cmd.api.ListNames {
 		// リスト名が空白を含んでいるならダブルクオートで囲む
-		if util.ContainsString("\\s", name) {
+		if util.MatchesRegexp("\\s", name) {
 			cmp[i] = fmt.Sprintf("\"%s\"", name)
 		} else {
 			cmp[i] = name

@@ -29,8 +29,8 @@ func TruncateString(str string, width int) string {
 	return runewidth.Truncate(str, width, "…")
 }
 
-// ContainsString 正規表現が文字列にマッチするか
-func ContainsString(reg, str string) bool {
+// MatchesRegexp 正規表現が文字列にマッチするか
+func MatchesRegexp(reg, str string) bool {
 	return regexp.MustCompile(reg).Match([]byte(str))
 }
 
@@ -56,10 +56,10 @@ func IndexOf(array []string, str string) int {
 }
 
 // IsSameDate 今日の日付かどうか
-func IsSameDate(a time.Time) bool {
+func IsSameDate(chkTime time.Time) bool {
 	now := time.Now()
 	t1 := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-	t2 := time.Date(a.Year(), a.Month(), a.Day(), 0, 0, 0, 0, now.Location())
+	t2 := time.Date(chkTime.Year(), chkTime.Month(), chkTime.Day(), 0, 0, 0, 0, now.Location())
 
 	return t1.Equal(t2)
 }
