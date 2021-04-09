@@ -9,7 +9,6 @@ import (
 	"github.com/arrow2nd/twnyan/view"
 )
 
-// Cmd コマンド
 type Cmd struct {
 	shell *ishell.Shell
 	cfg   *config.Config
@@ -26,40 +25,51 @@ func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 		view:  nil,
 	}
 	nc.view = view.New(nc.cfg)
+
 	return nc
 }
 
 // Init 初期化
 func (cmd *Cmd) Init() {
-	// コマンド登録
-	cmd.newTweetCmd()
-	cmd.newReplyCmd()
-	cmd.newTimelineCmd()
-	cmd.newMentionCmd()
-	cmd.newListCmd()
-	cmd.newSearchCmd()
-	cmd.newUserCmd()
-	cmd.newFaoriteCmd()
-	cmd.newRetweetCmd()
-	cmd.newQuoteCmd()
-	cmd.newFollowCmd()
-	cmd.newBlockCmd()
-	cmd.newMuteCmd()
-	cmd.newOpenCmd()
-	cmd.newVersionCmd()
-	// プロンプト設定
+	// コマンドを登録
+	cmd.addTweetCmd()
+	cmd.addReplyCmd()
+	cmd.addTimelineCmd()
+	cmd.addMentionCmd()
+	cmd.addListCmd()
+	cmd.addSearchCmd()
+	cmd.addUserCmd()
+	cmd.addLikeCmd()
+	cmd.addRetweetCmd()
+	cmd.addQuoteCmd()
+	cmd.addFollowCmd()
+	cmd.addBlockCmd()
+	cmd.addMuteCmd()
+	cmd.addOpenCmd()
+	cmd.addVersionCmd()
+	cmd.addStreamCmd()
+
+	// プロンプトを設定
 	cmd.setDefaultPrompt()
+
+	// コマンドエラーの表示を設定
+	cmd.shell.NotFound(func(c *ishell.Context) {
+		cmd.showErrorMessage("command not found: " + c.ReadLine())
+	})
 }
 
 // Run 実行
 func (cmd *Cmd) Run() {
+	// コマンドライン引数がある
 	if len(os.Args) > 1 {
 		err := cmd.shell.Process(os.Args[1:]...)
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 		}
-	} else {
-		cmd.shell.Process("timeline")
-		cmd.shell.Run()
+		os.Exit(0)
 	}
+
+	// 対話モードで実行
+	cmd.shell.Process("timeline")
+	cmd.shell.Run()
 }

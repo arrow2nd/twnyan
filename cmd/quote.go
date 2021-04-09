@@ -6,8 +6,9 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newQuoteCmd() {
-	qc := &ishell.Cmd{
+func (cmd *Cmd) addQuoteCmd() {
+	// quote
+	quoteCmd := &ishell.Cmd{
 		Name:    "quote",
 		Aliases: []string{"qt"},
 		Func:    cmd.quoteCmd,
@@ -20,7 +21,8 @@ func (cmd *Cmd) newQuoteCmd() {
 		),
 	}
 
-	qc.AddCmd(&ishell.Cmd{
+	// quote multi
+	quoteCmd.AddCmd(&ishell.Cmd{
 		Name:    "multi",
 		Aliases: []string{"ml"},
 		Func:    cmd.quoteMultiCmd,
@@ -33,61 +35,53 @@ func (cmd *Cmd) newQuoteCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(qc)
+	cmd.shell.AddCmd(quoteCmd)
 }
 
 func (cmd *Cmd) quoteCmd(c *ishell.Context) {
-	// 引数をチェック
 	if len(c.Args) < 1 {
-		cmd.drawWrongArgMessage(c.Cmd.Name)
+		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
 	}
 
-	// 引数をパース
 	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
-
-	// 引用ツイート
 	cmd.quote(c, status, files)
 }
 
 func (cmd *Cmd) quoteMultiCmd(c *ishell.Context) {
-	// 引数をチェック
 	if len(c.Args) < 1 {
-		cmd.drawWrongArgMessage("quote " + c.Cmd.Name)
+		cmd.showWrongArgMessage("quote " + c.Cmd.Name)
 		return
 	}
 
-	// 入力
 	status, files := cmd.inputMultiLine()
-
-	// 引用ツイート
 	cmd.quote(c, status, files)
 }
 
-func (cmd *Cmd) quote(c *ishell.Context, status string, files []string) {
-	val := url.Values{}
+func (cmd *Cmd) quote(c *ishell.Context, text string, images []string) {
+	query := url.Values{}
 
 	// 引用するツイートのURLを取得
-	uri, err := cmd.view.GetTweetURL(c.Args[0])
+	tweetUrl, err := cmd.view.GetTweetURL(c.Args[0])
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
 	// 画像をアップロード
-	err = cmd.upload(files, &val)
+	err = cmd.upload(images, &query)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
 	// URLを追加してツイート
-	status += " " + uri
-	tweetStr, err := cmd.api.PostTweet(val, status)
+	text += " " + tweetUrl
+	tweetText, err := cmd.api.PostTweet(query, text)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.drawMessage("QUOTED", tweetStr, cmd.cfg.Color.Retweet)
+	cmd.showMessage("QUOTED", tweetText, cmd.cfg.Color.Retweet)
 }

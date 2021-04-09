@@ -6,7 +6,7 @@ import (
 
 const ver = "1.3.0"
 
-func (c *Cmd) newVersionCmd() {
+func (c *Cmd) addVersionCmd() {
 	c.shell.AddCmd(&ishell.Cmd{
 		Name:    "version",
 		Aliases: []string{"ver"},

@@ -7,61 +7,63 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 )
 
-// GetFriendships ユーザーとの関係を取得
-func (ta *TwitterAPI) GetFriendships(userID string) ([]string, error) {
+// FetchRelationships ユーザーとの関係性を取得
+func (ta *TwitterAPI) FetchRelationships(userID string) ([]string, error) {
 	v := url.Values{"user_id": {userID}}
 
-	friendships, err := ta.API.GetFriendshipsLookup(v)
+	relationships, err := ta.API.GetFriendshipsLookup(v)
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(parseAPIErrorMsg(err))
 	}
 
-	return friendships[0].Connections, nil
+	return relationships[0].Connections, nil
 }
 
-// GetTimeline タイムラインを取得
-func (ta *TwitterAPI) GetTimeline(mode string, v url.Values) (*[]anaconda.Tweet, error) {
+// FetchTimelineTweets タイムラインのツイートを取得
+func (ta *TwitterAPI) FetchTimelineTweets(category string, query url.Values) (*[]anaconda.Tweet, error) {
 	var err error
 	timeline := []anaconda.Tweet{}
 
-	switch mode {
+	switch category {
 	case "home":
-		timeline, err = ta.API.GetHomeTimeline(v)
+		timeline, err = ta.API.GetHomeTimeline(query)
 	case "mention":
-		timeline, err = ta.API.GetMentionsTimeline(v)
+		timeline, err = ta.API.GetMentionsTimeline(query)
 	case "user":
-		timeline, err = ta.API.GetUserTimeline(v)
+		timeline, err = ta.API.GetUserTimeline(query)
 	}
 
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(parseAPIErrorMsg(err))
 	}
 
 	return &timeline, nil
 }
 
-// GetListTimeline リストタイムラインを取得
-func (ta *TwitterAPI) GetListTimeline(listID int64, count string) (*[]anaconda.Tweet, error) {
-	v := CreateURLValues(count)
+// FetchListTweets リストのツイートを取得
+func (ta *TwitterAPI) FetchListTweets(listID int64, count string) (*[]anaconda.Tweet, error) {
+	query := CreateQuery(count)
 
-	timeline, err := ta.API.GetListTweets(listID, true, v)
+	timeline, err := ta.API.GetListTweets(listID, true, query)
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(parseAPIErrorMsg(err))
 	}
 
 	return &timeline, nil
 }
 
-// GetSearchResult 検索結果を取得
-func (ta *TwitterAPI) GetSearchResult(query, count string) (*[]anaconda.Tweet, error) {
-	v := CreateURLValues(count)
+// FetchSearchResult 検索結果を取得
+func (ta *TwitterAPI) FetchSearchResult(queryStr, count string) (*[]anaconda.Tweet, error) {
+	query := CreateQuery(count)
+	queryStr += " -filter:retweets"
 
-	query += " -filter:retweets"
-	result, err := ta.API.GetSearch(query, v)
+	// 検索結果を取得
+	result, err := ta.API.GetSearch(queryStr, query)
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(parseAPIErrorMsg(err))
 	}
 
+	// 検索結果が0件ならエラーを返す
 	if len(result.Statuses) == 0 {
 		return nil, errors.New("no tweets found")
 	}
@@ -69,8 +71,8 @@ func (ta *TwitterAPI) GetSearchResult(query, count string) (*[]anaconda.Tweet, e
 	return &result.Statuses, nil
 }
 
-// getSelf 自分のユーザー情報を取得
-func (ta *TwitterAPI) getSelf() (*anaconda.User, error) {
+// fetchSelfInfo 自分のユーザー情報を取得
+func (ta *TwitterAPI) fetchSelfInfo() (*anaconda.User, error) {
 	user, err := ta.API.GetSelf(nil)
 	if err != nil {
 		return nil, err
@@ -79,8 +81,9 @@ func (ta *TwitterAPI) getSelf() (*anaconda.User, error) {
 	return &user, nil
 }
 
-// getLists リストの一覧を取得
-func (ta *TwitterAPI) getLists() ([]string, []int64, error) {
+// createListInfoSlice リスト名とリストIDのスライスを作成
+func (ta *TwitterAPI) createListInfoSlice() ([]string, []int64, error) {
+	// リストの情報を取得
 	lists, err := ta.API.GetListsOwnedBy(ta.OwnUser.Id, nil)
 	if err != nil {
 		return nil, nil, err

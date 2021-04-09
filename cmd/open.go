@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/browser"
 )
 
-func (cmd *Cmd) newOpenCmd() {
+func (cmd *Cmd) addOpenCmd() {
 	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "open",
 		Aliases: []string{"op"},
@@ -22,20 +22,19 @@ func (cmd *Cmd) newOpenCmd() {
 }
 
 func (cmd *Cmd) openCmd(c *ishell.Context) {
-	// 引数をチェック
+	// 引数が1つではないならエラー
 	if len(c.Args) != 1 {
-		cmd.drawWrongArgMessage(c.Cmd.Name)
+		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
 	}
 
 	// 該当ツイートのURLを取得
-	uri, err := cmd.view.GetTweetURL(c.Args[0])
+	url, err := cmd.view.GetTweetURL(c.Args[0])
 	if err != nil {
 		color.Error.Prompt(err.Error())
 		return
 	}
 
-	// ブラウザを開く
-	cmd.drawMessage("OPENED", uri, cmd.cfg.Color.Accent2)
-	browser.OpenURL(uri)
+	cmd.showMessage("OPENED", url, cmd.cfg.Color.Accent2)
+	browser.OpenURL(url)
 }

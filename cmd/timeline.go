@@ -5,7 +5,7 @@ import (
 	"github.com/arrow2nd/twnyan/api"
 )
 
-func (cmd *Cmd) newTimelineCmd() {
+func (cmd *Cmd) addTimelineCmd() {
 	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "timeline",
 		Aliases: []string{"tl"},
@@ -21,18 +21,16 @@ func (cmd *Cmd) newTimelineCmd() {
 }
 
 func (cmd *Cmd) timelineCmd(c *ishell.Context) {
-	// 引数をパース
-	counts := cmd.getCountFromCmdArg(c.Args)
+	count := cmd.getCountFromCmdArg(c.Args)
 
-	// タイムラインを取得
-	v := api.CreateURLValues(counts)
-	t, err := cmd.api.GetTimeline("home", v)
+	// タイムラインのツイートを取得
+	query := api.CreateQuery(count)
+	tweets, err := cmd.api.FetchTimelineTweets("home", query)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// 描画
-	cmd.view.RegisterTweets(t)
-	cmd.view.DrawTweets()
+	cmd.view.RegisterTweets(tweets)
+	cmd.view.ShowRegisteredTweets()
 }

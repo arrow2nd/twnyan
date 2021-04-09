@@ -6,7 +6,6 @@ const (
 	colFile = "color.yaml"
 )
 
-// Config 設定構造体
 type Config struct {
 	Cred   *cred
 	Option *option
@@ -46,7 +45,7 @@ type color struct {
 	Mute         string
 }
 
-// New 設定構造体作成
+// New 構造体を初期化
 func New() *Config {
 	cfg := &Config{
 		Cred: &cred{
@@ -80,14 +79,15 @@ func New() *Config {
 			Mute:         "#e5c07b",
 		},
 	}
+
 	return cfg
 }
 
 // Save 保存
 func (cfg *Config) Save() {
-	saveYaml(cfg.Option.ConfigDir, crdFile, cfg.Cred)
-	saveYaml(cfg.Option.ConfigDir, optFile, cfg.Option)
-	saveYaml(cfg.Option.ConfigDir, colFile, cfg.Color)
+	saveYAML(cfg.Option.ConfigDir, crdFile, cfg.Cred)
+	saveYAML(cfg.Option.ConfigDir, optFile, cfg.Option)
+	saveYAML(cfg.Option.ConfigDir, colFile, cfg.Color)
 }
 
 // Load 読込
@@ -95,8 +95,10 @@ func (cfg *Config) Load() bool {
 	if !configFileExists(cfg.Option.ConfigDir) {
 		return false
 	}
-	loadYaml(cfg.Option.ConfigDir, crdFile, cfg.Cred)
-	loadYaml(cfg.Option.ConfigDir, optFile, cfg.Option)
-	loadYaml(cfg.Option.ConfigDir, colFile, cfg.Color)
+
+	loadYAML(cfg.Option.ConfigDir, crdFile, cfg.Cred)
+	loadYAML(cfg.Option.ConfigDir, optFile, cfg.Option)
+	loadYAML(cfg.Option.ConfigDir, colFile, cfg.Color)
+
 	return true
 }

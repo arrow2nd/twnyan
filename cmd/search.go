@@ -4,7 +4,7 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newSearchCmd() {
+func (cmd *Cmd) addSearchCmd() {
 	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "search",
 		Aliases: []string{"sh"},
@@ -20,21 +20,19 @@ func (cmd *Cmd) newSearchCmd() {
 }
 
 func (cmd *Cmd) searchCmd(c *ishell.Context) {
-	// 引数をパース
-	keyword, counts, err := cmd.parseTLCmdArgs(c.Args)
+	keyword, count, err := cmd.parseTimelineCmdArgs(c.Args)
 	if err != nil {
-		cmd.drawWrongArgMessage(c.Cmd.Name)
+		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
 	}
 
 	// 検索結果を取得
-	t, err := cmd.api.GetSearchResult(keyword, counts)
+	tweets, err := cmd.api.FetchSearchResult(keyword, count)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// 描画
-	cmd.view.RegisterTweets(t)
-	cmd.view.DrawTweets()
+	cmd.view.RegisterTweets(tweets)
+	cmd.view.ShowRegisteredTweets()
 }

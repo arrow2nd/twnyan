@@ -6,8 +6,9 @@ import (
 	"github.com/arrow2nd/twnyan/util"
 )
 
-func (cmd *Cmd) newUserCmd() {
-	uc := &ishell.Cmd{
+func (cmd *Cmd) addUserCmd() {
+	// user
+	userCmd := &ishell.Cmd{
 		Name:    "user",
 		Aliases: []string{"ur"},
 		Func:    cmd.userCmd,
@@ -20,7 +21,8 @@ func (cmd *Cmd) newUserCmd() {
 		),
 	}
 
-	uc.AddCmd(&ishell.Cmd{
+	// use own
+	userCmd.AddCmd(&ishell.Cmd{
 		Name: "own",
 		Help: "get your own timeline",
 		LongHelp: createLongHelp(
@@ -30,55 +32,55 @@ func (cmd *Cmd) newUserCmd() {
 			"user own 25",
 		),
 		Func: func(c *ishell.Context) {
-			counts := cmd.getCountFromCmdArg(c.Args)
-			cmd.loadUserTimeline("", counts)
+			count := cmd.getCountFromCmdArg(c.Args)
+			cmd.showUserTimeline("", count)
 		},
 	})
 
-	cmd.shell.AddCmd(uc)
+	cmd.shell.AddCmd(userCmd)
 }
 
+// userCmd userコマンド
 func (cmd *Cmd) userCmd(c *ishell.Context) {
-	// 引数をパース
-	value, counts, err := cmd.parseTLCmdArgs(c.Args)
+	screenName, count, err := cmd.parseTimelineCmdArgs(c.Args)
 	if err != nil {
-		cmd.drawWrongArgMessage(c.Cmd.Name)
+		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
 	}
 
 	// ツイート番号ならスクリーンネームに置換
-	if util.IsNumber(value) {
-		value, err = cmd.view.GetDataFromTweetNum(value, "screenname")
+	if util.IsNumber(screenName) {
+		screenName, err = cmd.view.GetDataFromTweetNum(screenName, "screenname")
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 			return
 		}
 	}
 
-	// ユーザータイムラインを取得
-	cmd.loadUserTimeline(value, counts)
+	cmd.showUserTimeline(screenName, count)
 }
 
-func (cmd *Cmd) loadUserTimeline(screenName, counts string) {
-	// ユーザータイムラインを取得
-	v := api.CreateURLValues(counts)
-	v.Add("screen_name", screenName)
-	t, err := cmd.api.GetTimeline("user", v)
+// showUserTimeline ユーザータイムラインを表示
+func (cmd *Cmd) showUserTimeline(screenName, count string) {
+	query := api.CreateQuery(count)
+	query.Add("screen_name", screenName)
+
+	// ユーザーのツイートを取得
+	tweets, err := cmd.api.FetchTimelineTweets("user", query)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
 	// ユーザーとの関係を取得
-	u := (*t)[0].User
-	fs, err := cmd.api.GetFriendships(u.IdStr)
+	user := (*tweets)[0].User
+	relationships, err := cmd.api.FetchRelationships(user.IdStr)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// 描画
-	cmd.view.RegisterTweets(t)
-	cmd.view.DrawTweets()
-	cmd.view.DrawUser(&u, fs)
+	cmd.view.RegisterTweets(tweets)
+	cmd.view.ShowRegisteredTweets()
+	cmd.view.ShowUserInfo(&user, relationships)
 }

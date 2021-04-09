@@ -125,7 +125,7 @@ func TestContainsStr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ContainsStr(tt.args.reg, tt.args.str); got != tt.want {
+			if got := ContainsString(tt.args.reg, tt.args.str); got != tt.want {
 				t.Errorf("ContainsStr() = %v, want %v", got, tt.want)
 			}
 		})

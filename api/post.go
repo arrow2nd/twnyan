@@ -15,11 +15,12 @@ import (
 )
 
 // PostTweet ツイートを投稿
-func (ta *TwitterAPI) PostTweet(val url.Values, status string) (string, error) {
-	tweet, err := ta.API.PostTweet(status, val)
+func (ta *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
+	tweet, err := ta.API.PostTweet(text, query)
 	if err != nil {
-		return "", errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIErrorMsg(err))
 	}
+
 	return tweet.FullText, nil
 }
 
@@ -29,17 +30,17 @@ func (ta *TwitterAPI) DeleteTweet(tweetID string) (string, error) {
 
 	tweet, err := ta.API.DeleteTweet(id, true)
 	if err != nil {
-		return "", errors.New(parseAPIError(err))
+		return "", errors.New(parseAPIErrorMsg(err))
 	}
 
 	return tweet.FullText, nil
 }
 
 // UploadImage 画像をアップロード
-func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
-	fileNum := len(files)
+func (ta *TwitterAPI) UploadImage(images []string) (string, error) {
+	fileNum := len(images)
 
-	// ファイル数チェック
+	// 画像数が4枚を超えるならエラー
 	if fileNum > 4 {
 		return "", errors.New("you can attach up to 4 images")
 	}
@@ -47,8 +48,8 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 	eg, ctx := errgroup.WithContext(context.Background())
 	ch := make(chan string, fileNum)
 
-	for _, filename := range files {
-		// 拡張子をチェック
+	for _, filename := range images {
+		// サポート外の拡張子ならエラー
 		if ext := strings.ToLower(path.Ext(filename)); ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif" {
 			return "", fmt.Errorf("unsupported extensions (%s)", ext)
 		}
@@ -71,19 +72,20 @@ func (ta *TwitterAPI) UploadImage(files []string) (string, error) {
 				if err != nil {
 					return fmt.Errorf("upload failed (%s)", filename)
 				}
+				// mediaIDをチャネルへ送信
 				ch <- media.MediaIDString
 				return nil
 			}
 		})
 	}
 
-	// 待機
+	// アップロードが終了するまで待機
 	if err := eg.Wait(); err != nil {
 		return "", err
 	}
 	close(ch)
 
-	// カンマで連結
+	// mediaIDをカンマで連結
 	mediaIds := ""
 	for id := range ch {
 		mediaIds += id + ","

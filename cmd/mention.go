@@ -5,7 +5,7 @@ import (
 	"github.com/arrow2nd/twnyan/api"
 )
 
-func (cmd *Cmd) newMentionCmd() {
+func (cmd *Cmd) addMentionCmd() {
 	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "mention",
 		Aliases: []string{"mt"},
@@ -21,18 +21,16 @@ func (cmd *Cmd) newMentionCmd() {
 }
 
 func (cmd *Cmd) mentionCmd(c *ishell.Context) {
-	// 引数をパース
-	counts := cmd.getCountFromCmdArg(c.Args)
+	count := cmd.getCountFromCmdArg(c.Args)
 
 	// メンションタイムラインを取得
-	v := api.CreateURLValues(counts)
-	t, err := cmd.api.GetTimeline("mention", v)
+	query := api.CreateQuery(count)
+	tweets, err := cmd.api.FetchTimelineTweets("mention", query)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// 描画
-	cmd.view.RegisterTweets(t)
-	cmd.view.DrawTweets()
+	cmd.view.RegisterTweets(tweets)
+	cmd.view.ShowRegisteredTweets()
 }

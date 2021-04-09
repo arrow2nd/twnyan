@@ -4,8 +4,9 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newMuteCmd() {
-	mc := &ishell.Cmd{
+func (cmd *Cmd) addMuteCmd() {
+	// mute
+	muteCmd := &ishell.Cmd{
 		Name:    "mute",
 		Aliases: []string{"mu"},
 		Func: func(c *ishell.Context) {
@@ -20,7 +21,8 @@ func (cmd *Cmd) newMuteCmd() {
 		),
 	}
 
-	mc.AddCmd(&ishell.Cmd{
+	// mute remove
+	muteCmd.AddCmd(&ishell.Cmd{
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
@@ -35,5 +37,5 @@ func (cmd *Cmd) newMuteCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(mc)
+	cmd.shell.AddCmd(muteCmd)
 }
