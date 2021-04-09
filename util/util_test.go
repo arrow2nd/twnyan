@@ -4,6 +4,70 @@ import (
 	"testing"
 )
 
+func TestTruncateString(t *testing.T) {
+	type args struct {
+		str   string
+		width int
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "'fuyuko'を5文字に丸める",
+			args: args{
+				str:   "fuyuko",
+				width: 5,
+			},
+			want: "fuyu…",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := TruncateString(tt.args.str, tt.args.width); got != tt.want {
+				t.Errorf("TruncateString() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMatchesRegexp(t *testing.T) {
+	type args struct {
+		reg string
+		str string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "'ShiragikuHotaru' に '[0-9]+Hotaru' がマッチするか",
+			args: args{
+				reg: "[0-9]+Hotaru",
+				str: "ShiragikuHotaru",
+			},
+			want: false,
+		},
+		{
+			name: "'SerizawaAsahi' に '[A-Za-z]+Asahi' がマッチするか",
+			args: args{
+				reg: "[A-Za-z]+Asahi",
+				str: "SerizawaAsahi",
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MatchesRegexp(tt.args.reg, tt.args.str); got != tt.want {
+				t.Errorf("MatchesRegexp() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestIsNumber(t *testing.T) {
 	type args struct {
 		str string
@@ -96,10 +160,9 @@ func TestIndexOf(t *testing.T) {
 	}
 }
 
-func TestContainsStr(t *testing.T) {
+func TestIsEndLFCode(t *testing.T) {
 	type args struct {
-		reg string
-		str string
+		text string
 	}
 	tests := []struct {
 		name string
@@ -107,26 +170,24 @@ func TestContainsStr(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "テスト: [0-9]+Hotaru",
+			name: "末尾が改行コードかどうか 1",
 			args: args{
-				reg: "[0-9]+Hotaru",
-				str: "ShiragikuHotaru",
-			},
-			want: false,
-		},
-		{
-			name: "テスト: [A-Za-z]+Asahi",
-			args: args{
-				reg: "[A-Za-z]+Asahi",
-				str: "SerizawaAsahi",
+				text: "rinze\n",
 			},
 			want: true,
+		},
+		{
+			name: "末尾が改行コードかどうか 2",
+			args: args{
+				text: "morino",
+			},
+			want: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ContainsString(tt.args.reg, tt.args.str); got != tt.want {
-				t.Errorf("ContainsStr() = %v, want %v", got, tt.want)
+			if got := IsEndLFCode(tt.args.text); got != tt.want {
+				t.Errorf("IsEndLFCode() = %v, want %v", got, tt.want)
 			}
 		})
 	}
