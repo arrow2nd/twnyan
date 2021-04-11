@@ -28,8 +28,8 @@ func New(c *config.Config) *View {
 	return view
 }
 
-// createPostTimeString 投稿時刻の文字列を作成
-func (v *View) createPostTimeString(postTime time.Time) string {
+// createCreatedAtString 投稿時刻の文字列を作成
+func (v *View) createCreatedAtString(postTime time.Time) string {
 	postTimeStr := ""
 
 	// 今日の時刻なら、日付を省略する
