@@ -70,6 +70,7 @@ func (ta *TwitterAPI) Auth() (string, string) {
 	}
 
 	// URLを表示してPINコードを入力
+	showLogo()
 	showAuthUrl(uri)
 	pin := inputPinCode()
 

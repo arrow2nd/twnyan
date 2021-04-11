@@ -11,6 +11,7 @@ import (
 // CreateQuery クエリを作成
 func CreateQuery(count string) url.Values {
 	q := url.Values{}
+
 	q.Add("tweet_mode", "extended")
 	q.Add("count", count)
 
