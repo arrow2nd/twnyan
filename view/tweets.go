@@ -19,18 +19,18 @@ func (v *View) ShowRegisteredTweets() {
 
 // ShowTweetsFromArray 配列からツイートを表示
 func (v *View) ShowTweetsFromArray(tweets []anaconda.Tweet, shouldShowTweetNum bool) {
-	tagStr := ""
+	tagStr := " "
 
 	for i := len(tweets) - 1; i >= 0; i-- {
 		if shouldShowTweetNum {
-			tagStr = fmt.Sprint(i)
+			tagStr = fmt.Sprintf(" %d ", i)
 		}
-		v.showTweet(&tweets[i], tagStr, false)
+		v.ShowTweet(&tweets[i], tagStr, false)
 	}
 }
 
-// showTweet ツイートを表示
-func (v *View) showTweet(tweets *anaconda.Tweet, tagStr string, isQuote bool) {
+// ShowTweet ツイートを表示
+func (v *View) ShowTweet(tweets *anaconda.Tweet, tagStr string, isQuote bool) {
 	header := ""
 	halfWidth := util.GetWindowWidth() / 2
 
@@ -49,19 +49,19 @@ func (v *View) showTweet(tweets *anaconda.Tweet, tagStr string, isQuote bool) {
 	}
 
 	// ヘッダー文字列を作成
-	tagStr = color.HEXStyle(v.cfg.Color.BoxForground, v.cfg.Color.Accent1).Sprintf(" %s ", tagStr)
+	tagStr = color.HEXStyle(v.cfg.Color.BoxForground, v.cfg.Color.Accent1).Sprint(tagStr)
 	userInfoStr := v.createUserInfoString(&tweets.User)
-	postTime, _ := tweets.CreatedAtTime()
-	postTimeStr := v.createPostTimeString(postTime)
+	createdAt, _ := tweets.CreatedAtTime()
+	createdAtStr := v.createCreatedAtString(createdAt)
 	favCountStr := v.createCountString(tweets.FavoriteCount, tweets.Favorited, "Fav")
 	rtCountStr := v.createCountString(tweets.RetweetCount, tweets.Retweeted, "RT")
-	header += fmt.Sprintf("%s %s %s%s%s", tagStr, userInfoStr, postTimeStr, favCountStr, rtCountStr)
+	header += fmt.Sprintf("%s %s %s%s%s", tagStr, userInfoStr, createdAtStr, favCountStr, rtCountStr)
 
 	fmt.Printf("%s\n%s", header, v.editTweetText(tweets))
 
 	// QTなら引用元ツイートを表示
 	if tweets.QuotedStatus != nil {
-		v.showTweet(tweets.QuotedStatus, "↪", true)
+		v.ShowTweet(tweets.QuotedStatus, "↪", true)
 		return
 	}
 

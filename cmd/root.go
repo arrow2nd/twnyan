@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/ChimeraCoder/anaconda"
 	"github.com/arrow2nd/ishell"
 	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/config"
@@ -15,6 +16,8 @@ type Cmd struct {
 	api   *api.TwitterAPI
 	view  *view.View
 }
+
+type AccumulateTweets map[int64]anaconda.Tweet
 
 // New 構造体を初期化
 func New(c *config.Config, a *api.TwitterAPI) *Cmd {
