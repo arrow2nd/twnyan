@@ -61,7 +61,7 @@ func (v *View) ShowTweet(tweets *anaconda.Tweet, tagStr string, isQuote bool) {
 
 	// QTなら引用元ツイートを表示
 	if tweets.QuotedStatus != nil {
-		v.ShowTweet(tweets.QuotedStatus, "↪", true)
+		v.ShowTweet(tweets.QuotedStatus, " ", true)
 		return
 	}
 
