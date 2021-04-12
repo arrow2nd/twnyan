@@ -49,13 +49,13 @@ func (cmd *Cmd) Init() {
 	cmd.addBlockCmd()
 	cmd.addMuteCmd()
 	cmd.addOpenCmd()
-	cmd.addVersionCmd()
 	cmd.addStreamCmd()
+	cmd.addVersionCmd()
 
 	// プロンプトを設定
 	cmd.setDefaultPrompt()
 
-	// コマンドエラーの表示を設定
+	// コマンドエラー時の表示を設定
 	cmd.shell.NotFound(func(c *ishell.Context) {
 		cmd.showErrorMessage("command not found: " + c.ReadLine())
 	})
@@ -63,7 +63,7 @@ func (cmd *Cmd) Init() {
 
 // Run 実行
 func (cmd *Cmd) Run() {
-	// コマンドライン引数がある
+	// 引数があるなら直接実行
 	if len(os.Args) > 1 {
 		err := cmd.shell.Process(os.Args[1:]...)
 		if err != nil {

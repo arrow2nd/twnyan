@@ -17,7 +17,7 @@ func (cmd *Cmd) addStreamCmd() {
 		Func:    cmd.streamCmd,
 		Help:    "start a pseudo-UserStream",
 		LongHelp: createLongHelp(
-			"After accumulating up to 250 tweets in the first minute, the tweets will be displayed with a one-minute delay, just like the UserStream API.",
+			"After accumulating up to 250 tweets in the first minute, the tweets will be displayed with a one-minute delay, just like the UserStream API.\nCtrl+C to exit.",
 			"st",
 			"stream",
 			"",
@@ -38,7 +38,6 @@ func (cmd *Cmd) streamCmd(c *ishell.Context) {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 
-	// 疑似ストリーム開始
 	go cmd.startUserStream(sinceId, quit)
 
 	// 通知が来たら終了
@@ -47,7 +46,7 @@ func (cmd *Cmd) streamCmd(c *ishell.Context) {
 	close(quit)
 }
 
-// startUserStream  疑似userStreamを開始
+// startUserStream  疑似UserStreamを開始
 func (cmd *Cmd) startUserStream(startSinceId string, quit chan os.Signal) {
 	var (
 		accumulateTweets AccumulateTweets
@@ -124,7 +123,7 @@ func (cmd *Cmd) fetchHomeTimelineTweets(count, sinceId string) (*[]anaconda.Twee
 
 	tweets, err := cmd.api.FetchTimelineTweets("home", query)
 	if err != nil {
-		return nil, "", err
+		return nil, sinceId, err
 	}
 
 	newSinceId := sinceId
