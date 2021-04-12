@@ -2,66 +2,78 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/ChimeraCoder/anaconda"
 )
 
-// GetFriendships ユーザーとの関係を取得
-func (ta *TwitterAPI) GetFriendships(userID string) ([]string, error) {
+// FetchRelationships ユーザーとの関係性を取得
+func (tw *TwitterAPI) FetchRelationships(userID string) ([]string, error) {
 	v := url.Values{"user_id": {userID}}
 
-	friendships, err := ta.API.GetFriendshipsLookup(v)
+	relationships, err := tw.API.GetFriendshipsLookup(v)
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(tw.createAPIErrorMsg("/statuses/lookup", err))
 	}
 
-	return friendships[0].Connections, nil
+	return relationships[0].Connections, nil
 }
 
-// GetTimeline タイムラインを取得
-func (ta *TwitterAPI) GetTimeline(mode string, v url.Values) (*[]anaconda.Tweet, error) {
-	var err error
-	timeline := []anaconda.Tweet{}
+// FetchTimelineTweets タイムラインのツイートを取得
+func (tw *TwitterAPI) FetchTimelineTweets(category string, query url.Values) (*[]anaconda.Tweet, error) {
+	var (
+		timeline     []anaconda.Tweet
+		resourceName string
+		err          error
+	)
 
-	switch mode {
+	switch category {
 	case "home":
-		timeline, err = ta.API.GetHomeTimeline(v)
+		resourceName = "/statuses/home_timeline"
+		timeline, err = tw.API.GetHomeTimeline(query)
 	case "mention":
-		timeline, err = ta.API.GetMentionsTimeline(v)
+		resourceName = "/statuses/mentions_timeline"
+		timeline, err = tw.API.GetMentionsTimeline(query)
 	case "user":
-		timeline, err = ta.API.GetUserTimeline(v)
+		resourceName = "/statuses/user_timeline"
+		timeline, err = tw.API.GetUserTimeline(query)
+	default:
+		return nil, errors.New("category is wrong")
 	}
 
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(tw.createAPIErrorMsg(resourceName, err))
 	}
 
 	return &timeline, nil
 }
 
-// GetListTimeline リストタイムラインを取得
-func (ta *TwitterAPI) GetListTimeline(listID int64, count string) (*[]anaconda.Tweet, error) {
-	v := CreateURLValues(count)
+// FetchListTweets リストのツイートを取得
+func (tw *TwitterAPI) FetchListTweets(listID int64, count string) (*[]anaconda.Tweet, error) {
+	query := CreateQuery(count)
 
-	timeline, err := ta.API.GetListTweets(listID, true, v)
+	timeline, err := tw.API.GetListTweets(listID, true, query)
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(tw.createAPIErrorMsg("/lists/statuses", err))
 	}
 
 	return &timeline, nil
 }
 
-// GetSearchResult 検索結果を取得
-func (ta *TwitterAPI) GetSearchResult(query, count string) (*[]anaconda.Tweet, error) {
-	v := CreateURLValues(count)
+// FetchSearchResult 検索結果を取得
+func (tw *TwitterAPI) FetchSearchResult(queryStr, count string) (*[]anaconda.Tweet, error) {
+	query := CreateQuery(count)
+	queryStr += " -filter:retweets"
 
-	query += " -filter:retweets"
-	result, err := ta.API.GetSearch(query, v)
+	// 検索結果を取得
+	result, err := tw.API.GetSearch(queryStr, query)
 	if err != nil {
-		return nil, errors.New(parseAPIError(err))
+		return nil, errors.New(tw.createAPIErrorMsg("/search/tweets", err))
 	}
 
+	// 検索結果が0件ならエラーを返す
 	if len(result.Statuses) == 0 {
 		return nil, errors.New("no tweets found")
 	}
@@ -69,9 +81,29 @@ func (ta *TwitterAPI) GetSearchResult(query, count string) (*[]anaconda.Tweet, e
 	return &result.Statuses, nil
 }
 
-// getSelf 自分のユーザー情報を取得
-func (ta *TwitterAPI) getSelf() (*anaconda.User, error) {
-	user, err := ta.API.GetSelf(nil)
+// fetchRateLimitResetTime レート制限の解除時刻を取得
+func (tw *TwitterAPI) fetchRateLimitResetTime(resouceName string) string {
+	rateLimitRes, err := tw.API.GetRateLimits([]string{"statuses", "lists", "search"})
+	if err != nil {
+		return ""
+	}
+
+	fmt.Println(rateLimitRes)
+
+	for _, resources := range rateLimitRes.Resources {
+		for name, baseResource := range resources {
+			if name == resouceName {
+				return time.Unix(int64(baseResource.Reset), 0).Local().Format("15:04:05")
+			}
+		}
+	}
+
+	return ""
+}
+
+// fetchSelfInfo 自分のユーザー情報を取得
+func (tw *TwitterAPI) fetchSelfInfo() (*anaconda.User, error) {
+	user, err := tw.API.GetSelf(nil)
 	if err != nil {
 		return nil, err
 	}
@@ -79,20 +111,21 @@ func (ta *TwitterAPI) getSelf() (*anaconda.User, error) {
 	return &user, nil
 }
 
-// getLists リストの一覧を取得
-func (ta *TwitterAPI) getLists() ([]string, []int64, error) {
-	lists, err := ta.API.GetListsOwnedBy(ta.OwnUser.Id, nil)
+// createListInfoSlice リスト名とリストIDのスライスを作成
+func (tw *TwitterAPI) createListInfoSlice() ([]string, []int64, error) {
+	// リストの情報を取得
+	lists, err := tw.API.GetListsOwnedBy(tw.OwnUser.Id, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	// リスト名とIDのスライスを作成
-	id := make([]int64, len(lists))
-	name := make([]string, len(lists))
-	for i, l := range lists {
-		name[i] = l.Name
-		id[i] = l.Id
+	listIDs := make([]int64, len(lists))
+	listNames := make([]string, len(lists))
+	for i, ls := range lists {
+		listNames[i] = ls.Name
+		listIDs[i] = ls.Id
 	}
 
-	return name, id, nil
+	return listNames, listIDs, nil
 }

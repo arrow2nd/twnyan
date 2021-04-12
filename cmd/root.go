@@ -3,13 +3,13 @@ package cmd
 import (
 	"os"
 
+	"github.com/ChimeraCoder/anaconda"
 	"github.com/arrow2nd/ishell"
 	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/config"
 	"github.com/arrow2nd/twnyan/view"
 )
 
-// Cmd コマンド
 type Cmd struct {
 	shell *ishell.Shell
 	cfg   *config.Config
@@ -17,7 +17,9 @@ type Cmd struct {
 	view  *view.View
 }
 
-// New コマンド構造体作成
+type AccumulateTweets map[int64]anaconda.Tweet
+
+// New 構造体を初期化
 func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 	nc := &Cmd{
 		shell: ishell.New(),
@@ -26,40 +28,51 @@ func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 		view:  nil,
 	}
 	nc.view = view.New(nc.cfg)
+
 	return nc
 }
 
 // Init 初期化
 func (cmd *Cmd) Init() {
-	// コマンド登録
-	cmd.newTweetCmd()
-	cmd.newReplyCmd()
-	cmd.newTimelineCmd()
-	cmd.newMentionCmd()
-	cmd.newListCmd()
-	cmd.newSearchCmd()
-	cmd.newUserCmd()
-	cmd.newFaoriteCmd()
-	cmd.newRetweetCmd()
-	cmd.newQuoteCmd()
-	cmd.newFollowCmd()
-	cmd.newBlockCmd()
-	cmd.newMuteCmd()
-	cmd.newOpenCmd()
-	cmd.newVersionCmd()
-	// プロンプト設定
+	// コマンドを登録
+	cmd.addTweetCmd()
+	cmd.addReplyCmd()
+	cmd.addTimelineCmd()
+	cmd.addMentionCmd()
+	cmd.addListCmd()
+	cmd.addSearchCmd()
+	cmd.addUserCmd()
+	cmd.addLikeCmd()
+	cmd.addRetweetCmd()
+	cmd.addQuoteCmd()
+	cmd.addFollowCmd()
+	cmd.addBlockCmd()
+	cmd.addMuteCmd()
+	cmd.addOpenCmd()
+	cmd.addStreamCmd()
+	cmd.addVersionCmd()
+
+	// プロンプトを設定
 	cmd.setDefaultPrompt()
+
+	// コマンドエラー時の表示を設定
+	cmd.shell.NotFound(func(c *ishell.Context) {
+		cmd.showErrorMessage("command not found: " + c.ReadLine())
+	})
 }
 
 // Run 実行
 func (cmd *Cmd) Run() {
+	// 引数があるなら直接実行
 	if len(os.Args) > 1 {
 		err := cmd.shell.Process(os.Args[1:]...)
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 		}
-	} else {
-		cmd.shell.Process("timeline")
-		cmd.shell.Run()
+		os.Exit(0)
 	}
+
+	// 対話モードで実行
+	cmd.shell.Process("timeline")
+	cmd.shell.Run()
 }

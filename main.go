@@ -10,8 +10,8 @@ func main() {
 	api := api.New()
 	cfg := config.New()
 
-	// 設定読込
 	if !cfg.Load() {
+		// 設定ファイルが無いなら認証する
 		cfg.Cred.Token, cfg.Cred.Secret = api.Auth()
 		cfg.Save()
 	} else {

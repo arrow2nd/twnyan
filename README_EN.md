@@ -12,10 +12,10 @@ A colorful Twitter client that runs in a terminal🐾
 
 ## Features
 
-- Flexible settings
+- pseudo-UserStream
 - Multi-byte character support
-- Interactive mode
-- Very colorful
+- Interactive mode support
+- Very colorful 🎨
 
 ## System requirements
 
@@ -41,7 +41,7 @@ Download the latest version of the zip file for your environment from [Releases]
 
 1. `$ go clean -i github.com/arrow2nd/twnyan`
 2. `$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan`
-3. twnyan v1.1.x : `$ rm ~/.twnyan.yaml`<br>twnyan v1.2.x : `$ rm -rf ~/.twnyan`
+3. `$ rm -rf ~/.twnyan`
 
 ## Initialization
 
@@ -67,7 +67,9 @@ Also, some commands cannot be used in command line mode.
 
 `$ twnyan tw`
 
-If you omit the tweet text, it will be tweeted as "にゃーん". (If an image is attached, the tweet will not "にゃーん")
+If you omit the tweet text, it will be tweeted as "にゃーん".
+
+The same goes for replies and quote retweets. (If an image is attached, the tweet will not "にゃーん")
 
 > "にゃーん" is the Japanese word for a cat's meow.
 
@@ -127,6 +129,14 @@ Get a home timeline.
 | Arguments | Hints                                                                | Examples      |
 | --------- | -------------------------------------------------------------------- | ------------- |
 | counts    | If you omit it, the default value is given in the configuration file | `timeline 39` |
+
+## stream
+
+`Alias: st`
+
+It first accumulates tweets from the home timeline for a minute, then displays the tweets with a one-minute delay, just like the UserStream API.
+
+**Ctrl+C** to exit.
 
 ## mention
 

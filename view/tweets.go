@@ -12,150 +12,160 @@ import (
 	"github.com/gookit/color"
 )
 
-// DrawTweets ツイート描画
-func (v *View) DrawTweets() {
-	for i := len(v.tweets) - 1; i >= 0; i-- {
-		v.drawTweet(i, false, &v.tweets[i])
+// ShowRegisteredTweets 登録済みのツイートを表示
+func (v *View) ShowRegisteredTweets() {
+	v.ShowTweetsFromArray(v.tweets, true)
+}
+
+// ShowTweetsFromArray 配列からツイートを表示
+func (v *View) ShowTweetsFromArray(tweets []anaconda.Tweet, shouldShowTweetNum bool) {
+	tagText := " "
+
+	for i := len(tweets) - 1; i >= 0; i-- {
+		if shouldShowTweetNum {
+			tagText = fmt.Sprintf(" %d ", i)
+		}
+		v.ShowTweet(&tweets[i], tagText, false)
 	}
 }
 
-func (v *View) drawTweet(i int, isQuote bool, t *anaconda.Tweet) {
+// ShowTweet ツイートを表示
+func (v *View) ShowTweet(tweets *anaconda.Tweet, tagText string, isQuote bool) {
 	header := ""
+	halfWidth := util.GetWindowWidth() / 2
 
 	// QTならセパレータを挿入
 	if isQuote {
-		header += v.createSeparatorStr(true)
+		header += v.createSeparatorString(true)
 	}
 	// RTなら元のツイートに置換
-	if t.RetweetedStatus != nil {
-		header += color.HEX(v.cfg.Color.Retweet).Sprintf("RT by %s @%s\n", v.truncateUserName(t.User.Name), t.User.ScreenName)
-		t = t.RetweetedStatus
+	if tweets.RetweetedStatus != nil {
+		header += color.HEX(v.cfg.Color.Retweet).Sprintf("RT by %s @%s\n", util.TruncateString(tweets.User.Name, halfWidth), tweets.User.ScreenName)
+		tweets = tweets.RetweetedStatus
 	}
 	// リプライなら宛先を追加
-	if t.InReplyToScreenName != "" {
-		header += color.HEX(v.cfg.Color.Reply).Sprintf("Reply to @%s\n", t.InReplyToScreenName)
+	if tweets.InReplyToScreenName != "" {
+		header += color.HEX(v.cfg.Color.Reply).Sprintf("Reply to @%s\n", tweets.InReplyToScreenName)
 	}
 
-	// ツイート番号
-	index := "↪"
-	if !isQuote {
-		index = color.HEXStyle(v.cfg.Color.BoxForground, v.cfg.Color.Accent1).Sprintf(" %d ", i)
-	}
-	// ユーザー情報
-	userInfo := v.createUserStr(&t.User)
-	// 投稿時刻
-	pt, _ := t.CreatedAtTime()
-	postTime := v.createPostTimeStr(pt)
-	// いいね、RT数
-	fav := v.createReactionCountStr(t.FavoriteCount, t.Favorited, "Fav")
-	rt := v.createReactionCountStr(t.RetweetCount, t.Retweeted, "RT")
-	// ヘッダー
-	header += fmt.Sprintf("%s %s %s%s%s", index, userInfo, postTime, fav, rt)
-	// ツイート内容
-	text := v.createTweetText(t)
+	// ヘッダー文字列を作成
+	tagStr := color.HEXStyle(v.cfg.Color.BoxForground, v.cfg.Color.Accent1).Sprint(tagText)
+	userInfoStr := v.createUserInfoString(&tweets.User)
+	createdAt, _ := tweets.CreatedAtTime()
+	createdAtStr := v.createCreatedAtString(createdAt)
+	favCountStr := v.createCountString(tweets.FavoriteCount, tweets.Favorited, "Fav")
+	rtCountStr := v.createCountString(tweets.RetweetCount, tweets.Retweeted, "RT")
+	header += fmt.Sprintf("%s %s %s%s%s", tagStr, userInfoStr, createdAtStr, favCountStr, rtCountStr)
 
-	// 表示
-	fmt.Printf("%s\n%s", header, text)
-	// QTなら引用元を表示
-	if t.QuotedStatus != nil {
-		v.drawTweet(0, true, t.QuotedStatus)
+	fmt.Printf("%s\n%s", header, v.editTweetText(tweets))
+
+	// QTなら引用元ツイートを表示
+	if tweets.QuotedStatus != nil {
+		v.ShowTweet(tweets.QuotedStatus, " ", true)
 		return
 	}
+
 	fmt.Print("\n")
 }
 
-func (v *View) createTweetText(t *anaconda.Tweet) string {
+// editTweetText ツイート文を編集
+func (v *View) editTweetText(tweet *anaconda.Tweet) string {
 	// 文字をアンエスケープ
-	text := html.UnescapeString(t.FullText)
-	text += "\n"
+	tweetText := html.UnescapeString(tweet.FullText)
+	tweetText += "\n"
 
 	// ハッシュタグをハイライト
-	if len(t.Entities.Hashtags) != 0 {
-		for _, h := range t.Entities.Hashtags {
+	if len(tweet.Entities.Hashtags) != 0 {
+		for _, h := range tweet.Entities.Hashtags {
 			rep := regexp.MustCompile(fmt.Sprintf(`[#＃](%s)([\s　])`, h.Text))
-			text = rep.ReplaceAllString(text, color.HEX(v.cfg.Color.Hashtag).Sprintf("#$1$2"))
+			tweetText = rep.ReplaceAllString(tweetText, color.HEX(v.cfg.Color.Hashtag).Sprintf("#$1$2"))
 		}
 	}
+
 	// メンションをハイライト
-	if len(t.Entities.User_mentions) != 0 {
+	if len(tweet.Entities.User_mentions) != 0 {
 		rep := regexp.MustCompile(`(^|[^\w@#$%&])[@＠](\w+)`)
-		text = rep.ReplaceAllString(text, "$1"+color.HEX(v.cfg.Color.Reply).Sprintf("@$2"))
+		tweetText = rep.ReplaceAllString(tweetText, "$1"+color.HEX(v.cfg.Color.Reply).Sprintf("@$2"))
 	}
 
-	return text
+	return tweetText
 }
 
-func (v *View) createReactionCountStr(count int, flg bool, unit string) string {
-	// 表示色
+// createCountString いいね・RT数の文字列を作成
+func (v *View) createCountString(countNum int, reverseFlg bool, unitStr string) string {
 	colorCode := v.cfg.Color.Favorite
-	if unit == "RT" {
+	if unitStr == "RT" {
 		colorCode = v.cfg.Color.Retweet
 	}
 
-	// カウントが0なら処理を終了
-	if count <= 0 {
+	if countNum <= 0 {
 		return ""
-	} else if count > 1 {
-		unit += "s"
+	} else if countNum > 1 {
+		unitStr += "s"
 	}
 
-	// 文字列作成
-	text := " "
-	if flg {
-		text += color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", count, unit)
+	countStr := " "
+
+	// フラグが立っていれば文字を反転する
+	if reverseFlg {
+		countStr += color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unitStr)
 	} else {
-		text += color.HEX(colorCode).Sprintf("%d%s", count, unit)
+		countStr += color.HEX(colorCode).Sprintf("%d%s", countNum, unitStr)
 	}
 
-	return text
+	return countStr
 }
 
 // RegisterTweets ツイートを登録
-func (v *View) RegisterTweets(t *[]anaconda.Tweet) {
+func (v *View) RegisterTweets(tweets *[]anaconda.Tweet) {
 	v.mu.Lock()
 	defer v.mu.Unlock()
+
 	tmp := []anaconda.Tweet{}
-	v.tweets = append(tmp, *t...)
+	v.tweets = append(tmp, *tweets...)
 }
 
 // GetTweetURL ツイートのURLを取得
-func (v *View) GetTweetURL(numStr string) (string, error) {
-	name, err := v.GetDataFromTweetNum(numStr, "screenname")
+func (v *View) GetTweetURL(tweetNumStr string) (string, error) {
+	screenName, err := v.GetDataFromTweetNum(tweetNumStr, "screenName")
 	if err != nil {
 		return "", err
 	}
 
-	ID, _ := v.GetDataFromTweetNum(numStr, "tweetID")
+	tweetID, err := v.GetDataFromTweetNum(tweetNumStr, "tweetID")
+	if err != nil {
+		return "", err
+	}
 
-	return fmt.Sprintf("https://twitter.com/%s/status/%s", name, ID), nil
+	return fmt.Sprintf("https://twitter.com/%s/status/%s", screenName, tweetID), nil
 }
 
 // GetDataFromTweetNum ツイート番号から情報を取得
-func (v *View) GetDataFromTweetNum(numStr, dataType string) (string, error) {
-	// ツイート番号かチェック
-	if !util.IsNumber(numStr) {
-		return "", fmt.Errorf("tweetnumber is invalid")
+func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error) {
+	if !util.IsNumber(tweetNumStr) {
+		return "", errors.New("tweetnumber is invalid")
 	}
 
-	// ツイート番号が範囲内かチェック
-	num, _ := strconv.Atoi(numStr)
-	if num < 0 || num > len(v.tweets)-1 {
+	tweetNum, _ := strconv.Atoi(tweetNumStr)
+
+	// ツイート番号が範囲外ならエラー
+	if tweetNum < 0 || tweetNum > len(v.tweets)-1 {
 		return "", errors.New("tweetnumber is out of range")
 	}
 
-	// ツイート取得
-	tweet := v.tweets[num]
+	// ツイートを取得
+	tweet := v.tweets[tweetNum]
 	if tweet.RetweetedStatus != nil {
 		tweet = *tweet.RetweetedStatus
 	}
 
 	// 指定されたデータを返す
 	switch dataType {
-	case "screenname":
+	case "screenName":
 		return tweet.User.ScreenName, nil
 	case "tweetID":
 		return tweet.IdStr, nil
-	default:
-		return "", errors.New("wrong datatype")
 	}
+
+	return "", errors.New("wrong datatype")
 }

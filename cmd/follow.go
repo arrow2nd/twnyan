@@ -4,8 +4,9 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newFollowCmd() {
-	fc := &ishell.Cmd{
+func (cmd *Cmd) addFollowCmd() {
+	// follow
+	followCmd := &ishell.Cmd{
 		Name:    "follow",
 		Aliases: []string{"fw"},
 		Func: func(c *ishell.Context) {
@@ -20,7 +21,8 @@ func (cmd *Cmd) newFollowCmd() {
 		),
 	}
 
-	fc.AddCmd(&ishell.Cmd{
+	// follow remove
+	followCmd.AddCmd(&ishell.Cmd{
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
@@ -35,5 +37,5 @@ func (cmd *Cmd) newFollowCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(fc)
+	cmd.shell.AddCmd(followCmd)
 }

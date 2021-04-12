@@ -17,42 +17,41 @@ func (cmd *Cmd) setDefaultPrompt() {
 	cmd.shell.SetPrompt(prompt)
 }
 
-// parseTweetCmdArgs ツイート系コマンドの引数をパース
+// parseTweetCmdArgs ツイート系のコマンドの引数をパース
 func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
-	status, images := "にゃーん", []string{}
-
-	if len(args) > 0 {
-		if util.ContainsStr("\\.\\w{3,4}$", args[0]) {
-			status = ""
-			images = args[0:]
-		} else {
-			status = args[0]
-			images = args[1:]
-		}
+	// 引数がないならにゃーん
+	if len(args) == 0 {
+		return "にゃーん", []string{}
 	}
 
-	return status, images
+	// 1つ目の引数に拡張子が含まれているなら画像パスのみを返す
+	if util.MatchesRegexp("\\.\\w{3,4}$", args[0]) {
+		return "", args[0:]
+	}
+
+	// ツイート文と画像パスを返す
+	return args[0], args[1:]
 }
 
-// parseTLCmdArgs タイムライン系コマンドの引数をパース
-func (cmd *Cmd) parseTLCmdArgs(args []string) (string, string, error) {
-	// 引数をチェック
+// parseTimelineCmdArgs タイムライン取得系のコマンドの引数をパース
+func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 	if len(args) <= 0 {
 		return "", "", errors.New("no arguments")
 	}
-	str, counts := args[0], cmd.cfg.Option.Counts
 
-	// 取得件数の指定があれば置換
+	str, count := args[0], cmd.cfg.Option.Counts
+
+	// 2つ目の引数があればcountに代入
 	if len(args) >= 2 {
-		counts = args[1]
+		count = args[1]
 	}
 
-	return str, counts, nil
+	return str, count, nil
 }
 
-// getCountFromCmdArg 引数から取得件数を取得
+// getCountFromCmdArg 引数からツイート取得件数を取得
 func (cmd *Cmd) getCountFromCmdArg(args []string) string {
-	// 引数無し、数値以外ならデフォルト値を返す
+	// 引数が無い、または数値以外ならデフォルト値を返す
 	if len(args) <= 0 || !util.IsNumber(args[0]) {
 		return cmd.cfg.Option.Counts
 	}
@@ -67,28 +66,29 @@ func (cmd *Cmd) inputMultiLine() (string, []string) {
 	defer cmd.setDefaultPrompt()
 
 	// ツイート文入力
-	cmd.drawMessage("INPUT", "End typing with a semicolon (cancel with Ctrl+c on an empty line)", cmd.cfg.Color.Accent3)
-	text := cmd.shell.ReadMultiLines(";")
-	if text == "" || util.IsEndLFCode(text) {
-		cmd.drawMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
+	cmd.showMessage("INPUT", "End typing with a semicolon (cancel with Ctrl+C on an empty line)", cmd.cfg.Color.Accent3)
+	tweetText := cmd.shell.ReadMultiLines(";")
+
+	// 文末が改行ならキャンセル
+	// (Ctrl+Cが押された場合に改行が入力されるので)
+	if tweetText == "" || util.IsEndLFCode(tweetText) {
+		cmd.showMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
 		return "", nil
 	}
 
-	// 添付画像ファイル名入力
-	cmd.drawMessage("IMAGE", "Enter the file name of the attached image (separated by a space)", cmd.cfg.Color.Accent3)
-	img := cmd.shell.ReadLine()
+	tweetText = strings.TrimRight(tweetText, ";")
 
-	// 戻り値を作成
-	tweet := strings.TrimRight(text, ";")
+	// 添付画像ファイル名入力
+	cmd.showMessage("IMAGE", "Enter the file name of the attached image (separated by a space)", cmd.cfg.Color.Accent3)
+	img := cmd.shell.ReadLine()
 	images := strings.Fields(img)
 
-	return tweet, images
+	return tweetText, images
 }
 
 // upload 画像をアップロード
-func (cmd *Cmd) upload(files []string, val *url.Values) error {
-	// ファイルが無ければ処理しない
-	if len(files) <= 0 {
+func (cmd *Cmd) upload(images []string, query *url.Values) error {
+	if len(images) <= 0 {
 		return nil
 	}
 
@@ -97,42 +97,39 @@ func (cmd *Cmd) upload(files []string, val *url.Values) error {
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 
-	// アップロード
-	mediaIDs, err := cmd.api.UploadImage(files)
+	mediaIDs, err := cmd.api.UploadImage(images)
 	cmd.shell.ProgressBar().Stop()
 	if err != nil {
 		return err
 	}
 
-	// media_idsを追加
-	val.Add("media_ids", mediaIDs)
+	query.Add("media_ids", mediaIDs)
 
 	return nil
 }
 
 // actionOnTweet ツイートに対しての操作
 func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string, actionFunc func(string) (string, error)) {
-	// 引数をチェック
 	if len(args) <= 0 {
-		cmd.drawWrongArgMessage(cmdName)
+		cmd.showWrongArgMessage(cmdName)
 		return
 	}
 
 	// 引数の数だけ処理
 	for _, v := range args {
-		id, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
+		tweetID, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		tweetStr, err := actionFunc(id)
+		tweetText, err := actionFunc(tweetID)
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		cmd.drawMessage(actionName, tweetStr, bgColor)
+		cmd.showMessage(actionName, tweetText, bgColor)
 	}
 }
 
@@ -140,57 +137,79 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string, actionFunc func(string) (string, error)) {
 	var err error
 
-	// 引数をチェック
 	if len(args) <= 0 {
-		cmd.drawWrongArgMessage(cmdName)
+		cmd.showWrongArgMessage(cmdName)
 		return
 	}
 
-	// ツイート番号ならスクリーンネームに置換
 	screenName := args[0]
+
+	// ツイート番号ならスクリーンネームに置換
 	if util.IsNumber(args[0]) {
 		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenname")
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 			return
 		}
 	}
 
-	// 処理を実行
-	userStr, err := actionFunc(screenName)
+	// 受け取った関数を実行
+	userName, err := actionFunc(screenName)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.drawMessage(actionName, userStr, bgColor)
+	cmd.showMessage(actionName, userName, bgColor)
 }
 
-// drawMessage メッセージを表示
-func (cmd *Cmd) drawMessage(tips, text, bgColor string) {
+// showMessage メッセージを表示
+func (cmd *Cmd) showMessage(tips, msg, bgColor string) {
 	width := util.GetWindowWidth()
-	util.AllReplace(&text, "[\t\n\r]", " ")
-	text = html.UnescapeString(text)
-	text = util.TruncateStr(text, width-len(tips)-3)
-	tips = color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Sprintf(" %s ", tips)
-	fmt.Printf("%s %s\n", tips, text)
+
+	// 不要な文字を削除
+	msg = util.AllReplace(msg, "[\t\n\r]", " ")
+	msg = html.UnescapeString(msg)
+
+	// 画面内に収まるよう丸める
+	msg = util.TruncateString(msg, width-len(tips)-3)
+
+	color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Printf(" %s ", tips)
+	fmt.Printf(" %s\n", msg)
 }
 
-// drawErrorMsg エラーメッセージを表示
-func (cmd *Cmd) drawErrorMessage(text string) {
+// showErrorMessage エラーメッセージを表示
+func (cmd *Cmd) showErrorMessage(msg string) {
 	width := util.GetWindowWidth()
-	text = util.TruncateStr(text, width-9)
-	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
+
+	msg = util.TruncateString(msg, width-9)
+	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", msg)
+
 	fmt.Printf("%s\n", errMsg)
 }
 
 // drawWrongArgError 引数ミスのメッセージを表示
-func (cmd *Cmd) drawWrongArgMessage(cmdName string) {
-	text := fmt.Sprintf("Wrong argument, try '%s help'", cmdName)
-	cmd.drawErrorMessage(text)
+func (cmd *Cmd) showWrongArgMessage(cmdName string) {
+	msg := fmt.Sprintf("Wrong argument, try '%s help'", cmdName)
+	cmd.showErrorMessage(msg)
 }
 
 // createLongHelp 詳細なヘルプ文を作成
 func createLongHelp(help, alias, use, exp string) string {
-	return fmt.Sprintf("%s\n\nAlias:\n  %s\n\nUse:\n  %s\n\nExample:\n  %s", help, alias, use, exp)
+	longHelp := fmt.Sprintf("%s\n", help)
+
+	if alias != "" {
+		longHelp += fmt.Sprintf("\nAlias:\n  %s\n", alias)
+	}
+
+	if use != "" {
+		longHelp += fmt.Sprintf("\nUse:\n  %s\n", use)
+	}
+
+	if exp != "" {
+		longHelp += fmt.Sprintf("\nExample:\n  %s\n", exp)
+	}
+
+	return longHelp
+
 }

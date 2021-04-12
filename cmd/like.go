@@ -4,8 +4,9 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newFaoriteCmd() {
-	fc := &ishell.Cmd{
+func (cmd *Cmd) addLikeCmd() {
+	// like
+	likeCmd := &ishell.Cmd{
 		Name:    "like",
 		Aliases: []string{"lk", "fv"},
 		Func: func(c *ishell.Context) {
@@ -20,7 +21,8 @@ func (cmd *Cmd) newFaoriteCmd() {
 		),
 	}
 
-	fc.AddCmd(&ishell.Cmd{
+	// like remove
+	likeCmd.AddCmd(&ishell.Cmd{
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
@@ -35,5 +37,5 @@ func (cmd *Cmd) newFaoriteCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(fc)
+	cmd.shell.AddCmd(likeCmd)
 }

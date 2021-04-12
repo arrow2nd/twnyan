@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/ChimeraCoder/anaconda"
-	"github.com/gookit/color"
 )
 
 const (
@@ -12,7 +11,6 @@ const (
 	consumerSecret = "umr6nOFzV3W0AfdQoWPxKSh2ZMEeRgHFih5xQDTlBRO3DoEq8z"
 )
 
-// TwitterAPI API構造体
 type TwitterAPI struct {
 	API       *anaconda.TwitterApi
 	OwnUser   *anaconda.User
@@ -25,33 +23,34 @@ func init() {
 	anaconda.SetConsumerSecret(consumerSecret)
 }
 
-// New API構造体を作成
+// New 構造体を初期化
 func New() *TwitterAPI {
-	tw := &TwitterAPI{
+	api := &TwitterAPI{
 		API:       nil,
 		OwnUser:   &anaconda.User{},
 		ListNames: []string{},
 		ListIDs:   []int64{},
 	}
-	return tw
+
+	return api
 }
 
-// Init 初期化
-func (ta *TwitterAPI) Init(token, secret string) error {
+// Init 初期化処理
+func (tw *TwitterAPI) Init(token, secret string) error {
 	var err error
 
 	// TwitterApi構造体を作成
-	ta.API = anaconda.NewTwitterApi(token, secret)
-	ta.API.ReturnRateLimitError(true)
+	tw.API = anaconda.NewTwitterApi(token, secret)
+	tw.API.ReturnRateLimitError(true)
 
 	// ユーザー情報を取得
-	ta.OwnUser, err = ta.getSelf()
+	tw.OwnUser, err = tw.fetchSelfInfo()
 	if err != nil {
 		return err
 	}
 
 	// リスト情報を取得
-	ta.ListNames, ta.ListIDs, err = ta.getLists()
+	tw.ListNames, tw.ListIDs, err = tw.createListInfoSlice()
 	if err != nil {
 		return err
 	}
@@ -59,8 +58,8 @@ func (ta *TwitterAPI) Init(token, secret string) error {
 	return nil
 }
 
-// Auth 認証
-func (ta *TwitterAPI) Auth() (string, string) {
+// Auth アプリケーション認証
+func (tw *TwitterAPI) Auth() (string, string) {
 	authAPI := anaconda.NewTwitterApi("", "")
 
 	// 認証URL取得
@@ -70,21 +69,10 @@ func (ta *TwitterAPI) Auth() (string, string) {
 		panic(err)
 	}
 
-	// ロゴ
-	color.Red.Println(" __                                     ")
-	color.Yellow.Println("|  |_.--.--.--.-----.--.--.---.-.-----.")
-	color.Green.Println("|   _|  |  |  |     |  |  |  _  |     |")
-	color.Cyan.Println("|____|________|__|__|___  |___._|__|__|")
-	color.Blue.Println("                    |_____|            ")
-
-	// 認証URL
-	fmt.Println("\n🐈 Go to the following URL to authenticate the application and enter the PIN that is displayed")
-	fmt.Printf("[ %s ]\n\n", uri)
-
-	// PIN入力
-	pin := ""
-	fmt.Print("PIN : ")
-	fmt.Scanf("%s", &pin)
+	// URLを表示してPINコードを入力
+	showLogo()
+	showAuthUrl(uri)
+	pin := inputPinCode()
 
 	// トークン発行
 	cred, _, err = authAPI.GetCredentials(cred, pin)
@@ -93,8 +81,7 @@ func (ta *TwitterAPI) Auth() (string, string) {
 		panic(err)
 	}
 
-	// 初期化
-	ta.Init(cred.Token, cred.Secret)
+	tw.Init(cred.Token, cred.Secret)
 
 	return cred.Token, cred.Secret
 }

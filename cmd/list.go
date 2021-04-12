@@ -7,7 +7,7 @@ import (
 	"github.com/arrow2nd/twnyan/util"
 )
 
-func (cmd *Cmd) newListCmd() {
+func (cmd *Cmd) addListCmd() {
 	cmd.shell.AddCmd(&ishell.Cmd{
 		Name:    "list",
 		Aliases: []string{"ls"},
@@ -24,46 +24,45 @@ func (cmd *Cmd) newListCmd() {
 }
 
 func (cmd *Cmd) listCmd(c *ishell.Context) {
-	// 引数をパース
-	name, counts, err := cmd.parseTLCmdArgs(c.Args)
+	name, counts, err := cmd.parseTimelineCmdArgs(c.Args)
 	if err != nil {
-		cmd.drawWrongArgMessage(c.Cmd.Name)
+		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
 	}
 
-	// リスト名がリスト内にあるかチェック
-	i := util.IndexOf(cmd.api.ListNames, name)
-	if i == -1 {
-		cmd.drawErrorMessage("No list exists!")
+	// 指定されたリスト名が存在するかチェック
+	listIndex := util.IndexOf(cmd.api.ListNames, name)
+	if listIndex == -1 {
+		cmd.showErrorMessage("No list exists!")
 		return
 	}
 
-	// リストタイムラインを取得
-	t, err := cmd.api.GetListTimeline(cmd.api.ListIDs[i], counts)
+	// リストのツイートを取得
+	tweets, err := cmd.api.FetchListTweets(cmd.api.ListIDs[listIndex], counts)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// 描画
-	cmd.view.RegisterTweets(t)
-	cmd.view.DrawTweets()
+	// 登録して表示
+	cmd.view.RegisterTweets(tweets)
+	cmd.view.ShowRegisteredTweets()
 }
 
 func (cmd *Cmd) listCmdCompleter([]string) []string {
-	// リストの存在チェック
+	// リストが無いならreturn
 	if cmd.api.ListNames == nil {
 		return nil
 	}
 
-	// 補完用スライス作成
+	// 入力補完用のスライスを作成
 	cmp := make([]string, len(cmd.api.ListNames))
-	for i, v := range cmd.api.ListNames {
-		if util.ContainsStr("\\s", v) {
-			// リスト名に空白があればダブルクオートで囲む
-			cmp[i] = fmt.Sprintf("\"%s\"", v)
+	for i, name := range cmd.api.ListNames {
+		// リスト名が空白を含んでいるならダブルクオートで囲む
+		if util.MatchesRegexp("\\s", name) {
+			cmp[i] = fmt.Sprintf("\"%s\"", name)
 		} else {
-			cmp[i] = v
+			cmp[i] = name
 		}
 	}
 

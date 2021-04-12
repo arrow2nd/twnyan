@@ -4,8 +4,9 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newRetweetCmd() {
-	rc := &ishell.Cmd{
+func (cmd *Cmd) addRetweetCmd() {
+	// retweet
+	retweetCmd := &ishell.Cmd{
 		Name:    "retweet",
 		Aliases: []string{"rt"},
 		Func: func(c *ishell.Context) {
@@ -20,7 +21,8 @@ func (cmd *Cmd) newRetweetCmd() {
 		),
 	}
 
-	rc.AddCmd(&ishell.Cmd{
+	// retweet remove
+	retweetCmd.AddCmd(&ishell.Cmd{
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
@@ -35,5 +37,5 @@ func (cmd *Cmd) newRetweetCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(rc)
+	cmd.shell.AddCmd(retweetCmd)
 }

@@ -4,8 +4,9 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newBlockCmd() {
-	bc := &ishell.Cmd{
+func (cmd *Cmd) addBlockCmd() {
+	// block
+	blockCmd := &ishell.Cmd{
 		Name:    "block",
 		Aliases: []string{"bk"},
 		Func: func(c *ishell.Context) {
@@ -20,7 +21,8 @@ func (cmd *Cmd) newBlockCmd() {
 		),
 	}
 
-	bc.AddCmd(&ishell.Cmd{
+	// block remove
+	blockCmd.AddCmd(&ishell.Cmd{
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
@@ -35,5 +37,5 @@ func (cmd *Cmd) newBlockCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(bc)
+	cmd.shell.AddCmd(blockCmd)
 }

@@ -6,8 +6,9 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) newTweetCmd() {
-	tc := &ishell.Cmd{
+func (cmd *Cmd) addTweetCmd() {
+	// tweet
+	tweetCmd := &ishell.Cmd{
 		Name:    "tweet",
 		Aliases: []string{"tw"},
 		Func:    cmd.tweetCmd,
@@ -20,7 +21,8 @@ func (cmd *Cmd) newTweetCmd() {
 		),
 	}
 
-	tc.AddCmd(&ishell.Cmd{
+	// tweet multi
+	tweetCmd.AddCmd(&ishell.Cmd{
 		Name:    "multi",
 		Aliases: []string{"ml"},
 		Func:    cmd.tweetMultiCmd,
@@ -29,11 +31,12 @@ func (cmd *Cmd) newTweetCmd() {
 			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, press Ctrl+c on an empty line.",
 			"ml",
 			"tweet multi",
-			"tweet multi",
+			"",
 		),
 	})
 
-	tc.AddCmd(&ishell.Cmd{
+	// tweet remove
+	tweetCmd.AddCmd(&ishell.Cmd{
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func:    cmd.tweetRemoveCmd,
@@ -46,63 +49,63 @@ func (cmd *Cmd) newTweetCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(tc)
+	cmd.shell.AddCmd(tweetCmd)
 }
 
 func (cmd *Cmd) tweetCmd(c *ishell.Context) {
-	status, files := cmd.parseTweetCmdArgs(c.Args)
-	cmd.tweet(status, files)
+	text, images := cmd.parseTweetCmdArgs(c.Args)
+	cmd.tweet(text, images)
 }
 
 func (cmd *Cmd) tweetMultiCmd(c *ishell.Context) {
-	status, files := cmd.inputMultiLine()
-	if status == "" {
+	text, images := cmd.inputMultiLine()
+	if text == "" {
 		return
 	}
-	cmd.tweet(status, files)
+
+	cmd.tweet(text, images)
 }
 
 func (cmd *Cmd) tweetRemoveCmd(c *ishell.Context) {
-	// 引数をチェック
 	if len(c.Args) <= 0 {
-		cmd.drawWrongArgMessage("tweet " + c.Cmd.Name)
+		cmd.showWrongArgMessage("tweet " + c.Cmd.Name)
 		return
 	}
 
 	// 引数の数だけ削除処理
-	for _, v := range c.Args {
-		id, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
+	for _, tweetNumStr := range c.Args {
+		tweetID, err := cmd.view.GetDataFromTweetNum(tweetNumStr, "tweetID")
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		tweetStr, err := cmd.api.DeleteTweet(id)
+		tweetText, err := cmd.api.DeleteTweet(tweetID)
 		if err != nil {
-			cmd.drawErrorMessage(err.Error())
+			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		cmd.drawMessage("DELETED", tweetStr, cmd.cfg.Color.Accent2)
+		cmd.showMessage("DELETED", tweetText, cmd.cfg.Color.Accent2)
 	}
 }
 
-func (cmd *Cmd) tweet(status string, files []string) {
-	val := url.Values{}
+func (cmd *Cmd) tweet(text string, images []string) {
+	query := url.Values{}
 
 	// 画像をアップロード
-	err := cmd.upload(files, &val)
+	err := cmd.upload(images, &query)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// ツイート
-	tweetStr, err := cmd.api.PostTweet(val, status)
+	// ツイートを投稿
+	tweetText, err := cmd.api.PostTweet(query, text)
 	if err != nil {
-		cmd.drawErrorMessage(err.Error())
+		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.drawMessage("TWEETED", tweetStr, cmd.cfg.Color.Accent2)
+	cmd.showMessage("TWEETED", tweetText, cmd.cfg.Color.Accent2)
 }

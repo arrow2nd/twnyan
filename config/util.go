@@ -9,14 +9,17 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// getConfigDir 設定ファイルのディレクトリを取得
 func getConfigDir() string {
 	dirPath, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
 	}
+
 	return filepath.Join(dirPath, ".twnyan")
 }
 
+// configFileExists 設定ファイルが存在するか
 func configFileExists(dir string) bool {
 	list := []string{
 		filepath.Join(dir, crdFile),
@@ -43,7 +46,8 @@ func configFileExists(dir string) bool {
 	return true
 }
 
-func saveYaml(dir, filename string, in interface{}) {
+// saveYAML ファイルを保存
+func saveYAML(dir, filename string, in interface{}) {
 	// 変換
 	buf, err := yaml.Marshal(in)
 	if err != nil {
@@ -59,7 +63,8 @@ func saveYaml(dir, filename string, in interface{}) {
 	}
 }
 
-func loadYaml(dir, filename string, out interface{}) {
+// loadYAML ファイルを読込
+func loadYAML(dir, filename string, out interface{}) {
 	// 読込
 	path := filepath.Join(dir, filename)
 	buf, err := ioutil.ReadFile(path)

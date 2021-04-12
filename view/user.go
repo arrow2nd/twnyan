@@ -10,31 +10,28 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-// DrawUser ユーザー情報描画
-func (v *View) DrawUser(u *anaconda.User, c []string) {
+// ShowUserInfo ユーザー情報を表示
+func (v *View) ShowUserInfo(user *anaconda.User, relationships []string) {
 	width := util.GetWindowWidth()
 
 	// ユーザー情報
-	userInfo := v.createUserStr(u)
-	// 関係情報
-	connection := v.createConnectionStr(c)
-	// BIO
-	bio := runewidth.Wrap(html.UnescapeString(u.Description), width-5)
-	// 場所
-	locate := html.UnescapeString(u.Location)
-	// URL
-	url := u.URL
-	// count
-	tweetsCount := color.HEX(v.cfg.Color.Accent1).Sprintf("%d Tweets", u.StatusesCount)
-	followingCount := color.HEX(v.cfg.Color.Accent2).Sprintf("%d Following", u.FriendsCount)
-	followersCount := color.HEX(v.cfg.Color.Accent3).Sprintf("%d Followers", u.FollowersCount)
+	userInfo := v.createUserInfoString(user)
+	relationshipInfo := v.createRelationshipInfoString(relationships)
+	bio := runewidth.Wrap(html.UnescapeString(user.Description), width-5)
+	locate := html.UnescapeString(user.Location)
+	url := user.URL
 
-	// 描画
-	fmt.Printf("%s %s\n", userInfo, connection)
-	fmt.Print(v.createSeparatorStr(false))
+	// 各種カウント
+	tweetsCount := color.HEX(v.cfg.Color.Accent1).Sprintf("%d Tweets", user.StatusesCount)
+	followingCount := color.HEX(v.cfg.Color.Accent2).Sprintf("%d Following", user.FriendsCount)
+	followersCount := color.HEX(v.cfg.Color.Accent3).Sprintf("%d Followers", user.FollowersCount)
+
+	fmt.Printf("%s %s\n", userInfo, relationshipInfo)
+	fmt.Print(v.createSeparatorString(false))
 	fmt.Printf("%s %s %s\n", tweetsCount, followingCount, followersCount)
+
 	if bio != "" {
-		util.AllReplace(&bio, "\n", "\n     ")
+		bio = util.AllReplace(bio, "\n", "\n     ")
 		fmt.Printf("📄 : %s\n", bio)
 	}
 	if locate != "" {
@@ -43,49 +40,47 @@ func (v *View) DrawUser(u *anaconda.User, c []string) {
 	if url != "" {
 		fmt.Printf("🔗 : %s\n", url)
 	}
+
 	fmt.Print("\n")
 }
 
-func (v *View) createUserStr(u *anaconda.User) string {
+// createUserInfoString ユーザー情報の文字列を作成
+func (v *View) createUserInfoString(u *anaconda.User) string {
+	halfWidth := util.GetWindowWidth() / 2
+
 	// ユーザー名、スクリーンネーム
-	name := v.truncateUserName(u.Name)
-	name = color.HEX(v.cfg.Color.UserName).Sprint(name)
+	userName := util.TruncateString(u.Name, halfWidth)
+	userName = color.HEX(v.cfg.Color.UserName).Sprint(userName)
 	screenName := color.HEX(v.cfg.Color.ScreenName).Sprintf("@%s", u.ScreenName)
 
-	// バッジ
-	badge := ""
+	// アカウントタイプ
+	accountType := ""
 	if u.Verified {
-		badge += color.HEX(v.cfg.Color.Verified).Sprint(" verified")
+		accountType += color.HEX(v.cfg.Color.Verified).Sprint(" verified")
 	}
 	if u.Protected {
-		badge += color.HEX(v.cfg.Color.Protected).Sprint(" protected")
+		accountType += color.HEX(v.cfg.Color.Protected).Sprint(" protected")
 	}
 
-	// 結合
-	text := fmt.Sprintf("%s %s%s", name, screenName, badge)
-	return text
+	return fmt.Sprintf("%s %s%s", userName, screenName, accountType)
 }
 
-func (v *View) truncateUserName(un string) string {
-	width := util.GetWindowWidth()
-	return runewidth.Truncate(un, width/2, "…")
-}
+// createRelationshipInfoString ユーザーとの関係性を表す文字列を作成
+func (v *View) createRelationshipInfoString(relationships []string) string {
+	relationshipInfo := ""
 
-func (v *View) createConnectionStr(c []string) string {
-	connection := ""
-
-	for _, str := range c {
+	for _, str := range relationships {
 		switch str {
 		case "followed_by":
-			connection += color.HEX(v.cfg.Color.FollowedBy).Sprint("Followed by ")
+			relationshipInfo += color.HEX(v.cfg.Color.FollowedBy).Sprint("Followed by ")
 		case "following":
-			connection += color.HEX(v.cfg.Color.Following).Sprint("Following ")
+			relationshipInfo += color.HEX(v.cfg.Color.Following).Sprint("Following ")
 		case "blocking":
-			connection += color.HEX(v.cfg.Color.Block).Sprint("Blocking ")
+			relationshipInfo += color.HEX(v.cfg.Color.Block).Sprint("Blocking ")
 		case "muting":
-			connection += color.HEX(v.cfg.Color.Mute).Sprint("Muting ")
+			relationshipInfo += color.HEX(v.cfg.Color.Mute).Sprint("Muting ")
 		}
 	}
 
-	return connection
+	return relationshipInfo
 }
