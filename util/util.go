@@ -34,25 +34,26 @@ func MatchesRegexp(reg, str string) bool {
 	return regexp.MustCompile(reg).Match([]byte(str))
 }
 
-// IsNumber ３桁までの数値かどうか
-func IsNumber(str string) bool {
-	return regexp.MustCompile("^[0-9]{1,3}$").Match([]byte(str))
-}
-
 // AllReplace 該当文字列を全て置換
-func AllReplace(str *string, reg, rep string) {
+func AllReplace(str, reg, rep string) string {
 	replace := regexp.MustCompile(reg)
-	*str = replace.ReplaceAllString(*str, rep)
+	return replace.ReplaceAllString(str, rep)
 }
 
-// IndexOf 文字列配列内を検索
+// IndexOf 引数と同じ内容を持つ最初の配列要素の添字を返す
 func IndexOf(array []string, str string) int {
-	for i, v := range array {
-		if v == str {
+	for i, value := range array {
+		if value == str {
 			return i
 		}
 	}
+
 	return -1
+}
+
+// IsNumber ３桁までの数値かどうか
+func IsNumber(str string) bool {
+	return regexp.MustCompile("^[0-9]{1,3}$").Match([]byte(str))
 }
 
 // IsSameDate 今日の日付かどうか

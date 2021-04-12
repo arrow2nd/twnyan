@@ -98,19 +98,22 @@ func (v *View) createCountString(countNum int, reverseFlg bool, unitStr string) 
 		colorCode = v.cfg.Color.Retweet
 	}
 
-	// カウントが0ならreturn
 	if countNum <= 0 {
 		return ""
 	} else if countNum > 1 {
 		unitStr += "s"
 	}
 
+	countStr := " "
+
 	// フラグが立っていれば文字を反転する
 	if reverseFlg {
-		return " " + color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unitStr)
+		countStr += color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unitStr)
 	} else {
-		return " " + color.HEX(colorCode).Sprintf("%d%s", countNum, unitStr)
+		countStr += color.HEX(colorCode).Sprintf("%d%s", countNum, unitStr)
 	}
+
+	return countStr
 }
 
 // RegisterTweets ツイートを登録
@@ -129,16 +132,18 @@ func (v *View) GetTweetURL(tweetNumStr string) (string, error) {
 		return "", err
 	}
 
-	tweetID, _ := v.GetDataFromTweetNum(tweetNumStr, "tweetID")
+	tweetID, err := v.GetDataFromTweetNum(tweetNumStr, "tweetID")
+	if err != nil {
+		return "", err
+	}
 
 	return fmt.Sprintf("https://twitter.com/%s/status/%s", screenName, tweetID), nil
 }
 
 // GetDataFromTweetNum ツイート番号から情報を取得
 func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error) {
-	// 数値ではないならエラー
 	if !util.IsNumber(tweetNumStr) {
-		return "", fmt.Errorf("tweetnumber is invalid")
+		return "", errors.New("tweetnumber is invalid")
 	}
 
 	tweetNum, _ := strconv.Atoi(tweetNumStr)
@@ -148,7 +153,7 @@ func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error)
 		return "", errors.New("tweetnumber is out of range")
 	}
 
-	// ツイート取得
+	// ツイートを取得
 	tweet := v.tweets[tweetNum]
 	if tweet.RetweetedStatus != nil {
 		tweet = *tweet.RetweetedStatus
@@ -160,7 +165,7 @@ func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error)
 		return tweet.User.ScreenName, nil
 	case "tweetID":
 		return tweet.IdStr, nil
-	default:
-		return "", errors.New("wrong datatype")
 	}
+
+	return "", errors.New("wrong datatype")
 }

@@ -31,7 +31,7 @@ func (v *View) ShowUserInfo(user *anaconda.User, relationships []string) {
 	fmt.Printf("%s %s %s\n", tweetsCount, followingCount, followersCount)
 
 	if bio != "" {
-		util.AllReplace(&bio, "\n", "\n     ")
+		bio = util.AllReplace(bio, "\n", "\n     ")
 		fmt.Printf("📄 : %s\n", bio)
 	}
 	if locate != "" {

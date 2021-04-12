@@ -19,20 +19,18 @@ func (cmd *Cmd) setDefaultPrompt() {
 
 // parseTweetCmdArgs ツイート系のコマンドの引数をパース
 func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
-	text, images := "にゃーん", []string{}
-
-	if len(args) > 0 {
-		// 1つ目の引数に拡張子が含まれるなら、画像のみのツイートと解釈
-		if util.MatchesRegexp("\\.\\w{3,4}$", args[0]) {
-			text = ""
-			images = args[0:]
-		} else {
-			text = args[0]
-			images = args[1:]
-		}
+	// 引数がないならにゃーん
+	if len(args) == 0 {
+		return "にゃーん", []string{}
 	}
 
-	return text, images
+	// 1つ目の引数に拡張子が含まれているなら画像パスのみを返す
+	if util.MatchesRegexp("\\.\\w{3,4}$", args[0]) {
+		return "", args[0:]
+	}
+
+	// ツイート文と画像パスを返す
+	return args[0], args[1:]
 }
 
 // parseTimelineCmdArgs タイムライン取得系のコマンドの引数をパース
@@ -43,7 +41,7 @@ func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 
 	str, count := args[0], cmd.cfg.Option.Counts
 
-	// ツイート取得件数が引数にあれば置換
+	// 2つ目の引数があればcountに代入
 	if len(args) >= 2 {
 		count = args[1]
 	}
@@ -53,7 +51,7 @@ func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 
 // getCountFromCmdArg 引数からツイート取得件数を取得
 func (cmd *Cmd) getCountFromCmdArg(args []string) string {
-	// 引数無し、数値以外ならデフォルト値を返す
+	// 引数が無い、または数値以外ならデフォルト値を返す
 	if len(args) <= 0 || !util.IsNumber(args[0]) {
 		return cmd.cfg.Option.Counts
 	}
@@ -68,26 +66,28 @@ func (cmd *Cmd) inputMultiLine() (string, []string) {
 	defer cmd.setDefaultPrompt()
 
 	// ツイート文入力
-	cmd.showMessage("INPUT", "End typing with a semicolon (cancel with Ctrl+c on an empty line)", cmd.cfg.Color.Accent3)
-	text := cmd.shell.ReadMultiLines(";")
-	if text == "" || util.IsEndLFCode(text) {
+	cmd.showMessage("INPUT", "End typing with a semicolon (cancel with Ctrl+C on an empty line)", cmd.cfg.Color.Accent3)
+	tweetText := cmd.shell.ReadMultiLines(";")
+
+	// 文末が改行ならキャンセル
+	// (Ctrl+Cが押された場合に改行が入力されるので)
+	if tweetText == "" || util.IsEndLFCode(tweetText) {
 		cmd.showMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
 		return "", nil
 	}
 
+	tweetText = strings.TrimRight(tweetText, ";")
+
 	// 添付画像ファイル名入力
 	cmd.showMessage("IMAGE", "Enter the file name of the attached image (separated by a space)", cmd.cfg.Color.Accent3)
 	img := cmd.shell.ReadLine()
-
-	tweet := strings.TrimRight(text, ";")
 	images := strings.Fields(img)
 
-	return tweet, images
+	return tweetText, images
 }
 
 // upload 画像をアップロード
 func (cmd *Cmd) upload(images []string, query *url.Values) error {
-	// ファイルが無いならreturn
 	if len(images) <= 0 {
 		return nil
 	}
@@ -97,7 +97,6 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 
-	// アップロード
 	mediaIDs, err := cmd.api.UploadImage(images)
 	cmd.shell.ProgressBar().Stop()
 	if err != nil {
@@ -147,13 +146,14 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsNumber(args[0]) {
-		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenName")
+		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenname")
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 	}
 
+	// 受け取った関数を実行
 	userName, err := actionFunc(screenName)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
@@ -168,19 +168,20 @@ func (cmd *Cmd) showMessage(tips, msg, bgColor string) {
 	width := util.GetWindowWidth()
 
 	// 不要な文字を削除
-	util.AllReplace(&msg, "[\t\n\r]", " ")
+	msg = util.AllReplace(msg, "[\t\n\r]", " ")
 	msg = html.UnescapeString(msg)
 
-	// 画面内に収まるように丸める
+	// 画面内に収まるよう丸める
 	msg = util.TruncateString(msg, width-len(tips)-3)
 
-	tips = color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Sprintf(" %s ", tips)
-	fmt.Printf("%s %s\n", tips, msg)
+	color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Printf(" %s ", tips)
+	fmt.Printf(" %s\n", msg)
 }
 
 // showErrorMessage エラーメッセージを表示
 func (cmd *Cmd) showErrorMessage(msg string) {
 	width := util.GetWindowWidth()
+
 	msg = util.TruncateString(msg, width-9)
 	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", msg)
 

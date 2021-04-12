@@ -66,12 +66,14 @@ func (tw *TwitterAPI) UploadImage(images []string) (string, error) {
 				if err != nil {
 					return fmt.Errorf("failed to load file (%s)", filename)
 				}
+
 				// base64にエンコードしてアップロード
 				enc := base64.StdEncoding.EncodeToString(data)
 				media, err := tw.API.UploadMedia(enc)
 				if err != nil {
 					return fmt.Errorf("upload failed (%s)", filename)
 				}
+
 				// mediaIDをチャネルへ送信
 				ch <- media.MediaIDString
 				return nil
