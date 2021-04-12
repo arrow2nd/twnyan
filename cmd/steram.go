@@ -15,19 +15,19 @@ func (cmd *Cmd) addStreamCmd() {
 		Name:    "stream",
 		Aliases: []string{"st"},
 		Func:    cmd.streamCmd,
-		Help:    "",
+		Help:    "start a pseudo-UserStream",
 		LongHelp: createLongHelp(
-			"",
+			"After accumulating up to 250 tweets in the first minute, the tweets will be displayed with a one-minute delay, just like the UserStream API.",
 			"st",
 			"stream",
-			"stream",
+			"",
 		),
 	})
 }
 
 func (cmd *Cmd) streamCmd(c *ishell.Context) {
-	// タイムラインを取得して表示
-	tweets, err := cmd.fetchHomeTimelineTweets("25", "")
+	// タイムラインを表示
+	tweets, sinceId, err := cmd.fetchHomeTimelineTweets("25", "")
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -39,35 +39,37 @@ func (cmd *Cmd) streamCmd(c *ishell.Context) {
 	signal.Notify(quit, os.Interrupt)
 
 	// 疑似ストリーム開始
-	go cmd.startUserStream(quit)
+	go cmd.startUserStream(sinceId, quit)
 
-	// 通知を待つ
+	// 通知が来たら終了
 	<-quit
 	signal.Stop(quit)
 	close(quit)
 }
 
-// startUserStream  疑似userStream
-func (cmd *Cmd) startUserStream(quit chan os.Signal) {
+// startUserStream  疑似userStreamを開始
+func (cmd *Cmd) startUserStream(startSinceId string, quit chan os.Signal) {
 	var (
 		accumulateTweets AccumulateTweets
 		err              error
 	)
-	sinceId := ""
+	sinceId := startSinceId
 
 	for {
 		for i := 0; i < 60; i++ {
 			select {
 			case <-quit:
+				// 中断された
 				return
 			default:
+				// 蓄積したツイートを表示
 				accumulateTweets = cmd.showAccumulateTweet(accumulateTweets)
 			}
 			time.Sleep(1 * time.Second)
 		}
 
-		// 蓄積する分のツイートを取得
-		accumulateTweets, sinceId, err = cmd.fetchAccumulateTweets(sinceId)
+		// 次の60秒間に表示するツイートを取得
+		accumulateTweets, sinceId, err = cmd.createNewAccumulateTweets(sinceId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 		}
@@ -78,40 +80,39 @@ func (cmd *Cmd) startUserStream(quit chan os.Signal) {
 func (cmd *Cmd) showAccumulateTweet(accumulateTweets AccumulateTweets) AccumulateTweets {
 	nowTime := time.Now().Local().Unix()
 
-	for time, tweet := range accumulateTweets {
-		// fmt.Printf("%d = %d\n", time, nowTime)
-		if time <= nowTime {
+	for displayTiming, tweet := range accumulateTweets {
+		if displayTiming <= nowTime {
 			cmd.view.ShowTweet(&tweet, " ", false)
-			delete(accumulateTweets, time)
+			delete(accumulateTweets, displayTiming)
 		}
 	}
 
 	return accumulateTweets
 }
 
-// fetchAccumulateTweets 蓄積されたツイートを取得
-func (cmd *Cmd) fetchAccumulateTweets(sinceId string) (AccumulateTweets, string, error) {
-	tweets, err := cmd.fetchHomeTimelineTweets("50", sinceId)
+// createNewAccumulateTweets 新しい蓄積データを作成する
+func (cmd *Cmd) createNewAccumulateTweets(sinceId string) (AccumulateTweets, string, error) {
+	tweets, newSinceId, err := cmd.fetchHomeTimelineTweets("200", sinceId)
 	if err != nil {
 		return nil, "", err
 	}
 
-	// 1分後の投稿時間をキーにした連想配列を作成
+	// 画面に表示するタイミング（時間）をキーとした連想配列
 	accumulateTweets := make(AccumulateTweets, len(*tweets))
+
+	// 投稿時間の1分後をキーにして連想配列を作成
 	for _, tweet := range *tweets {
 		createdAtTime, _ := tweet.CreatedAtTime()
-		createdAtUnixTime := createdAtTime.Add(1 * time.Minute).Local().Unix()
-		accumulateTweets[createdAtUnixTime] = tweet
+		displayTiming := createdAtTime.Add(1 * time.Minute).Local().Unix()
+		accumulateTweets[displayTiming] = tweet
 	}
-
-	newSinceId := (*tweets)[0].IdStr
-	// fmt.Printf("ok! : %s\n", newSinceId)
 
 	return accumulateTweets, newSinceId, nil
 }
 
-// fetchHomeTimelineTweets タイムラインを取得
-func (cmd *Cmd) fetchHomeTimelineTweets(count, sinceId string) (*[]anaconda.Tweet, error) {
+// fetchHomeTimelineTweets ホームタイムラインのツイートを取得
+func (cmd *Cmd) fetchHomeTimelineTweets(count, sinceId string) (*[]anaconda.Tweet, string, error) {
+	// 取得件数が指定されていないならデフォルト値を代入
 	if count == "" {
 		count = cmd.cfg.Option.Counts
 	}
@@ -123,8 +124,13 @@ func (cmd *Cmd) fetchHomeTimelineTweets(count, sinceId string) (*[]anaconda.Twee
 
 	tweets, err := cmd.api.FetchTimelineTweets("home", query)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	return tweets, nil
+	newSinceId := sinceId
+	if len(*tweets) > 0 {
+		newSinceId = (*tweets)[0].IdStr
+	}
+
+	return tweets, newSinceId, nil
 }
