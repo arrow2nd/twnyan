@@ -147,7 +147,7 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsNumber(args[0]) {
-		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenname")
+		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenName")
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -164,36 +164,46 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 }
 
 // showMessage メッセージを表示
-func (cmd *Cmd) showMessage(tips, text, bgColor string) {
+func (cmd *Cmd) showMessage(tips, msg, bgColor string) {
 	width := util.GetWindowWidth()
 
-	util.AllReplace(&text, "[\t\n\r]", " ")
-	text = html.UnescapeString(text)
-	text = util.TruncateString(text, width-len(tips)-3)
+	// 不要な文字を削除
+	util.AllReplace(&msg, "[\t\n\r]", " ")
+	msg = html.UnescapeString(msg)
+
+	// 画面内に収まるように丸める
+	msg = util.TruncateString(msg, width-len(tips)-3)
 
 	tips = color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Sprintf(" %s ", tips)
-
-	fmt.Printf("%s %s\n", tips, text)
+	fmt.Printf("%s %s\n", tips, msg)
 }
 
 // showErrorMessage エラーメッセージを表示
-func (cmd *Cmd) showErrorMessage(text string) {
+func (cmd *Cmd) showErrorMessage(msg string) {
 	width := util.GetWindowWidth()
-	text = util.TruncateString(text, width-9)
-	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
+	msg = util.TruncateString(msg, width-9)
+	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", msg)
 
 	fmt.Printf("%s\n", errMsg)
 }
 
 // drawWrongArgError 引数ミスのメッセージを表示
 func (cmd *Cmd) showWrongArgMessage(cmdName string) {
-	text := fmt.Sprintf("Wrong argument, try '%s help'", cmdName)
-	cmd.showErrorMessage(text)
+	msg := fmt.Sprintf("Wrong argument, try '%s help'", cmdName)
+	cmd.showErrorMessage(msg)
 }
 
 // createLongHelp 詳細なヘルプ文を作成
 func createLongHelp(help, alias, use, exp string) string {
-	longHelp := fmt.Sprintf("%s\n\nAlias:\n  %s\n\nUse:\n  %s\n", help, alias, use)
+	longHelp := fmt.Sprintf("%s\n", help)
+
+	if alias != "" {
+		longHelp += fmt.Sprintf("\nAlias:\n  %s\n", alias)
+	}
+
+	if use != "" {
+		longHelp += fmt.Sprintf("\nUse:\n  %s\n", use)
+	}
 
 	if exp != "" {
 		longHelp += fmt.Sprintf("\nExample:\n  %s\n", exp)

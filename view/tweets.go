@@ -124,14 +124,14 @@ func (v *View) RegisterTweets(tweets *[]anaconda.Tweet) {
 
 // GetTweetURL ツイートのURLを取得
 func (v *View) GetTweetURL(tweetNumStr string) (string, error) {
-	screenname, err := v.GetDataFromTweetNum(tweetNumStr, "screenname")
+	screenName, err := v.GetDataFromTweetNum(tweetNumStr, "screenName")
 	if err != nil {
 		return "", err
 	}
 
 	tweetID, _ := v.GetDataFromTweetNum(tweetNumStr, "tweetID")
 
-	return fmt.Sprintf("https://twitter.com/%s/status/%s", screenname, tweetID), nil
+	return fmt.Sprintf("https://twitter.com/%s/status/%s", screenName, tweetID), nil
 }
 
 // GetDataFromTweetNum ツイート番号から情報を取得
@@ -156,7 +156,7 @@ func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error)
 
 	// 指定されたデータを返す
 	switch dataType {
-	case "screenname":
+	case "screenName":
 		return tweet.User.ScreenName, nil
 	case "tweetID":
 		return tweet.IdStr, nil

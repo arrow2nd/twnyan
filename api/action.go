@@ -55,8 +55,8 @@ func (tw *TwitterAPI) UnRetweet(tweetID string) (string, error) {
 }
 
 // Follow フォローする
-func (tw *TwitterAPI) Follow(screenname string) (string, error) {
-	user, err := tw.API.FollowUser(screenname)
+func (tw *TwitterAPI) Follow(screenName string) (string, error) {
+	user, err := tw.API.FollowUser(screenName)
 	if err != nil {
 		return "", errors.New(parseAPIErrorMsg(err))
 	}
@@ -67,8 +67,8 @@ func (tw *TwitterAPI) Follow(screenname string) (string, error) {
 }
 
 // Unfollow フォローを解除する
-func (tw *TwitterAPI) Unfollow(screenname string) (string, error) {
-	user, err := tw.API.UnfollowUser(screenname)
+func (tw *TwitterAPI) Unfollow(screenName string) (string, error) {
+	user, err := tw.API.UnfollowUser(screenName)
 	if err != nil {
 		return "", errors.New(parseAPIErrorMsg(err))
 	}
@@ -79,8 +79,8 @@ func (tw *TwitterAPI) Unfollow(screenname string) (string, error) {
 }
 
 // Block ブロックする
-func (tw *TwitterAPI) Block(screenname string) (string, error) {
-	user, err := tw.API.BlockUser(screenname, nil)
+func (tw *TwitterAPI) Block(screenName string) (string, error) {
+	user, err := tw.API.BlockUser(screenName, nil)
 	if err != nil {
 		return "", errors.New(parseAPIErrorMsg(err))
 	}
@@ -91,8 +91,8 @@ func (tw *TwitterAPI) Block(screenname string) (string, error) {
 }
 
 // Unblock ブロックを解除する
-func (tw *TwitterAPI) Unblock(screenname string) (string, error) {
-	user, err := tw.API.UnblockUser(screenname, nil)
+func (tw *TwitterAPI) Unblock(screenName string) (string, error) {
+	user, err := tw.API.UnblockUser(screenName, nil)
 	if err != nil {
 		return "", errors.New(parseAPIErrorMsg(err))
 	}
@@ -103,8 +103,8 @@ func (tw *TwitterAPI) Unblock(screenname string) (string, error) {
 }
 
 // Mute ミュートする
-func (tw *TwitterAPI) Mute(screenname string) (string, error) {
-	user, err := tw.API.MuteUser(screenname, nil)
+func (tw *TwitterAPI) Mute(screenName string) (string, error) {
+	user, err := tw.API.MuteUser(screenName, nil)
 	if err != nil {
 		return "", errors.New(parseAPIErrorMsg(err))
 	}
@@ -115,8 +115,8 @@ func (tw *TwitterAPI) Mute(screenname string) (string, error) {
 }
 
 // Unmute ミュートを解除する
-func (tw *TwitterAPI) Unmute(screenname string) (string, error) {
-	user, err := tw.API.UnmuteUser(screenname, nil)
+func (tw *TwitterAPI) Unmute(screenName string) (string, error) {
+	user, err := tw.API.UnmuteUser(screenName, nil)
 	if err != nil {
 		return "", errors.New(parseAPIErrorMsg(err))
 	}
