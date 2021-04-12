@@ -12,7 +12,7 @@ func (tw *TwitterAPI) Favorite(tweetID string) (string, error) {
 
 	tweet, err := tw.API.Favorite(id)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	return tweet.FullText, nil
@@ -24,7 +24,7 @@ func (tw *TwitterAPI) Unfavorite(tweetID string) (string, error) {
 
 	tweet, err := tw.API.Unfavorite(id)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	return tweet.FullText, nil
@@ -36,7 +36,7 @@ func (tw *TwitterAPI) Retweet(tweetID string) (string, error) {
 
 	tweet, err := tw.API.Retweet(id, true)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	return tweet.RetweetedStatus.FullText, nil
@@ -48,7 +48,7 @@ func (tw *TwitterAPI) UnRetweet(tweetID string) (string, error) {
 
 	tweet, err := tw.API.UnRetweet(id, true)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	return tweet.FullText, nil
@@ -58,7 +58,7 @@ func (tw *TwitterAPI) UnRetweet(tweetID string) (string, error) {
 func (tw *TwitterAPI) Follow(screenName string) (string, error) {
 	user, err := tw.API.FollowUser(screenName)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
@@ -70,7 +70,7 @@ func (tw *TwitterAPI) Follow(screenName string) (string, error) {
 func (tw *TwitterAPI) Unfollow(screenName string) (string, error) {
 	user, err := tw.API.UnfollowUser(screenName)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
@@ -82,7 +82,7 @@ func (tw *TwitterAPI) Unfollow(screenName string) (string, error) {
 func (tw *TwitterAPI) Block(screenName string) (string, error) {
 	user, err := tw.API.BlockUser(screenName, nil)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
@@ -94,7 +94,7 @@ func (tw *TwitterAPI) Block(screenName string) (string, error) {
 func (tw *TwitterAPI) Unblock(screenName string) (string, error) {
 	user, err := tw.API.UnblockUser(screenName, nil)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
@@ -106,7 +106,7 @@ func (tw *TwitterAPI) Unblock(screenName string) (string, error) {
 func (tw *TwitterAPI) Mute(screenName string) (string, error) {
 	user, err := tw.API.MuteUser(screenName, nil)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)
@@ -118,7 +118,7 @@ func (tw *TwitterAPI) Mute(screenName string) (string, error) {
 func (tw *TwitterAPI) Unmute(screenName string) (string, error) {
 	user, err := tw.API.UnmuteUser(screenName, nil)
 	if err != nil {
-		return "", errors.New(parseAPIErrorMsg(err))
+		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
 
 	str := fmt.Sprintf("%s @%s", user.Name, user.ScreenName)

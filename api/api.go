@@ -36,21 +36,21 @@ func New() *TwitterAPI {
 }
 
 // Init 初期化処理
-func (ta *TwitterAPI) Init(token, secret string) error {
+func (tw *TwitterAPI) Init(token, secret string) error {
 	var err error
 
 	// TwitterApi構造体を作成
-	ta.API = anaconda.NewTwitterApi(token, secret)
-	ta.API.ReturnRateLimitError(true)
+	tw.API = anaconda.NewTwitterApi(token, secret)
+	tw.API.ReturnRateLimitError(true)
 
 	// ユーザー情報を取得
-	ta.OwnUser, err = ta.fetchSelfInfo()
+	tw.OwnUser, err = tw.fetchSelfInfo()
 	if err != nil {
 		return err
 	}
 
 	// リスト情報を取得
-	ta.ListNames, ta.ListIDs, err = ta.createListInfoSlice()
+	tw.ListNames, tw.ListIDs, err = tw.createListInfoSlice()
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func (ta *TwitterAPI) Init(token, secret string) error {
 }
 
 // Auth アプリケーション認証
-func (ta *TwitterAPI) Auth() (string, string) {
+func (tw *TwitterAPI) Auth() (string, string) {
 	authAPI := anaconda.NewTwitterApi("", "")
 
 	// 認証URL取得
@@ -81,7 +81,7 @@ func (ta *TwitterAPI) Auth() (string, string) {
 		panic(err)
 	}
 
-	ta.Init(cred.Token, cred.Secret)
+	tw.Init(cred.Token, cred.Secret)
 
 	return cred.Token, cred.Secret
 }

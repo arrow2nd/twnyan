@@ -18,12 +18,24 @@ func CreateQuery(count string) url.Values {
 	return q
 }
 
-// parseAPIErrorMsg エラーメッセージをパース
-func parseAPIErrorMsg(err error) string {
+// createAPIErrorMsg エラーメッセージを作成
+func (tw *TwitterAPI) createAPIErrorMsg(resourceName string, err error) string {
+	// エラー文字列からメッセージを抽出
 	bytes := []byte(err.Error())
-	errMsg := regexp.MustCompile(`"(message|error)":"([^"]+)"`).FindSubmatch(bytes)
+	result := regexp.MustCompile(`"(message|error)":"([^"]+)"`).FindSubmatch(bytes)
+	if len(result) <= 0 {
+		return ""
+	}
 
-	return fmt.Sprintf("%s", errMsg[2])
+	errMsg := fmt.Sprintf("%s", result[2])
+
+	// レート制限なら解除時刻を追加
+	if errMsg == "Rate limit exceeded" && resourceName != "" {
+		resetTimeStr := tw.fetchRateLimitResetTime(resourceName)
+		errMsg += fmt.Sprintf(" (Reset Time : %s)", resetTimeStr)
+	}
+
+	return errMsg
 }
 
 // showLogo ロゴを表示
