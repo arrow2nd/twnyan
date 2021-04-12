@@ -31,7 +31,7 @@ func (cmd *Cmd) addTweetCmd() {
 			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, press Ctrl+c on an empty line.",
 			"ml",
 			"tweet multi",
-			"tweet multi",
+			"",
 		),
 	})
 

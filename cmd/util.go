@@ -193,5 +193,12 @@ func (cmd *Cmd) showWrongArgMessage(cmdName string) {
 
 // createLongHelp 詳細なヘルプ文を作成
 func createLongHelp(help, alias, use, exp string) string {
-	return fmt.Sprintf("%s\n\nAlias:\n  %s\n\nUse:\n  %s\n\nExample:\n  %s", help, alias, use, exp)
+	longHelp := fmt.Sprintf("%s\n\nAlias:\n  %s\n\nUse:\n  %s\n", help, alias, use)
+
+	if exp != "" {
+		longHelp += fmt.Sprintf("\nExample:\n  %s\n", exp)
+	}
+
+	return longHelp
+
 }
