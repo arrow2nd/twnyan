@@ -53,16 +53,16 @@ func (v *View) createUserInfoString(u *anaconda.User) string {
 	userName = color.HEX(v.cfg.Color.UserName).Sprint(userName)
 	screenName := color.HEX(v.cfg.Color.ScreenName).Sprintf("@%s", u.ScreenName)
 
-	// バッジ
-	badge := ""
+	// アカウントタイプ
+	accountType := ""
 	if u.Verified {
-		badge += color.HEX(v.cfg.Color.Verified).Sprint(" verified")
+		accountType += color.HEX(v.cfg.Color.Verified).Sprint(" verified")
 	}
 	if u.Protected {
-		badge += color.HEX(v.cfg.Color.Protected).Sprint(" protected")
+		accountType += color.HEX(v.cfg.Color.Protected).Sprint(" protected")
 	}
 
-	return fmt.Sprintf("%s %s%s", userName, screenName, badge)
+	return fmt.Sprintf("%s %s%s", userName, screenName, accountType)
 }
 
 // createRelationshipInfoString ユーザーとの関係性を表す文字列を作成

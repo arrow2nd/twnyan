@@ -107,9 +107,9 @@ func (v *View) createCountString(countNum int, reverseFlg bool, unitStr string) 
 
 	// フラグが立っていれば文字を反転する
 	if reverseFlg {
-		return color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unitStr)
+		return " " + color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unitStr)
 	} else {
-		return color.HEX(colorCode).Sprintf("%d%s", countNum, unitStr)
+		return " " + color.HEX(colorCode).Sprintf("%d%s", countNum, unitStr)
 	}
 }
 
