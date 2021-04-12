@@ -12,7 +12,7 @@ A colorful Twitter client that runs in a terminal🐾
 
 ## Features
 
-- pseudo-UserStream
+- pseudo-UserStream mode
 - Multi-byte character support
 - Interactive mode support
 - Very colorful 🎨
