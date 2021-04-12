@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2021-04-12
+
+### Added
+
+- UserStream を再現する stream コマンドを追加
+
 ## [1.3.0] - 2021-04-03
 
 ### Added
