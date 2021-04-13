@@ -46,7 +46,7 @@ func (v *View) ShowUserInfo(user *anaconda.User, relationships []string) {
 
 // createUserInfoString ユーザー情報の文字列を作成
 func (v *View) createUserInfoString(u *anaconda.User) string {
-	halfWidth := util.GetWindowWidth() / 2
+	halfWidth := util.GetWindowWidth() / 3
 
 	// ユーザー名、スクリーンネーム
 	userName := util.TruncateString(u.Name, halfWidth)
@@ -54,12 +54,12 @@ func (v *View) createUserInfoString(u *anaconda.User) string {
 	screenName := color.HEX(v.cfg.Color.ScreenName).Sprintf("@%s", u.ScreenName)
 
 	// アカウントタイプ
-	accountType := ""
+	accountType := " "
 	if u.Verified {
-		accountType += color.HEX(v.cfg.Color.Verified).Sprint(" verified")
+		accountType += "✅"
 	}
 	if u.Protected {
-		accountType += color.HEX(v.cfg.Color.Protected).Sprint(" protected")
+		accountType += "🔒"
 	}
 
 	return fmt.Sprintf("%s %s%s", userName, screenName, accountType)
