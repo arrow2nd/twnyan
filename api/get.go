@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"net/url"
 	"time"
 
@@ -87,8 +86,6 @@ func (tw *TwitterAPI) fetchRateLimitResetTime(resouceName string) string {
 	if err != nil {
 		return ""
 	}
-
-	fmt.Println(rateLimitRes)
 
 	for _, resources := range rateLimitRes.Resources {
 		for name, baseResource := range resources {
