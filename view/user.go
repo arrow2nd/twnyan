@@ -54,12 +54,12 @@ func (v *View) createUserInfoString(u *anaconda.User) string {
 	screenName := color.HEX(v.cfg.Color.ScreenName).Sprintf("@%s", u.ScreenName)
 
 	// アカウントタイプ
-	accountType := " "
+	accountType := ""
 	if u.Verified {
-		accountType += "✅"
+		accountType += " ✅"
 	}
 	if u.Protected {
-		accountType += "🔒"
+		accountType += " 🔒"
 	}
 
 	return fmt.Sprintf("%s %s%s", userName, screenName, accountType)
