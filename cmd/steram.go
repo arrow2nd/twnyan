@@ -93,7 +93,7 @@ func (cmd *Cmd) showAccumulateTweet(accumulateTweets AccumulateTweets) Accumulat
 func (cmd *Cmd) createNewAccumulateTweets(sinceId string) (AccumulateTweets, string, error) {
 	tweets, newSinceId, err := cmd.fetchHomeTimelineTweets("200", sinceId)
 	if err != nil {
-		return nil, "", err
+		return nil, sinceId, err
 	}
 
 	// 画面に表示するタイミング（時間）をキーとした連想配列
