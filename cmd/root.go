@@ -57,7 +57,7 @@ func (cmd *Cmd) Init() {
 
 	// コマンドエラー時の表示を設定
 	cmd.shell.NotFound(func(c *ishell.Context) {
-		cmd.showErrorMessage("command not found: " + c.ReadLine())
+		cmd.showErrorMessage("command not found: " + c.Args[0])
 	})
 }
 
