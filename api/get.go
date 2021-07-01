@@ -10,9 +10,9 @@ import (
 
 // FetchRelationships ユーザーとの関係性を取得
 func (tw *TwitterAPI) FetchRelationships(userID string) ([]string, error) {
-	v := url.Values{"user_id": {userID}}
+	values := url.Values{"user_id": {userID}}
+	relationships, err := tw.API.GetFriendshipsLookup(values)
 
-	relationships, err := tw.API.GetFriendshipsLookup(v)
 	if err != nil {
 		return nil, errors.New(tw.createAPIErrorMsg("/statuses/lookup", err))
 	}
@@ -52,8 +52,8 @@ func (tw *TwitterAPI) FetchTimelineTweets(category string, query url.Values) (*[
 // FetchListTweets リストのツイートを取得
 func (tw *TwitterAPI) FetchListTweets(listID int64, count string) (*[]anaconda.Tweet, error) {
 	query := CreateQuery(count)
-
 	timeline, err := tw.API.GetListTweets(listID, true, query)
+
 	if err != nil {
 		return nil, errors.New(tw.createAPIErrorMsg("/lists/statuses", err))
 	}
@@ -68,6 +68,7 @@ func (tw *TwitterAPI) FetchSearchResult(queryStr, count string) (*[]anaconda.Twe
 
 	// 検索結果を取得
 	result, err := tw.API.GetSearch(queryStr, query)
+
 	if err != nil {
 		return nil, errors.New(tw.createAPIErrorMsg("/search/tweets", err))
 	}
@@ -83,6 +84,7 @@ func (tw *TwitterAPI) FetchSearchResult(queryStr, count string) (*[]anaconda.Twe
 // fetchRateLimitResetTime レート制限の解除時刻を取得
 func (tw *TwitterAPI) fetchRateLimitResetTime(resouceName string) string {
 	rateLimitRes, err := tw.API.GetRateLimits([]string{"statuses", "lists", "search"})
+
 	if err != nil {
 		return ""
 	}
@@ -101,6 +103,7 @@ func (tw *TwitterAPI) fetchRateLimitResetTime(resouceName string) string {
 // fetchSelfInfo 自分のユーザー情報を取得
 func (tw *TwitterAPI) fetchSelfInfo() (*anaconda.User, error) {
 	user, err := tw.API.GetSelf(nil)
+
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +115,7 @@ func (tw *TwitterAPI) fetchSelfInfo() (*anaconda.User, error) {
 func (tw *TwitterAPI) createListInfoSlice() ([]string, []int64, error) {
 	// リストの情報を取得
 	lists, err := tw.API.GetListsOwnedBy(tw.OwnUser.Id, nil)
+
 	if err != nil {
 		return nil, nil, err
 	}
@@ -119,6 +123,7 @@ func (tw *TwitterAPI) createListInfoSlice() ([]string, []int64, error) {
 	// リスト名とIDのスライスを作成
 	listIDs := make([]int64, len(lists))
 	listNames := make([]string, len(lists))
+
 	for i, ls := range lists {
 		listNames[i] = ls.Name
 		listIDs[i] = ls.Id
