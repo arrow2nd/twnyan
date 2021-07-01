@@ -57,6 +57,7 @@ func saveYAML(dir, filename string, in interface{}) {
 	// 保存
 	path := filepath.Join(dir, filename)
 	err = ioutil.WriteFile(path, buf, os.ModePerm)
+
 	if err != nil {
 		fmt.Println("Error: Failed to write file")
 		panic(err)
@@ -68,6 +69,7 @@ func loadYAML(dir, filename string, out interface{}) {
 	// 読込
 	path := filepath.Join(dir, filename)
 	buf, err := ioutil.ReadFile(path)
+
 	if err != nil {
 		fmt.Println("Error: Failed to load file")
 		panic(err)

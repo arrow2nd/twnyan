@@ -17,6 +17,7 @@ import (
 // PostTweet ツイートを投稿
 func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
 	tweet, err := tw.API.PostTweet(text, query)
+
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
@@ -27,8 +28,8 @@ func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
 // DeleteTweet ツイートを削除
 func (tw *TwitterAPI) DeleteTweet(tweetIDStr string) (string, error) {
 	tweetID, _ := strconv.ParseInt(tweetIDStr, 10, 64)
-
 	tweet, err := tw.API.DeleteTweet(tweetID, true)
+
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
@@ -85,6 +86,7 @@ func (tw *TwitterAPI) UploadImage(images []string) (string, error) {
 	if err := eg.Wait(); err != nil {
 		return "", err
 	}
+
 	close(ch)
 
 	// mediaIDをカンマで連結
