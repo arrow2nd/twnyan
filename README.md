@@ -20,12 +20,11 @@
 
 ## 動作条件
 
-- Windows / Linux
+- Windows / macOS / Linux
 - 絵文字が表示可能なターミナル
 
 ### 備考
 
-- Mac での動作は確認できていません
 - WSL 環境で実行する場合、xdg-open が使用できる必要があります（~微妙な~[解決策](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)）
 
 ## インストール

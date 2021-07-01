@@ -19,12 +19,11 @@ A colorful Twitter client that runs in a terminal🐾
 
 ## System requirements
 
-- Windows / Linux
+- Windows / macOS / Linux
 - A terminal that can display emoji
 
 ### Remarks
 
-- Not confirmed to work on Mac
 - If you want to run in WSL environment, you need to be able to use xdg-open
 
 ## Install
