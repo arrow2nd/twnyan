@@ -58,13 +58,12 @@ func IsNumber(str string) bool {
 
 // IsSameDate 今日の日付かどうか
 func IsSameDate(chkTime time.Time) bool {
-	jst, _ := time.LoadLocation("Asia/Tokyo")
-
 	now := time.Now()
-	fixedChkTime := chkTime.In(jst)
+	location := now.Location()
+	fixedChkTime := chkTime.In(location)
 
-	t1 := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, jst)
-	t2 := time.Date(fixedChkTime.Year(), fixedChkTime.Month(), fixedChkTime.Day(), 0, 0, 0, 0, jst)
+	t1 := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, location)
+	t2 := time.Date(fixedChkTime.Year(), fixedChkTime.Month(), fixedChkTime.Day(), 0, 0, 0, 0, location)
 
 	return t1.Equal(t2)
 }
