@@ -60,30 +60,31 @@ func (cmd *Cmd) getCountFromCmdArg(args []string) string {
 }
 
 // inputMultiLine マルチラインツイート入力
-func (cmd *Cmd) inputMultiLine() (string, []string) {
+func (cmd *Cmd) inputMultiLine() string {
 	// プロンプトを変更
 	cmd.shell.SetPrompt("... ")
 	defer cmd.setDefaultPrompt()
 
-	// ツイート文入力
-	cmd.showMessage("INPUT", "End typing with a semicolon (cancel with Ctrl+C on an empty line)", cmd.cfg.Color.Accent3)
-	tweetText := cmd.shell.ReadMultiLines(";")
+	cmd.showMessage(
+		"INPUT",
+		"End typing with a semicolon (If you want to cancel, input \":exit\").",
+		cmd.cfg.Color.Accent3,
+	)
 
-	// 文末が改行ならキャンセル
-	// (Ctrl+Cが押された場合に改行が入力されるので)
-	if tweetText == "" || util.IsEndLFCode(tweetText) {
-		cmd.showMessage("CANCELED", "Canceled input", cmd.cfg.Color.Accent2)
-		return "", nil
+	input := cmd.shell.ReadMultiLinesFunc(func(f string) bool {
+		if f == ":exit" || strings.HasSuffix(f, ";") {
+			return false
+		}
+		return true
+	})
+
+	// 文字列内に:exitがあればキャンセル
+	if strings.Contains(input, ":exit") {
+		cmd.showMessage("CANCELED", "Input interrupted.", cmd.cfg.Color.Accent2)
+		return ""
 	}
 
-	tweetText = strings.TrimRight(tweetText, ";")
-
-	// 添付画像ファイル名入力
-	cmd.showMessage("IMAGE", "Enter the file name of the attached image (separated by a space)", cmd.cfg.Color.Accent3)
-	img := cmd.shell.ReadLine()
-	images := strings.Fields(img)
-
-	return tweetText, images
+	return strings.TrimRight(input, ";")
 }
 
 // upload 画像をアップロード
@@ -211,5 +212,4 @@ func createLongHelp(help, alias, use, exp string) string {
 	}
 
 	return longHelp
-
 }

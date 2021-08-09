@@ -28,10 +28,10 @@ func (cmd *Cmd) addQuoteCmd() {
 		Func:    cmd.quoteMultiCmd,
 		Help:    "post a multi-line quote tweet",
 		LongHelp: createLongHelp(
-			"Post a multi-line quote tweet.\nEnter a semicolon to end the input.\nAlso, if it is blank, the tweet will be canceled.",
+			"Post a multi-line quote tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
 			"ml",
-			"quote multi [<tweetnumber>]",
-			"quote multi 0",
+			"quote multi [<tweetnumber>] [images]...",
+			"quote multi 0 apple.png",
 		),
 	})
 
@@ -45,7 +45,7 @@ func (cmd *Cmd) quoteCmd(c *ishell.Context) {
 	}
 
 	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
-	cmd.quote(c, status, files)
+	cmd.quote(c.Args[0], status, files)
 }
 
 func (cmd *Cmd) quoteMultiCmd(c *ishell.Context) {
@@ -54,15 +54,22 @@ func (cmd *Cmd) quoteMultiCmd(c *ishell.Context) {
 		return
 	}
 
-	status, files := cmd.inputMultiLine()
-	cmd.quote(c, status, files)
+	// 添付画像を取得
+	_, images := cmd.parseTweetCmdArgs(c.Args[1:])
+
+	text := cmd.inputMultiLine()
+	if text == "" {
+		return
+	}
+
+	cmd.quote(c.Args[0], text, images)
 }
 
-func (cmd *Cmd) quote(c *ishell.Context, text string, images []string) {
+func (cmd *Cmd) quote(tweetNumStr, text string, images []string) {
 	query := url.Values{}
 
 	// 引用するツイートのURLを取得
-	tweetUrl, err := cmd.view.GetTweetURL(c.Args[0])
+	tweetUrl, err := cmd.view.GetTweetURL(tweetNumStr)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
