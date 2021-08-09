@@ -48,7 +48,7 @@ func (cmd *Cmd) userCmd(c *ishell.Context) {
 	}
 
 	// ツイート番号ならスクリーンネームに置換
-	if util.IsNumber(screenName) {
+	if util.IsThreeDigitsNumber(screenName) {
 		screenName, err = cmd.view.GetDataFromTweetNum(screenName, "screenName")
 		if err != nil {
 			cmd.showErrorMessage(err.Error())

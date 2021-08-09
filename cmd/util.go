@@ -52,7 +52,7 @@ func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 // getCountFromCmdArg 引数からツイート取得件数を取得
 func (cmd *Cmd) getCountFromCmdArg(args []string) string {
 	// 引数が無い、または数値以外ならデフォルト値を返す
-	if len(args) <= 0 || !util.IsNumber(args[0]) {
+	if len(args) <= 0 || !util.IsThreeDigitsNumber(args[0]) {
 		return cmd.cfg.Option.Counts
 	}
 
@@ -145,7 +145,7 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 	screenName := args[0]
 
 	// ツイート番号ならスクリーンネームに置換
-	if util.IsNumber(args[0]) {
+	if util.IsThreeDigitsNumber(args[0]) {
 		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenname")
 		if err != nil {
 			cmd.showErrorMessage(err.Error())

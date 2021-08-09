@@ -141,7 +141,7 @@ func (v *View) GetTweetURL(tweetNumStr string) (string, error) {
 
 // GetDataFromTweetNum ツイート番号から情報を取得
 func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error) {
-	if !util.IsNumber(tweetNumStr) {
+	if !util.IsThreeDigitsNumber(tweetNumStr) {
 		return "", errors.New("tweetnumber is invalid")
 	}
 
