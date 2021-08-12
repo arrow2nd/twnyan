@@ -28,7 +28,7 @@ func (cmd *Cmd) addReplyCmd() {
 		Func:    cmd.replyMultiCmd,
 		Help:    "post a multi-line reply",
 		LongHelp: createLongHelp(
-			"Post a multi-line reply.\nEnter a semicolon to end the input.\nAlso, if it is blank, the tweet will be canceled.",
+			"Post a multi-line reply.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
 			"ml",
 			"reply multi [<tweetnumber>]",
 			"reply multi 2",
@@ -45,7 +45,7 @@ func (cmd *Cmd) replyCmd(c *ishell.Context) {
 	}
 
 	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
-	cmd.reply(c, status, files)
+	cmd.reply(c.Args[0], status, files)
 }
 
 func (cmd *Cmd) replyMultiCmd(c *ishell.Context) {
@@ -54,17 +54,20 @@ func (cmd *Cmd) replyMultiCmd(c *ishell.Context) {
 		return
 	}
 
-	status, files := cmd.inputMultiLine()
-	if status == "" {
+	// 添付画像を取得
+	_, images := cmd.parseTweetCmdArgs(c.Args[1:])
+
+	text := cmd.inputMultiLine()
+	if text == "" {
 		return
 	}
 
-	cmd.reply(c, status, files)
+	cmd.reply(c.Args[0], text, images)
 }
 
-func (cmd *Cmd) reply(c *ishell.Context, status string, files []string) {
+func (cmd *Cmd) reply(tweetNumStr, status string, files []string) {
 	// リプライ先のツイートIDを取得
-	tweetID, err := cmd.view.GetDataFromTweetNum(c.Args[0], "tweetID")
+	tweetID, err := cmd.view.GetDataFromTweetNum(tweetNumStr, "tweetID")
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return

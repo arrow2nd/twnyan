@@ -68,7 +68,7 @@ func TestMatchesRegexp(t *testing.T) {
 	}
 }
 
-func TestIsNumber(t *testing.T) {
+func TestIsThreeDigitsNumber(t *testing.T) {
 	type args struct {
 		str string
 	}
@@ -108,7 +108,7 @@ func TestIsNumber(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IsNumber(tt.args.str); got != tt.want {
+			if got := IsThreeDigitsNumber(tt.args.str); got != tt.want {
 				t.Errorf("IsNumber() = %v, want %v", got, tt.want)
 			}
 		})

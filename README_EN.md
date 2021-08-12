@@ -104,8 +104,12 @@ Post a tweet.
 
 Post a multi-line tweet.
 
-- To finish typing, type a semicolon (;) at the end of the sentence
-- To cancel, press Ctrl+C on an empty line
+| Arguments  | Hints                                                        | Examples                      |
+| ---------- | ------------------------------------------------------------ | ----------------------------- |
+| image file | If there is more than one, please separate them with a space | `tweet multi dog.png cat.png` |
+
+- To finish typing, type a semicolon `;` at the end of the sentence
+- To cancel, input `:exit`.
 
 ### tweet remove [\<tweetnumber\>]...
 
@@ -260,8 +264,12 @@ Quote a tweet.
 
 Post a multi-line quote retweet.
 
-- To finish typing, type a semicolon (;) at the end of the sentence
-- If blank (enter only a semicolon), the post will be canceled
+| Arguments  | Hints                                                        | Examples              |
+| ---------- | ------------------------------------------------------------ | --------------------- |
+| image file | If there is more than one, please separate them with a space | `quote multi cat.png` |
+
+- To finish typing, type a semicolon `;` at the end of the sentence
+- To cancel, input `:exit`.
 
 ## reply
 
@@ -285,8 +293,12 @@ Post a reply.
 
 Post a multi-line reply.
 
-- To finish typing, enter a semicolon (;) at the end of the sentence
-- If blank (enter only a semicolon), the post will be canceled
+| Arguments  | Hints                                                        | Examples              |
+| ---------- | ------------------------------------------------------------ | --------------------- |
+| image file | If there is more than one, please separate them with a space | `reply multi cat.png` |
+
+- To finish typing, type a semicolon `;` at the end of the sentence
+- To cancel, input `:exit`.
 
 ## follow
 

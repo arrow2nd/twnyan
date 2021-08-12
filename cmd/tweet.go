@@ -28,9 +28,9 @@ func (cmd *Cmd) addTweetCmd() {
 		Func:    cmd.tweetMultiCmd,
 		Help:    "post a multi-line tweet",
 		LongHelp: createLongHelp(
-			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, press Ctrl+c on an empty line.",
+			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
 			"ml",
-			"tweet multi",
+			"tweet multi [image]...",
 			"",
 		),
 	})
@@ -58,7 +58,10 @@ func (cmd *Cmd) tweetCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) tweetMultiCmd(c *ishell.Context) {
-	text, images := cmd.inputMultiLine()
+	// 添付画像を取得
+	_, images := cmd.parseTweetCmdArgs(c.Args)
+
+	text := cmd.inputMultiLine()
 	if text == "" {
 		return
 	}

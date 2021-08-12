@@ -51,8 +51,8 @@ func IndexOf(array []string, str string) int {
 	return -1
 }
 
-// IsNumber ３桁までの数値かどうか
-func IsNumber(str string) bool {
+// IsThreeDigitsNumber ３桁までの数値かどうか
+func IsThreeDigitsNumber(str string) bool {
 	return regexp.MustCompile("^[0-9]{1,3}$").Match([]byte(str))
 }
 
