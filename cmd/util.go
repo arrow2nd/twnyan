@@ -67,7 +67,7 @@ func (cmd *Cmd) inputMultiLine() string {
 
 	cmd.showMessage(
 		"INPUT",
-		"End typing with a semicolon (If you want to cancel, input \":exit\").",
+		"End typing with a semicolon. (If you want to cancel, input \":exit\")",
 		cmd.cfg.Color.Accent3,
 	)
 
