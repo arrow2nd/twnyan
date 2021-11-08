@@ -28,19 +28,39 @@ A colorful Twitter client that runs in a terminal🐾
 
 ## Install
 
-### Recommend
+### Homebrew
 
-`$ go install github.com/arrow2nd/twnyan@latest`
+```sh
+brew tap arrow2nd/tap
+brew install arrow2nd/tap/twnyan
+```
+
+### Go
+
+```sh
+go install github.com/arrow2nd/twnyan@latest
+```
 
 ### Use binary files
 
-Download the latest version of the zip file for your environment from [Releases](https://github.com/arrow2nd/twnyan/releases).
+Download the latest version of the file for your environment from [Releases](https://github.com/arrow2nd/twnyan/releases).
 
 ## Uninstall
 
-1. `$ go clean -i github.com/arrow2nd/twnyan`
-2. `$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan`
-3. `$ rm -rf ~/.twnyan`
+### Homebrew
+
+```sh
+brew uninstall twnyan
+rm -rf ~/.twnyan # Delete configuration files
+```
+
+### Go
+
+```sh
+go clean -i github.com/arrow2nd/twnyan
+rm -rf $GOPATH/src/github.com/arrow2nd/twnyan
+rm -rf ~/.twnyan
+```
 
 ## Initialization
 
@@ -48,7 +68,7 @@ Download the latest version of the zip file for your environment from [Releases]
 
 1. Access the authentication page that appears the first time you start the program
 2. Follow the steps on the screen and enter the PIN code that appears on the screen into twnyan
-3. done!
+3. done! 😺
 
 ## Usage
 
@@ -56,7 +76,7 @@ Download the latest version of the zip file for your environment from [Releases]
 
 ![cmdline](https://user-images.githubusercontent.com/44780846/106699170-b287cf00-6625-11eb-8374-8565286db3e2.gif)
 
-`$ twnyan [command] [argument]`
+`twnyan [command] [argument]`
 
 Also, some commands cannot be used in command line mode.
 
@@ -64,19 +84,23 @@ Also, some commands cannot be used in command line mode.
 
 ![nyaan](https://user-images.githubusercontent.com/44780846/106699001-558c1900-6625-11eb-948e-6212ab0cba40.gif)
 
-`$ twnyan tw`
+`twnyan tw`
 
 If you omit the tweet text, it will be tweeted as "にゃーん".
 
-The same goes for replies and quote retweets. (If an image is attached, the tweet will not "にゃーん")
+The same goes for replies and quote retweets.
+
+If an image is attached, the tweet will not "にゃーん".
 
 > "にゃーん" is the Japanese word for a cat's meow.
 
 ### Interactive mode
 
-`$ twnyan`
+`twnyan`
 
-You can control tweets (like, RT, etc.) by specifying the number (tweetnumber) displayed at the top of the tweet.
+You can like or RT the tweets on the timeline.
+
+You can do this by specifying the tweetnumber displayed at the top of the tweet.
 
 ## Command list
 
