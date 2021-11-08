@@ -1,5 +1,6 @@
 # twnyan
 
+[![release](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml/badge.svg)](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml)
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 [![GitHub license](https://img.shields.io/github/license/arrow2nd/twnyan)](https://github.com/arrow2nd/twnyan/blob/main/LICENSE.txt)
@@ -22,17 +23,13 @@ A colorful Twitter client that runs in a terminal🐾
 - Windows / macOS / Linux
 - A terminal that can display emoji
 
-### Remarks
-
-- If you want to run in WSL environment, you need to be able to use xdg-open
-
 ## Install
 
 ### Homebrew
 
 ```sh
 brew tap arrow2nd/tap
-brew install arrow2nd/tap/twnyan
+brew install twnyan
 ```
 
 ### Go
