@@ -15,21 +15,6 @@ jobs:
       - run: go get -v -t -d ./...
       - run: go vet ./...
       - run: go test -v -race ./...
-  deploy:
-    environment:
-      - GOPATH: /home/circleci/go
-    docker:
-      - image: circleci/golang:latest
-    steps:
-      - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
-      - checkout
-      - run: go get -v -t -d ./...
-      - run: go get github.com/mitchellh/gox
-      - run: go get github.com/tcnksm/ghr
-      - run: mkdir release
-      - run: go mod vendor
-      - run: gox -os="linux darwin windows" -arch="amd64" -mod="vendor" -output="./release/{{.Dir}}-${CIRCLE_TAG}-{{.OS}}-{{.Arch}}" -ldflags="-s -w"
-      - run: ghr -u $CIRCLE_PROJECT_USERNAME $CIRCLE_TAG release/
 
 workflows:
   version: 2
@@ -39,11 +24,3 @@ workflows:
           filters:
             branches:
               only: /.*/
-  deploy:
-    jobs:
-      - deploy:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
