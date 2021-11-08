@@ -76,8 +76,8 @@ func (v *View) editTweetText(tweet *anaconda.Tweet) string {
 
 	// ハッシュタグをハイライト
 	if len(tweet.Entities.Hashtags) != 0 {
-		// 半角・全角英数字、漢字、平仮名、全角・半角片仮名、伸ばし棒、アンダースコア
-		rep := regexp.MustCompile(`[#＃]([A-Za-z0-9Ａ-Ｚａ-ｚ０-９\x{4E00}-\x{9FFF}\x{3005}-\x{3007}ぁ-ヶｦ-ﾟー～_]+)`)
+		// 半角・全角英数字、漢字、平仮名、全角・半角片仮名、伸ばし棒、アンダースコア、中点
+		rep := regexp.MustCompile(`[#＃]([A-Za-z0-9Ａ-Ｚａ-ｚ０-９\x{4E00}-\x{9FFF}\x{3005}-\x{3007}ぁ-ヶｦ-ﾟー～_・]+)`)
 		tweetText = rep.ReplaceAllString(tweetText, color.HEX(v.cfg.Color.Hashtag).Sprintf("#$1"))
 	}
 
