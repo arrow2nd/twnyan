@@ -29,27 +29,47 @@
 
 ## インストール
 
-### おすすめ
+### Homebrew
 
-`$ go install github.com/arrow2nd/twnyan@latest`
+```sh
+brew tap arrow2nd/tap
+brew install arrow2nd/tap/twnyan
+```
 
-### Go の実行環境がない場合
+### Go
 
-[Releases](https://github.com/arrow2nd/twnyan/releases) からお使いの環境にあった最新の zip ファイルをダウンロードしてください。
+```sh
+go install github.com/arrow2nd/twnyan@latest
+```
+
+### それ以外
+
+[Releases](https://github.com/arrow2nd/twnyan/releases) からお使いの環境にあった、最新のバイナリファイルをダウンロードしてください。
 
 ## アンインストール
 
-1. `$ go clean -i github.com/arrow2nd/twnyan`
-2. `$ rm -rf $GOPATH/src/github.com/arrow2nd/twnyan`
-3. `$ rm -rf ~/.twnyan`
+### Homebrew
+
+```sh
+brew uninstall twnyan
+rm -rf ~/.twnyan # 設定ファイル群を削除
+```
+
+### Go
+
+```sh
+go clean -i github.com/arrow2nd/twnyan
+rm -rf $GOPATH/src/github.com/arrow2nd/twnyan
+rm -rf ~/.twnyan
+```
 
 ## 初期設定
 
 ![auth](https://user-images.githubusercontent.com/44780846/106747441-4a59dd00-6667-11eb-8248-3468cb39f7d1.png)
 
-1. 初回起動時に表示される認証ページの URL にブラウザでアクセスする
-2. 画面に従って手順を進め、表示される PIN コードを twnyan に入力する
-3. 完了！
+1. 初回起動時に表示される認証ページの URL にブラウザでアクセス
+2. 画面に従って手順を進め、表示される PIN コードを twnyan に入力
+3. 完了！ 😺
 
 ## 使い方
 
@@ -57,25 +77,29 @@
 
 ![cmdline](https://user-images.githubusercontent.com/44780846/106699170-b287cf00-6625-11eb-8374-8565286db3e2.gif)
 
-`$ twnyan [コマンド] [引数]`
+`twnyan [コマンド] [引数]`
 
-また、一部コマンドはコマンドラインモードでは使用できません。
+一部コマンドはコマンドラインモードでは使用できません。
 
 ### にゃーん
 
 ![nyaan](https://user-images.githubusercontent.com/44780846/106699001-558c1900-6625-11eb-948e-6212ab0cba40.gif)
 
-`$ twnyan tw`
+`twnyan tw`
 
 ツイート文を省略すると「にゃーん」とツイートされます。
 
-リプライや引用リツイートの時でも同じです。（画像が添付されている場合はにゃーんしません）
+リプライや引用リツイートの時でも同じ動きをします。
+
+画像が添付されている場合はにゃーんしません。
 
 ### 対話モード
 
-`$ twnyan`
+`twnyan`
 
-ツイートへの操作（いいね・RT など）はツイートの先頭に表示されている番号（tweetnumber）を指定して行います。
+タイムライン上のツイートへいいね・RT などの操作を行うことができます。
+
+それぞれツイートの先頭に表示されている番号（tweetnumber）を指定して行います。
 
 ## コマンド一覧
 
