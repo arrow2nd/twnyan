@@ -1,5 +1,6 @@
 # twnyan
 
+[![release](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml/badge.svg)](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml)
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 [![GitHub license](https://img.shields.io/github/license/arrow2nd/twnyan)](https://github.com/arrow2nd/twnyan/blob/main/LICENSE.txt)
@@ -23,17 +24,13 @@
 - Windows / macOS / Linux
 - 絵文字が表示可能なターミナル
 
-### 備考
-
-- WSL 環境で実行する場合、xdg-open が使用できる必要があります（~微妙な~[解決策](https://qiita.com/arrow2nd/items/5c02a8cdf8197ae15cb7)）
-
 ## インストール
 
 ### Homebrew
 
 ```sh
 brew tap arrow2nd/tap
-brew install arrow2nd/tap/twnyan
+brew install twnyan
 ```
 
 ### Go
@@ -44,7 +41,7 @@ go install github.com/arrow2nd/twnyan@latest
 
 ### それ以外
 
-[Releases](https://github.com/arrow2nd/twnyan/releases) からお使いの環境にあった、最新のバイナリファイルをダウンロードしてください。
+[Releases](https://github.com/arrow2nd/twnyan/releases) からお使いの環境にあったファイルをダウンロードしてください。
 
 ## アンインストール
 
