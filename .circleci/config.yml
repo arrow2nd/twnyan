@@ -4,17 +4,17 @@
 version: 2
 jobs:
   build:
-      environment:
-        - GOPATH: /home/circleci/go
-      docker:
-        - image: circleci/golang:latest
-      working_directory: /go/src/github.com/arrow2nd/twnyan
-      steps:
-        - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
-        - checkout
-        - run: go get -v -t -d ./...
-        - run: go vet ./...
-        - run: go test -v -race ./...
+    environment:
+      - GOPATH: /home/circleci/go
+    docker:
+      - image: circleci/golang:latest
+    working_directory: /go/src/github.com/arrow2nd/twnyan
+    steps:
+      - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
+      - checkout
+      - run: go get -v -t -d ./...
+      - run: go vet ./...
+      - run: go test -v -race ./...
   deploy:
     environment:
       - GOPATH: /home/circleci/go
@@ -28,8 +28,7 @@ jobs:
       - run: go get github.com/tcnksm/ghr
       - run: mkdir release
       - run: go mod vendor
-      - run: gox -os="linux darwin windows" -arch="amd64" -mod="vendor" -output="{{.Dir}}-{{.OS}}-{{.Arch}}/{{.Dir}}" -ldflags="-s -w"
-      - run: for os in linux darwin windows;do cp README.md README_EN.md LICENSE.txt twnyan-$os-amd64/;zip -r ./release/twnyan-$os-amd64.zip twnyan-$os-amd64/;done
+      - run: gox -os="linux darwin windows" -arch="amd64" -mod="vendor" -output="./release/{{.Dir}}-${CIRCLE_TAG}-{{.OS}}-{{.Arch}}" -ldflags="-s -w"
       - run: ghr -u $CIRCLE_PROJECT_USERNAME $CIRCLE_TAG release/
 
 workflows:
