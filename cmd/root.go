@@ -10,7 +10,7 @@ import (
 	"github.com/arrow2nd/twnyan/view"
 )
 
-const versionStr = "1.5.2"
+const versionStr = "1.6.0"
 
 type Cmd struct {
 	shell *ishell.Shell
