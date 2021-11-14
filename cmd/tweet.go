@@ -6,12 +6,12 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addTweetCmd() {
+func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 	// tweet
 	tweetCmd := &ishell.Cmd{
 		Name:    "tweet",
 		Aliases: []string{"tw"},
-		Func:    cmd.tweetCmd,
+		Func:    cmd.execTweetCmd,
 		Help:    "post a tweet",
 		LongHelp: createLongHelp(
 			"Post a tweet.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
@@ -25,7 +25,7 @@ func (cmd *Cmd) addTweetCmd() {
 	tweetCmd.AddCmd(&ishell.Cmd{
 		Name:    "multi",
 		Aliases: []string{"ml"},
-		Func:    cmd.tweetMultiCmd,
+		Func:    cmd.execTweetMultiCmd,
 		Help:    "post a multi-line tweet",
 		LongHelp: createLongHelp(
 			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
@@ -39,7 +39,7 @@ func (cmd *Cmd) addTweetCmd() {
 	tweetCmd.AddCmd(&ishell.Cmd{
 		Name:    "remove",
 		Aliases: []string{"rm"},
-		Func:    cmd.tweetRemoveCmd,
+		Func:    cmd.execTweetRemoveCmd,
 		Help:    "delete a tweet",
 		LongHelp: createLongHelp(
 			"Delete a tweet.\nIf there is more than one, please separate them with a space.",
@@ -49,15 +49,15 @@ func (cmd *Cmd) addTweetCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(tweetCmd)
+	return tweetCmd
 }
 
-func (cmd *Cmd) tweetCmd(c *ishell.Context) {
+func (cmd *Cmd) execTweetCmd(c *ishell.Context) {
 	text, images := cmd.parseTweetCmdArgs(c.Args)
 	cmd.tweet(text, images)
 }
 
-func (cmd *Cmd) tweetMultiCmd(c *ishell.Context) {
+func (cmd *Cmd) execTweetMultiCmd(c *ishell.Context) {
 	// 添付画像を取得
 	_, images := cmd.parseTweetCmdArgs(c.Args)
 
@@ -69,7 +69,7 @@ func (cmd *Cmd) tweetMultiCmd(c *ishell.Context) {
 	cmd.tweet(text, images)
 }
 
-func (cmd *Cmd) tweetRemoveCmd(c *ishell.Context) {
+func (cmd *Cmd) execTweetRemoveCmd(c *ishell.Context) {
 	if len(c.Args) <= 0 {
 		cmd.showWrongArgMessage("tweet " + c.Cmd.Name)
 		return
@@ -97,8 +97,7 @@ func (cmd *Cmd) tweet(text string, images []string) {
 	query := url.Values{}
 
 	// 画像をアップロード
-	err := cmd.upload(images, &query)
-	if err != nil {
+	if err := cmd.upload(images, &query); err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}

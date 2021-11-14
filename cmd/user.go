@@ -6,12 +6,12 @@ import (
 	"github.com/arrow2nd/twnyan/util"
 )
 
-func (cmd *Cmd) addUserCmd() {
+func (cmd *Cmd) newUserCmd() *ishell.Cmd {
 	// user
 	userCmd := &ishell.Cmd{
 		Name:    "user",
 		Aliases: []string{"ur"},
-		Func:    cmd.userCmd,
+		Func:    cmd.execUserCmd,
 		Help:    "get a user timeline",
 		LongHelp: createLongHelp(
 			"Get a user timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
@@ -37,10 +37,10 @@ func (cmd *Cmd) addUserCmd() {
 		},
 	})
 
-	cmd.shell.AddCmd(userCmd)
+	return userCmd
 }
 
-func (cmd *Cmd) userCmd(c *ishell.Context) {
+func (cmd *Cmd) execUserCmd(c *ishell.Context) {
 	screenName, count, err := cmd.parseTimelineCmdArgs(c.Args)
 	if err != nil {
 		cmd.showWrongArgMessage(c.Cmd.Name)

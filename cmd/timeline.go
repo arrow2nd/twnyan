@@ -5,11 +5,11 @@ import (
 	"github.com/arrow2nd/twnyan/api"
 )
 
-func (cmd *Cmd) addTimelineCmd() {
-	cmd.shell.AddCmd(&ishell.Cmd{
+func (cmd *Cmd) newTimelineCmd() *ishell.Cmd {
+	return &ishell.Cmd{
 		Name:    "timeline",
 		Aliases: []string{"tl"},
-		Func:    cmd.timelineCmd,
+		Func:    cmd.execTimelineCmd,
 		Help:    "get a home timeline",
 		LongHelp: createLongHelp(
 			"Get a home timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
@@ -17,10 +17,10 @@ func (cmd *Cmd) addTimelineCmd() {
 			"timeline [counts]",
 			"timeline 50",
 		),
-	})
+	}
 }
 
-func (cmd *Cmd) timelineCmd(c *ishell.Context) {
+func (cmd *Cmd) execTimelineCmd(c *ishell.Context) {
 	count := cmd.getCountFromCmdArg(c.Args)
 
 	// タイムラインのツイートを取得

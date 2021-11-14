@@ -6,11 +6,11 @@ import (
 	"github.com/pkg/browser"
 )
 
-func (cmd *Cmd) addOpenCmd() {
-	cmd.shell.AddCmd(&ishell.Cmd{
+func (cmd *Cmd) newOpenCmd() *ishell.Cmd {
+	return &ishell.Cmd{
 		Name:    "open",
 		Aliases: []string{"op"},
-		Func:    cmd.openCmd,
+		Func:    cmd.execOpenCmd,
 		Help:    "view the tweet in your browser",
 		LongHelp: createLongHelp(
 			"View the tweet in your browser.",
@@ -18,11 +18,10 @@ func (cmd *Cmd) addOpenCmd() {
 			"open [<tweetnumber>]",
 			"open 2",
 		),
-	})
+	}
 }
 
-func (cmd *Cmd) openCmd(c *ishell.Context) {
-	// 引数が1つではないならエラー
+func (cmd *Cmd) execOpenCmd(c *ishell.Context) {
 	if len(c.Args) != 1 {
 		cmd.showWrongArgMessage(c.Cmd.Name)
 		return

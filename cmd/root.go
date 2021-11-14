@@ -10,6 +10,8 @@ import (
 	"github.com/arrow2nd/twnyan/view"
 )
 
+const versionStr = "1.5.2"
+
 type Cmd struct {
 	shell *ishell.Shell
 	cfg   *config.Config
@@ -25,35 +27,33 @@ func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 		shell: ishell.New(),
 		cfg:   c,
 		api:   a,
-		view:  nil,
+		view:  view.New(c),
 	}
-	nc.view = view.New(nc.cfg)
 
+	nc.init()
 	return nc
 }
 
-// Init 初期化
-func (cmd *Cmd) Init() {
-	// コマンドを登録
-	cmd.addTweetCmd()
-	cmd.addReplyCmd()
-	cmd.addTimelineCmd()
-	cmd.addMentionCmd()
-	cmd.addListCmd()
-	cmd.addSearchCmd()
-	cmd.addUserCmd()
-	cmd.addLikeCmd()
-	cmd.addRetweetCmd()
-	cmd.addQuoteCmd()
-	cmd.addFollowCmd()
-	cmd.addBlockCmd()
-	cmd.addMuteCmd()
-	cmd.addOpenCmd()
-	cmd.addStreamCmd()
-	cmd.addVersionCmd()
-
-	// プロンプトを設定
+// init 初期化
+func (cmd *Cmd) init() {
 	cmd.setDefaultPrompt()
+
+	cmd.shell.AddCmd(cmd.newTweetCmd())
+	cmd.shell.AddCmd(cmd.newReplyCmd())
+	cmd.shell.AddCmd(cmd.newTimelineCmd())
+	cmd.shell.AddCmd(cmd.newMentionCmd())
+	cmd.shell.AddCmd(cmd.newListCmd())
+	cmd.shell.AddCmd(cmd.newSearchCmd())
+	cmd.shell.AddCmd(cmd.newUserCmd())
+	cmd.shell.AddCmd(cmd.newLikeCmd())
+	cmd.shell.AddCmd(cmd.newRetweetCmd())
+	cmd.shell.AddCmd(cmd.newQuoteCmd())
+	cmd.shell.AddCmd(cmd.newFollowCmd())
+	cmd.shell.AddCmd(cmd.newBlockCmd())
+	cmd.shell.AddCmd(cmd.newMuteCmd())
+	cmd.shell.AddCmd(cmd.newOpenCmd())
+	cmd.shell.AddCmd(cmd.newStreamCmd())
+	cmd.shell.AddCmd(cmd.newVersionCmd())
 
 	// コマンドエラー時の表示を設定
 	cmd.shell.NotFound(func(c *ishell.Context) {
@@ -65,8 +65,7 @@ func (cmd *Cmd) Init() {
 func (cmd *Cmd) Run() {
 	// 引数があるなら直接実行
 	if len(os.Args) > 1 {
-		err := cmd.shell.Process(os.Args[1:]...)
-		if err != nil {
+		if err := cmd.shell.Process(os.Args[1:]...); err != nil {
 			cmd.showErrorMessage(err.Error())
 		}
 		os.Exit(0)

@@ -4,7 +4,7 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addBlockCmd() {
+func (cmd *Cmd) newBlockCmd() *ishell.Cmd {
 	// block
 	blockCmd := &ishell.Cmd{
 		Name:    "block",
@@ -37,5 +37,5 @@ func (cmd *Cmd) addBlockCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(blockCmd)
+	return blockCmd
 }

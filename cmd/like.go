@@ -4,7 +4,7 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addLikeCmd() {
+func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
 	// like
 	likeCmd := &ishell.Cmd{
 		Name:    "like",
@@ -37,5 +37,5 @@ func (cmd *Cmd) addLikeCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(likeCmd)
+	return likeCmd
 }
