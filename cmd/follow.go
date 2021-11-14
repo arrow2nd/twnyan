@@ -4,7 +4,7 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addFollowCmd() {
+func (cmd *Cmd) newFollowCmd() *ishell.Cmd {
 	// follow
 	followCmd := &ishell.Cmd{
 		Name:    "follow",
@@ -37,5 +37,5 @@ func (cmd *Cmd) addFollowCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(followCmd)
+	return followCmd
 }

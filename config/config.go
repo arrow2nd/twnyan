@@ -47,7 +47,7 @@ type color struct {
 
 // New 構造体を初期化
 func New() *Config {
-	cfg := &Config{
+	return &Config{
 		Cred: &cred{
 			Token:  "",
 			Secret: "",
@@ -79,8 +79,6 @@ func New() *Config {
 			Mute:         "#e5c07b",
 		},
 	}
-
-	return cfg
 }
 
 // Save 保存

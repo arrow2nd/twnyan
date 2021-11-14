@@ -17,7 +17,7 @@ func GetWindowWidth() int {
 
 	width, _, err := term.GetSize(fd)
 	if err != nil {
-		fmt.Println("Error: Could not get window size")
+		fmt.Fprintln(os.Stderr, "Error: Could not get window size")
 		panic(err)
 	}
 
@@ -41,14 +41,14 @@ func AllReplace(str, reg, rep string) string {
 }
 
 // IndexOf 引数と同じ内容を持つ最初の配列要素の添字を返す
-func IndexOf(array []string, str string) int {
+func IndexOf(array []string, str string) (int, bool) {
 	for i, value := range array {
 		if value == str {
-			return i
+			return i, true
 		}
 	}
 
-	return -1
+	return 0, false
 }
 
 // IsThreeDigitsNumber ３桁までの数値かどうか

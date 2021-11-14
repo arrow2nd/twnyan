@@ -6,12 +6,12 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addReplyCmd() {
+func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 	// reply
 	replyCmd := &ishell.Cmd{
 		Name:    "reply",
 		Aliases: []string{"rp"},
-		Func:    cmd.replyCmd,
+		Func:    cmd.execReplyCmd,
 		Help:    "post a reply",
 		LongHelp: createLongHelp(
 			"Post a reply.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
@@ -25,7 +25,7 @@ func (cmd *Cmd) addReplyCmd() {
 	replyCmd.AddCmd(&ishell.Cmd{
 		Name:    "multi",
 		Aliases: []string{"ml"},
-		Func:    cmd.replyMultiCmd,
+		Func:    cmd.execReplyMultiCmd,
 		Help:    "post a multi-line reply",
 		LongHelp: createLongHelp(
 			"Post a multi-line reply.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
@@ -35,20 +35,20 @@ func (cmd *Cmd) addReplyCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(replyCmd)
+	return replyCmd
 }
 
-func (cmd *Cmd) replyCmd(c *ishell.Context) {
+func (cmd *Cmd) execReplyCmd(c *ishell.Context) {
 	if len(c.Args) < 1 {
 		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
 	}
 
 	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
-	cmd.reply(c.Args[0], status, files)
+	cmd.execReply(c.Args[0], status, files)
 }
 
-func (cmd *Cmd) replyMultiCmd(c *ishell.Context) {
+func (cmd *Cmd) execReplyMultiCmd(c *ishell.Context) {
 	if len(c.Args) < 1 {
 		cmd.showWrongArgMessage("reply " + c.Cmd.Name)
 		return
@@ -62,10 +62,10 @@ func (cmd *Cmd) replyMultiCmd(c *ishell.Context) {
 		return
 	}
 
-	cmd.reply(c.Args[0], text, images)
+	cmd.execReply(c.Args[0], text, images)
 }
 
-func (cmd *Cmd) reply(tweetNumStr, status string, files []string) {
+func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 	// リプライ先のツイートIDを取得
 	tweetID, err := cmd.view.GetDataFromTweetNum(tweetNumStr, "tweetID")
 	if err != nil {
@@ -79,8 +79,7 @@ func (cmd *Cmd) reply(tweetNumStr, status string, files []string) {
 	query.Add("auto_populate_reply_metadata", "true")
 
 	// 画像をアップロード
-	err = cmd.upload(files, &query)
-	if err != nil {
+	if err := cmd.upload(files, &query); err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}

@@ -11,7 +11,6 @@ import (
 // CreateQuery クエリを作成
 func CreateQuery(count string) url.Values {
 	q := url.Values{}
-
 	q.Add("tweet_mode", "extended")
 	q.Add("count", count)
 
@@ -25,10 +24,10 @@ func (tw *TwitterAPI) createUserInfoStr(name, screenName string) string {
 
 // createAPIErrorMsg エラーメッセージを作成
 func (tw *TwitterAPI) createAPIErrorMsg(resourceName string, err error) string {
-	// エラー文字列からメッセージを抽出
 	bytes := []byte(err.Error())
-	result := regexp.MustCompile(`"(message|error)":"([^"]+)"`).FindSubmatch(bytes)
 
+	// エラー文字列からメッセージを抽出
+	result := regexp.MustCompile(`"(message|error)":"([^"]+)"`).FindSubmatch(bytes)
 	if len(result) <= 0 {
 		return ""
 	}
@@ -55,15 +54,15 @@ func showLogo() {
 
 // showAuthUrl 認証URLを表示
 func showAuthUrl(uri string) {
-	fmt.Println("\n🐈 Go to the following URL to authenticate the application and enter the PIN that is displayed")
+	fmt.Println("\n🐈  Go to the following URL to authenticate the application and enter the PIN that is displayed")
 	fmt.Printf("[ %s ]\n\n", uri)
 }
 
 // inputPinCode PINコードを入力
 func inputPinCode() string {
-	pin := ""
-
 	fmt.Print("PIN : ")
+
+	pin := ""
 	fmt.Scanf("%s", &pin)
 
 	return pin

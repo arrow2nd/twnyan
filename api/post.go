@@ -17,7 +17,6 @@ import (
 // PostTweet ツイートを投稿
 func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
 	tweet, err := tw.API.PostTweet(text, query)
-
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
@@ -28,8 +27,8 @@ func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
 // DeleteTweet ツイートを削除
 func (tw *TwitterAPI) DeleteTweet(tweetIDStr string) (string, error) {
 	tweetID, _ := strconv.ParseInt(tweetIDStr, 10, 64)
-	tweet, err := tw.API.DeleteTweet(tweetID, true)
 
+	tweet, err := tw.API.DeleteTweet(tweetID, true)
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
 	}
@@ -51,7 +50,8 @@ func (tw *TwitterAPI) UploadImage(images []string) (string, error) {
 
 	for _, filename := range images {
 		// サポート外の拡張子ならエラー
-		if ext := strings.ToLower(path.Ext(filename)); ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif" {
+		ext := strings.ToLower(path.Ext(filename))
+		if ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif" {
 			return "", fmt.Errorf("unsupported extensions (%s)", ext)
 		}
 

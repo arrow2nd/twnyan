@@ -4,11 +4,11 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addSearchCmd() {
-	cmd.shell.AddCmd(&ishell.Cmd{
+func (cmd *Cmd) newSearchCmd() *ishell.Cmd {
+	return &ishell.Cmd{
 		Name:    "search",
 		Aliases: []string{"sh"},
-		Func:    cmd.searchCmd,
+		Func:    cmd.execSearchCmd,
 		Help:    "search for tweets from the past 7 days",
 		LongHelp: createLongHelp(
 			"Search for tweets from the past 7 days.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
@@ -16,10 +16,10 @@ func (cmd *Cmd) addSearchCmd() {
 			"search [<keyword>] [counts]",
 			"search cats 50",
 		),
-	})
+	}
 }
 
-func (cmd *Cmd) searchCmd(c *ishell.Context) {
+func (cmd *Cmd) execSearchCmd(c *ishell.Context) {
 	keyword, count, err := cmd.parseTimelineCmdArgs(c.Args)
 	if err != nil {
 		cmd.showWrongArgMessage(c.Cmd.Name)

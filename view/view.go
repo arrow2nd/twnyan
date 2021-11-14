@@ -20,12 +20,10 @@ type View struct {
 
 // New 構造体を初期化
 func New(c *config.Config) *View {
-	view := &View{
+	return &View{
 		tweets: []anaconda.Tweet{},
 		cfg:    c,
 	}
-
-	return view
 }
 
 // createCreatedAtString 投稿時刻の文字列を作成

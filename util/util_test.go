@@ -121,22 +121,23 @@ func TestIndexOf(t *testing.T) {
 		str   string
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-	}{
-		{
-			name: "[hotaru,nono,hiromi]にnonoはあるか",
-			args: args{
-				array: []string{
-					"hotaru",
-					"nono",
-					"hiromi",
-				},
-				str: "nono",
+		name  string
+		args  args
+		want  int
+		want1 bool
+	}{{
+		name: "[hotaru,nono,hiromi]にnonoはあるか",
+		args: args{
+			array: []string{
+				"hotaru",
+				"nono",
+				"hiromi",
 			},
-			want: 1,
+			str: "nono",
 		},
+		want:  1,
+		want1: true,
+	},
 		{
 			name: "[hotaru,hiromi,chiduru,yasuha]にtomoはあるか",
 			args: args{
@@ -148,13 +149,17 @@ func TestIndexOf(t *testing.T) {
 				},
 				str: "tomo",
 			},
-			want: -1,
-		},
-	}
+			want:  0,
+			want1: false,
+		}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IndexOf(tt.args.array, tt.args.str); got != tt.want {
-				t.Errorf("IndexOf() = %v, want %v", got, tt.want)
+			got, got1 := IndexOf(tt.args.array, tt.args.str)
+			if got != tt.want {
+				t.Errorf("IndexOf() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("IndexOf() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/arrow2nd/twnyan/util"
@@ -66,16 +67,13 @@ func (cmd *Cmd) inputMultiLine() string {
 	defer cmd.setDefaultPrompt()
 
 	cmd.showMessage(
-		"INPUT",
-		"End typing with a semicolon. (If you want to cancel, input \":exit\")",
+		"MULTI",
+		"End typing with a semicolon. (If you want to cancel, input ':exit')",
 		cmd.cfg.Color.Accent3,
 	)
 
 	input := cmd.shell.ReadMultiLinesFunc(func(f string) bool {
-		if f == ":exit" || strings.HasSuffix(f, ";") {
-			return false
-		}
-		return true
+		return f != ":exit" && !strings.HasSuffix(f, ";")
 	})
 
 	// 文字列内に:exitがあればキャンセル
@@ -94,7 +92,7 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 	}
 
 	// プログレスバー開始
-	fmt.Print("Uploading...🐾 ")
+	fmt.Print("Uploading... 🐾 ")
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 
@@ -105,7 +103,6 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 	}
 
 	query.Add("media_ids", mediaIDs)
-
 	return nil
 }
 
@@ -165,28 +162,27 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 }
 
 // showMessage メッセージを表示
-func (cmd *Cmd) showMessage(tips, msg, bgColor string) {
+func (cmd *Cmd) showMessage(tips, text, bgColor string) {
 	width := util.GetWindowWidth()
 
 	// 不要な文字を削除
-	msg = util.AllReplace(msg, "[\t\n\r]", " ")
-	msg = html.UnescapeString(msg)
+	text = util.AllReplace(text, "[\t\n\r]", " ")
+	text = html.UnescapeString(text)
 
 	// 画面内に収まるよう丸める
-	msg = util.TruncateString(msg, width-len(tips)-3)
+	text = util.TruncateString(text, width-len(tips)-3)
 
 	color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Printf(" %s ", tips)
-	fmt.Printf(" %s\n", msg)
+	fmt.Printf(" %s\n", text)
 }
 
 // showErrorMessage エラーメッセージを表示
 func (cmd *Cmd) showErrorMessage(msg string) {
 	width := util.GetWindowWidth()
+	text := util.TruncateString(msg, width-9)
 
-	msg = util.TruncateString(msg, width-9)
-	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", msg)
-
-	fmt.Printf("%s\n", errMsg)
+	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
+	fmt.Fprintln(os.Stderr, errMsg)
 }
 
 // drawWrongArgError 引数ミスのメッセージを表示
@@ -202,11 +198,9 @@ func createLongHelp(help, alias, use, exp string) string {
 	if alias != "" {
 		longHelp += fmt.Sprintf("\nAlias:\n  %s\n", alias)
 	}
-
 	if use != "" {
 		longHelp += fmt.Sprintf("\nUse:\n  %s\n", use)
 	}
-
 	if exp != "" {
 		longHelp += fmt.Sprintf("\nExample:\n  %s\n", exp)
 	}

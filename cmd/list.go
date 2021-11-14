@@ -7,11 +7,11 @@ import (
 	"github.com/arrow2nd/twnyan/util"
 )
 
-func (cmd *Cmd) addListCmd() {
-	cmd.shell.AddCmd(&ishell.Cmd{
+func (cmd *Cmd) newListCmd() *ishell.Cmd {
+	return &ishell.Cmd{
 		Name:    "list",
 		Aliases: []string{"ls"},
-		Func:    cmd.listCmd,
+		Func:    cmd.execListCmd,
 		Help:    "get the list timeline",
 		LongHelp: createLongHelp(
 			"Get the list timeline.\nYou can use the tab key to complete the list name.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
@@ -20,10 +20,10 @@ func (cmd *Cmd) addListCmd() {
 			"list cats 50",
 		),
 		Completer: cmd.listCmdCompleter,
-	})
+	}
 }
 
-func (cmd *Cmd) listCmd(c *ishell.Context) {
+func (cmd *Cmd) execListCmd(c *ishell.Context) {
 	name, counts, err := cmd.parseTimelineCmdArgs(c.Args)
 	if err != nil {
 		cmd.showWrongArgMessage(c.Cmd.Name)
@@ -31,8 +31,8 @@ func (cmd *Cmd) listCmd(c *ishell.Context) {
 	}
 
 	// 指定されたリスト名が存在するかチェック
-	listIndex := util.IndexOf(cmd.api.ListNames, name)
-	if listIndex == -1 {
+	listIndex, ok := util.IndexOf(cmd.api.ListNames, name)
+	if !ok {
 		cmd.showErrorMessage("No list exists!")
 		return
 	}

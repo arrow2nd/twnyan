@@ -10,11 +10,11 @@ import (
 	"github.com/arrow2nd/twnyan/api"
 )
 
-func (cmd *Cmd) addStreamCmd() {
-	cmd.shell.AddCmd(&ishell.Cmd{
+func (cmd *Cmd) newStreamCmd() *ishell.Cmd {
+	return &ishell.Cmd{
 		Name:    "stream",
 		Aliases: []string{"st"},
-		Func:    cmd.streamCmd,
+		Func:    cmd.execStreamCmd,
 		Help:    "start a pseudo-UserStream",
 		LongHelp: createLongHelp(
 			"After accumulating up to 250 tweets in the first minute, the tweets will be displayed with a one-minute delay, just like the UserStream API.\nCtrl+C to exit.",
@@ -22,16 +22,17 @@ func (cmd *Cmd) addStreamCmd() {
 			"stream",
 			"",
 		),
-	})
+	}
 }
 
-func (cmd *Cmd) streamCmd(c *ishell.Context) {
-	// タイムラインを表示
+func (cmd *Cmd) execStreamCmd(c *ishell.Context) {
 	tweets, sinceId, err := cmd.fetchHomeTimelineTweets("25", "")
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
+
+	// タイムラインを表示
 	cmd.view.ShowTweetsFromArray(*tweets, false)
 
 	// Ctrl+Cが入力されたら通知する
@@ -51,8 +52,8 @@ func (cmd *Cmd) startUserStream(startSinceId string, quit chan os.Signal) {
 	var (
 		accumulateTweets AccumulateTweets
 		err              error
+		sinceId          = startSinceId
 	)
-	sinceId := startSinceId
 
 	for {
 		for i := 0; i < 60; i++ {

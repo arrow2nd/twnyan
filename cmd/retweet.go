@@ -4,7 +4,7 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addRetweetCmd() {
+func (cmd *Cmd) newRetweetCmd() *ishell.Cmd {
 	// retweet
 	retweetCmd := &ishell.Cmd{
 		Name:    "retweet",
@@ -37,5 +37,5 @@ func (cmd *Cmd) addRetweetCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(retweetCmd)
+	return retweetCmd
 }

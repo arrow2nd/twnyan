@@ -6,12 +6,12 @@ import (
 	"github.com/arrow2nd/ishell"
 )
 
-func (cmd *Cmd) addQuoteCmd() {
+func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
 	// quote
 	quoteCmd := &ishell.Cmd{
 		Name:    "quote",
 		Aliases: []string{"qt"},
-		Func:    cmd.quoteCmd,
+		Func:    cmd.execQuoteCmd,
 		Help:    "quote a tweet",
 		LongHelp: createLongHelp(
 			"Quote a tweet.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
@@ -25,7 +25,7 @@ func (cmd *Cmd) addQuoteCmd() {
 	quoteCmd.AddCmd(&ishell.Cmd{
 		Name:    "multi",
 		Aliases: []string{"ml"},
-		Func:    cmd.quoteMultiCmd,
+		Func:    cmd.execQuoteMultiCmd,
 		Help:    "post a multi-line quote tweet",
 		LongHelp: createLongHelp(
 			"Post a multi-line quote tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
@@ -35,20 +35,20 @@ func (cmd *Cmd) addQuoteCmd() {
 		),
 	})
 
-	cmd.shell.AddCmd(quoteCmd)
+	return quoteCmd
 }
 
-func (cmd *Cmd) quoteCmd(c *ishell.Context) {
+func (cmd *Cmd) execQuoteCmd(c *ishell.Context) {
 	if len(c.Args) < 1 {
 		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
 	}
 
 	status, files := cmd.parseTweetCmdArgs(c.Args[1:])
-	cmd.quote(c.Args[0], status, files)
+	cmd.execQuote(c.Args[0], status, files)
 }
 
-func (cmd *Cmd) quoteMultiCmd(c *ishell.Context) {
+func (cmd *Cmd) execQuoteMultiCmd(c *ishell.Context) {
 	if len(c.Args) < 1 {
 		cmd.showWrongArgMessage("quote " + c.Cmd.Name)
 		return
@@ -62,10 +62,10 @@ func (cmd *Cmd) quoteMultiCmd(c *ishell.Context) {
 		return
 	}
 
-	cmd.quote(c.Args[0], text, images)
+	cmd.execQuote(c.Args[0], text, images)
 }
 
-func (cmd *Cmd) quote(tweetNumStr, text string, images []string) {
+func (cmd *Cmd) execQuote(tweetNumStr, text string, images []string) {
 	query := url.Values{}
 
 	// 引用するツイートのURLを取得
@@ -76,8 +76,7 @@ func (cmd *Cmd) quote(tweetNumStr, text string, images []string) {
 	}
 
 	// 画像をアップロード
-	err = cmd.upload(images, &query)
-	if err != nil {
+	if err := cmd.upload(images, &query); err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
