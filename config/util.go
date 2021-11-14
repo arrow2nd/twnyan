@@ -30,7 +30,7 @@ func configFileExists(dir string) bool {
 	// ディレクトリの存在チェック
 	if _, err := os.Stat(dir); err != nil {
 		if err := os.Mkdir(dir, 0777); err != nil {
-			fmt.Println("Error: Failed to create the configuration directory")
+			fmt.Fprintln(os.Stderr, "Error: Failed to create the configuration directory")
 			panic(err)
 		}
 		return false
@@ -54,24 +54,24 @@ func saveYAML(dir, filename string, in interface{}) {
 		panic(err)
 	}
 
-	// 保存
 	path := filepath.Join(dir, filename)
-	err = ioutil.WriteFile(path, buf, os.ModePerm)
 
+	// 保存
+	err = ioutil.WriteFile(path, buf, os.ModePerm)
 	if err != nil {
-		fmt.Println("Error: Failed to write file")
+		fmt.Fprintln(os.Stderr, "Error: Failed to write file")
 		panic(err)
 	}
 }
 
 // loadYAML ファイルを読込
 func loadYAML(dir, filename string, out interface{}) {
-	// 読込
 	path := filepath.Join(dir, filename)
-	buf, err := ioutil.ReadFile(path)
 
+	// 読込
+	buf, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Println("Error: Failed to load file")
+		fmt.Fprintln(os.Stderr, "Error: Failed to load file")
 		panic(err)
 	}
 
