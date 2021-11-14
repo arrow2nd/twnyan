@@ -25,14 +25,12 @@ func init() {
 
 // New 構造体を初期化
 func New() *TwitterAPI {
-	api := &TwitterAPI{
+	return &TwitterAPI{
 		API:       nil,
 		OwnUser:   &anaconda.User{},
 		ListNames: []string{},
 		ListIDs:   []int64{},
 	}
-
-	return api
 }
 
 // Init 初期化処理
@@ -82,6 +80,5 @@ func (tw *TwitterAPI) Auth() (string, string) {
 	}
 
 	tw.Init(cred.Token, cred.Secret)
-
 	return cred.Token, cred.Secret
 }

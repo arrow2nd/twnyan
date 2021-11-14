@@ -31,8 +31,8 @@ func (cmd *Cmd) execListCmd(c *ishell.Context) {
 	}
 
 	// 指定されたリスト名が存在するかチェック
-	listIndex := util.IndexOf(cmd.api.ListNames, name)
-	if listIndex == -1 {
+	listIndex, ok := util.IndexOf(cmd.api.ListNames, name)
+	if !ok {
 		cmd.showErrorMessage("No list exists!")
 		return
 	}
