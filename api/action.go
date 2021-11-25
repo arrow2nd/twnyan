@@ -8,7 +8,6 @@ import (
 // Favorite いいねする
 func (tw *TwitterAPI) Favorite(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-
 	tweet, err := tw.API.Favorite(id)
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
@@ -20,7 +19,6 @@ func (tw *TwitterAPI) Favorite(tweetID string) (string, error) {
 // Unfavorite いいねを取り消す
 func (tw *TwitterAPI) Unfavorite(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-
 	tweet, err := tw.API.Unfavorite(id)
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
@@ -32,7 +30,6 @@ func (tw *TwitterAPI) Unfavorite(tweetID string) (string, error) {
 // Retweet リツイートする
 func (tw *TwitterAPI) Retweet(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-
 	tweet, err := tw.API.Retweet(id, true)
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
@@ -44,7 +41,6 @@ func (tw *TwitterAPI) Retweet(tweetID string) (string, error) {
 // UnRetweet リツイートを取り消す
 func (tw *TwitterAPI) UnRetweet(tweetID string) (string, error) {
 	id, _ := strconv.ParseInt(tweetID, 10, 64)
-
 	tweet, err := tw.API.UnRetweet(id, true)
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))

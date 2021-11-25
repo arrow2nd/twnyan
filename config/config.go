@@ -6,6 +6,7 @@ const (
 	colFile = "color.yaml"
 )
 
+// Config 設定構造体
 type Config struct {
 	Cred   *cred
 	Option *option
@@ -83,20 +84,20 @@ func New() *Config {
 
 // Save 保存
 func (cfg *Config) Save() {
-	saveYAML(cfg.Option.ConfigDir, crdFile, cfg.Cred)
-	saveYAML(cfg.Option.ConfigDir, optFile, cfg.Option)
-	saveYAML(cfg.Option.ConfigDir, colFile, cfg.Color)
+	cfg.saveYaml(crdFile, cfg.Cred)
+	cfg.saveYaml(optFile, cfg.Option)
+	cfg.saveYaml(colFile, cfg.Color)
 }
 
 // Load 読込
 func (cfg *Config) Load() bool {
-	if !configFileExists(cfg.Option.ConfigDir) {
+	if !cfg.configFileExists() {
 		return false
 	}
 
-	loadYAML(cfg.Option.ConfigDir, crdFile, cfg.Cred)
-	loadYAML(cfg.Option.ConfigDir, optFile, cfg.Option)
-	loadYAML(cfg.Option.ConfigDir, colFile, cfg.Color)
+	cfg.loadYaml(crdFile, cfg.Cred)
+	cfg.loadYaml(optFile, cfg.Option)
+	cfg.loadYaml(colFile, cfg.Color)
 
 	return true
 }

@@ -24,7 +24,7 @@ func GetWindowWidth() int {
 	return width
 }
 
-// TruncateString 文字列を指定した長さに丸める
+// TruncateString 文字列を指定した表示幅に丸める
 func TruncateString(str string, width int) string {
 	return runewidth.Truncate(str, width, "…")
 }
