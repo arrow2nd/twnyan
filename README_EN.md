@@ -1,4 +1,6 @@
-# twnyan
+# twnyan 🐈
+
+A colorful Twitter client that runs in a terminal
 
 [![release](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml/badge.svg)](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml)
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
@@ -6,8 +8,6 @@
 [![GitHub license](https://img.shields.io/github/license/arrow2nd/twnyan)](https://github.com/arrow2nd/twnyan/blob/main/LICENSE.txt)
 
 > **[日本語](README.md)**
-
-A colorful Twitter client that runs in a terminal🐾
 
 ![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
@@ -87,7 +87,7 @@ If you omit the tweet text, it will be tweeted as "にゃーん".
 
 The same goes for replies and quote retweets.
 
-If an image is attached, the tweet will not "にゃーん".
+**If an image is attached, the tweet will not "にゃーん".**
 
 > "にゃーん" is the Japanese word for a cat's meow.
 

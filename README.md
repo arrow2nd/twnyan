@@ -1,4 +1,6 @@
-# twnyan
+# twnyan 🐈
+
+いつでも「にゃーん」したいねこのための Twitter クライアント
 
 [![release](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml/badge.svg)](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml)
 [![arrow2nd](https://circleci.com/gh/arrow2nd/twnyan.svg?style=shield)](https://circleci.com/gh/arrow2nd/twnyan/tree/main)
@@ -7,13 +9,11 @@
 
 > **[English](README_EN.md)**
 
-いつでも「にゃーん」したいねこのための Twitter クライアント
-
 ![twnyan](https://user-images.githubusercontent.com/44780846/106699506-612c0f80-6626-11eb-803e-332512822789.gif)
 
 ## 特徴
 
-- にゃーん
+- 「にゃーん」できる
 - 疑似 UserStream モード
 - マルチバイト文字対応
 - 対話モード対応
@@ -86,17 +86,17 @@ rm -rf ~/.twnyan
 
 ツイート文を省略すると「にゃーん」とツイートされます。
 
-リプライや引用リツイートの時でも同じ動きをします。
+リプライや引用リツイートでも同様の動作をします。
 
-画像が添付されている場合はにゃーんしません。
+尚、**画像が添付されている場合はにゃーんしません。**
 
 ### 対話モード
 
 `twnyan`
 
-タイムライン上のツイートへいいね・RT などの操作を行うことができます。
+タイムライン上のツイートに対して、いいね・RT などの操作を行うことができます。
 
-それぞれツイートの先頭に表示されている番号（tweetnumber）を指定して行います。
+ツイートの先頭に表示されている番号（tweetnumber）を指定して行います。
 
 ## コマンド一覧
 
