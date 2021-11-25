@@ -27,7 +27,6 @@ func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
 // DeleteTweet ツイートを削除
 func (tw *TwitterAPI) DeleteTweet(tweetIDStr string) (string, error) {
 	tweetID, _ := strconv.ParseInt(tweetIDStr, 10, 64)
-
 	tweet, err := tw.API.DeleteTweet(tweetID, true)
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))
@@ -62,7 +61,6 @@ func (tw *TwitterAPI) UploadImage(images []string) (string, error) {
 			case <-ctx.Done():
 				return nil
 			default:
-				// ファイルを読み込む
 				data, err := ioutil.ReadFile(filename)
 				if err != nil {
 					return fmt.Errorf("failed to load file (%s)", filename)
@@ -75,14 +73,12 @@ func (tw *TwitterAPI) UploadImage(images []string) (string, error) {
 					return fmt.Errorf("upload failed (%s)", filename)
 				}
 
-				// mediaIDをチャネルへ送信
 				ch <- media.MediaIDString
 				return nil
 			}
 		})
 	}
 
-	// アップロードが終了するまで待機
 	if err := eg.Wait(); err != nil {
 		return "", err
 	}

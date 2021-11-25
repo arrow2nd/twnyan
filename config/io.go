@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -20,8 +19,9 @@ func getConfigDir() string {
 }
 
 // configFileExists 設定ファイルが存在するか
-func configFileExists(dir string) bool {
-	list := []string{
+func (cfg *Config) configFileExists() bool {
+	dir := cfg.Option.ConfigDir
+	fileList := []string{
 		filepath.Join(dir, crdFile),
 		filepath.Join(dir, optFile),
 		filepath.Join(dir, colFile),
@@ -30,14 +30,13 @@ func configFileExists(dir string) bool {
 	// ディレクトリの存在チェック
 	if _, err := os.Stat(dir); err != nil {
 		if err := os.Mkdir(dir, 0777); err != nil {
-			fmt.Fprintln(os.Stderr, "Error: Failed to create the configuration directory")
 			panic(err)
 		}
 		return false
 	}
 
 	// ファイルの存在チェック
-	for _, path := range list {
+	for _, path := range fileList {
 		if _, err := os.Stat(path); err != nil {
 			return false
 		}
@@ -46,36 +45,28 @@ func configFileExists(dir string) bool {
 	return true
 }
 
-// saveYAML ファイルを保存
-func saveYAML(dir, filename string, in interface{}) {
-	// 変換
+// saveYAML ファイルに保存
+func (cfg *Config) saveYaml(filename string, in interface{}) {
 	buf, err := yaml.Marshal(in)
 	if err != nil {
 		panic(err)
 	}
 
-	path := filepath.Join(dir, filename)
-
-	// 保存
+	path := filepath.Join(cfg.Option.ConfigDir, filename)
 	err = ioutil.WriteFile(path, buf, os.ModePerm)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error: Failed to write file")
 		panic(err)
 	}
 }
 
-// loadYAML ファイルを読込
-func loadYAML(dir, filename string, out interface{}) {
-	path := filepath.Join(dir, filename)
-
-	// 読込
+// loadYAML ファイルから読込
+func (cfg *Config) loadYaml(filename string, out interface{}) {
+	path := filepath.Join(cfg.Option.ConfigDir, filename)
 	buf, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error: Failed to load file")
 		panic(err)
 	}
 
-	// 構造体にマッピング
 	err = yaml.Unmarshal(buf, out)
 	if err != nil {
 		panic(err)

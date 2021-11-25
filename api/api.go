@@ -11,6 +11,7 @@ const (
 	consumerSecret = "umr6nOFzV3W0AfdQoWPxKSh2ZMEeRgHFih5xQDTlBRO3DoEq8z"
 )
 
+// TwitterAPI API構造体
 type TwitterAPI struct {
 	API       *anaconda.TwitterApi
 	OwnUser   *anaconda.User
@@ -23,7 +24,7 @@ func init() {
 	anaconda.SetConsumerSecret(consumerSecret)
 }
 
-// New 構造体を初期化
+// New 生成
 func New() *TwitterAPI {
 	return &TwitterAPI{
 		API:       nil,
@@ -33,11 +34,10 @@ func New() *TwitterAPI {
 	}
 }
 
-// Init 初期化処理
+// Init 初期化
 func (tw *TwitterAPI) Init(token, secret string) error {
 	var err error
 
-	// TwitterApi構造体を作成
 	tw.API = anaconda.NewTwitterApi(token, secret)
 	tw.API.ReturnRateLimitError(true)
 
@@ -67,7 +67,7 @@ func (tw *TwitterAPI) Auth() (string, string) {
 		panic(err)
 	}
 
-	// URLを表示してPINコードを入力
+	// URLを表示してPINコードの入力を待つ
 	showLogo()
 	showAuthUrl(uri)
 	pin := inputPinCode()
