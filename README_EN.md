@@ -1,4 +1,4 @@
-# twnyan 🐈
+# 🐈 twnyan
 
 A colorful Twitter client that runs in a terminal
 
@@ -265,6 +265,18 @@ UnRetweet tweet.
 | Arguments   | Hints                                                      | Examples             |
 | ----------- | ---------------------------------------------------------- | -------------------- |
 | tweetnumber | Separate each tweet with a space if there is more than one | `retweet remove 1 5` |
+
+## likert
+
+`Alias: lr, fr`
+
+### likert [\<tweetnumber\>]...
+
+Like & Retweet the tweet.
+
+| Arguments   | Hints                                                      | Examples     |
+| ----------- | ---------------------------------------------------------- | ------------ |
+| tweetnumber | Separate each tweet with a space if there is more than one | `likert 2 3` |
 
 ## quote
 
