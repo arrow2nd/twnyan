@@ -47,6 +47,7 @@ func (cmd *Cmd) init() {
 	cmd.shell.AddCmd(cmd.newUserCmd())
 	cmd.shell.AddCmd(cmd.newLikeCmd())
 	cmd.shell.AddCmd(cmd.newRetweetCmd())
+	cmd.shell.AddCmd(cmd.newLikertCmd())
 	cmd.shell.AddCmd(cmd.newQuoteCmd())
 	cmd.shell.AddCmd(cmd.newFollowCmd())
 	cmd.shell.AddCmd(cmd.newBlockCmd())
