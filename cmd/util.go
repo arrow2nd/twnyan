@@ -144,7 +144,7 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsThreeDigitsNumber(args[0]) {
-		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenname")
+		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenName")
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
