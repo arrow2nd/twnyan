@@ -224,6 +224,36 @@
 - 日本語環境での絵文字入力時の挙動がおかしい
 - `go get`でインストールした際、正しい依存パッケージが取得できない
 
-## [0.0.1] - 2020-11-17
+## 0.0.1 - 2020-11-17
 
 - リリースしました！
+
+[unreleased]: https://github.com/arrow2nd/twnyan/compare/v1.7.1...HEAD
+[1.7.1]: https://github.com/arrow2nd/twnyan/compare/v1.7.0...v1.7.1
+[1.7.0]: https://github.com/arrow2nd/twnyan/compare/v1.6.0...v1.7.0
+[1.6.0]: https://github.com/arrow2nd/twnyan/compare/v1.5.2...v1.6.0
+[1.5.2]: https://github.com/arrow2nd/twnyan/compare/v1.5.1...v1.5.2
+[1.5.1]: https://github.com/arrow2nd/twnyan/compare/v1.5.0...v1.5.1
+[1.5.0]: https://github.com/arrow2nd/twnyan/compare/v1.4.6...v1.5.0
+[1.4.6]: https://github.com/arrow2nd/twnyan/compare/v1.4.5...v1.4.6
+[1.4.5]: https://github.com/arrow2nd/twnyan/compare/v1.4.4...v1.4.5
+[1.4.4]: https://github.com/arrow2nd/twnyan/compare/v1.4.3...v1.4.4
+[1.4.3]: https://github.com/arrow2nd/twnyan/compare/v1.4.2...v1.4.3
+[1.4.2]: https://github.com/arrow2nd/twnyan/compare/v1.4.1...v1.4.2
+[1.4.1]: https://github.com/arrow2nd/twnyan/compare/v1.4.0...v1.4.1
+[1.4.0]: https://github.com/arrow2nd/twnyan/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/arrow2nd/twnyan/compare/v1.2.5...v1.3.0
+[1.2.5]: https://github.com/arrow2nd/twnyan/compare/v1.2.4...v1.2.5
+[1.2.4]: https://github.com/arrow2nd/twnyan/compare/v1.2.3...v1.2.4
+[1.2.3]: https://github.com/arrow2nd/twnyan/compare/v1.2.2...v1.2.3
+[1.2.2]: https://github.com/arrow2nd/twnyan/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/arrow2nd/twnyan/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/arrow2nd/twnyan/compare/v1.1.1...v1.2.0
+[1.1.1]: https://github.com/arrow2nd/twnyan/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/arrow2nd/twnyan/compare/v1.0.2...v1.1.0
+[1.0.2]: https://github.com/arrow2nd/twnyan/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/arrow2nd/twnyan/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/arrow2nd/twnyan/compare/v0.0.4...v1.0.0
+[0.0.4]: https://github.com/arrow2nd/twnyan/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/arrow2nd/twnyan/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/arrow2nd/twnyan/compare/v0.0.1...v0.0.2
