@@ -12,16 +12,11 @@ const (
 	consumerSecret = "umr6nOFzV3W0AfdQoWPxKSh2ZMEeRgHFih5xQDTlBRO3DoEq8z"
 )
 
-type list struct {
-	Names []string
-	IDs   []int64
-}
-
 // TwitterAPI API構造体
 type TwitterAPI struct {
 	API     *anaconda.TwitterApi
 	OwnUser *anaconda.User
-	List    list
+	List    map[string]int64
 }
 
 func init() {
@@ -34,7 +29,7 @@ func New() *TwitterAPI {
 	return &TwitterAPI{
 		API:     nil,
 		OwnUser: nil,
-		List:    list{},
+		List:    map[string]int64{},
 	}
 }
 
@@ -52,7 +47,7 @@ func (tw *TwitterAPI) Init(cred *oauth.Credentials) {
 	}
 
 	// リスト情報を取得
-	if err := tw.createListInfoSlice(); err != nil {
+	if err := tw.cacheListInfo(); err != nil {
 		panic(tw.createAPIErrorMsg("", err))
 	}
 }

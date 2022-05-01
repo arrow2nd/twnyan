@@ -30,15 +30,15 @@ func (cmd *Cmd) execListCmd(c *ishell.Context) {
 		return
 	}
 
-	// 指定されたリスト名が存在するかチェック
-	listIndex, ok := util.IndexOf(cmd.api.List.Names, name)
+	// リスト名からリストIDを取得
+	listId, ok := cmd.api.List[name]
 	if !ok {
 		cmd.showErrorMessage("No list exists!")
 		return
 	}
 
 	// リストのツイートを取得
-	tweets, err := cmd.api.FetchListTweets(cmd.api.List.IDs[listIndex], counts)
+	tweets, err := cmd.api.FetchListTweets(listId, counts)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -50,22 +50,22 @@ func (cmd *Cmd) execListCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) listCmdCompleter([]string) []string {
-	// リストが無いならreturn
-	if cmd.api.List.Names == nil {
+	// リストが無いなら処理しない
+	if len(cmd.api.List) == 0 {
 		return nil
 	}
 
 	// 入力補完用のスライスを作成
-	cmp := make([]string, len(cmd.api.List.Names))
+	items := []string{}
 
-	for i, name := range cmd.api.List.Names {
+	for name := range cmd.api.List {
 		// リスト名が空白を含んでいるならダブルクオートで囲む
 		if util.MatchesRegexp("\\s", name) {
-			cmp[i] = fmt.Sprintf("\"%s\"", name)
+			items = append(items, fmt.Sprintf("\"%s\"", name))
 		} else {
-			cmp[i] = name
+			items = append(items, name)
 		}
 	}
 
-	return cmp
+	return items
 }

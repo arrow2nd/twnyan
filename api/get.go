@@ -106,21 +106,17 @@ func (tw *TwitterAPI) fetchSelfInfo() (*anaconda.User, error) {
 	return &user, nil
 }
 
-// createListInfoSlice リスト名とリストIDのスライスを作成
-func (tw *TwitterAPI) createListInfoSlice() error {
-	// リストの情報を取得
+// cacheListInfo リスト情報を取得してキャッシュ
+func (tw *TwitterAPI) cacheListInfo() error {
+	// リスト情報を取得
 	lists, err := tw.API.GetListsOwnedBy(tw.OwnUser.Id, nil)
 	if err != nil {
 		return err
 	}
 
-	// リスト名とIDのスライスを作成
-	tw.List.Names = make([]string, len(lists))
-	tw.List.IDs = make([]int64, len(lists))
-
-	for i, ls := range lists {
-		tw.List.Names[i] = ls.Name
-		tw.List.IDs[i] = ls.Id
+	// リスト情報を追加
+	for _, ls := range lists {
+		tw.List[ls.Name] = ls.Id
 	}
 
 	return nil
