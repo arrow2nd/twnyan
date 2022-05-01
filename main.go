@@ -10,13 +10,14 @@ func main() {
 	api := api.New()
 	cfg := config.New()
 
+	// 設定ファイルが無いなら認証
 	if !cfg.Load() {
-		// 設定ファイルが無いなら認証する
-		cfg.Cred.Token, cfg.Cred.Secret = api.Auth()
+		cfg.Cred.Main = api.Auth()
 		cfg.Save()
-	} else {
-		api.Init(cfg.Cred.Token, cfg.Cred.Secret)
 	}
+
+	// TODO: オプションによって認証情報を変えることで、マルチアカウント対応させる
+	api.Init(cfg.Cred.Main)
 
 	cmd := cmd.New(cfg, api)
 	cmd.Run()

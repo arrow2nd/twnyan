@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"gopkg.in/yaml.v2"
+	"github.com/goccy/go-yaml"
 )
 
 // getConfigDir 設定ファイルのディレクトリを取得
@@ -21,11 +21,6 @@ func getConfigDir() string {
 // configFileExists 設定ファイルが存在するか
 func (cfg *Config) configFileExists() bool {
 	dir := cfg.Option.ConfigDir
-	fileList := []string{
-		filepath.Join(dir, crdFile),
-		filepath.Join(dir, optFile),
-		filepath.Join(dir, colFile),
-	}
 
 	// ディレクトリの存在チェック
 	if _, err := os.Stat(dir); err != nil {
@@ -35,8 +30,14 @@ func (cfg *Config) configFileExists() bool {
 		return false
 	}
 
+	files := []string{
+		filepath.Join(dir, crdFile),
+		filepath.Join(dir, optFile),
+		filepath.Join(dir, colFile),
+	}
+
 	// ファイルの存在チェック
-	for _, path := range fileList {
+	for _, path := range files {
 		if _, err := os.Stat(path); err != nil {
 			return false
 		}
@@ -53,8 +54,8 @@ func (cfg *Config) saveYaml(filename string, in interface{}) {
 	}
 
 	path := filepath.Join(cfg.Option.ConfigDir, filename)
-	err = ioutil.WriteFile(path, buf, os.ModePerm)
-	if err != nil {
+
+	if err := ioutil.WriteFile(path, buf, os.ModePerm); err != nil {
 		panic(err)
 	}
 }
@@ -62,13 +63,13 @@ func (cfg *Config) saveYaml(filename string, in interface{}) {
 // loadYAML ファイルから読込
 func (cfg *Config) loadYaml(filename string, out interface{}) {
 	path := filepath.Join(cfg.Option.ConfigDir, filename)
+
 	buf, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 
-	err = yaml.Unmarshal(buf, out)
-	if err != nil {
+	if err := yaml.Unmarshal(buf, out); err != nil {
 		panic(err)
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ChimeraCoder/anaconda"
+	"github.com/garyburd/go-oauth/oauth"
 )
 
 const (
@@ -32,16 +33,16 @@ func init() {
 func New() *TwitterAPI {
 	return &TwitterAPI{
 		API:     nil,
-		OwnUser: &anaconda.User{},
+		OwnUser: nil,
 		List:    list{},
 	}
 }
 
 // Init 初期化
-func (tw *TwitterAPI) Init(token, secret string) {
+func (tw *TwitterAPI) Init(cred *oauth.Credentials) {
 	var err error
 
-	tw.API = anaconda.NewTwitterApi(token, secret)
+	tw.API = anaconda.NewTwitterApi(cred.Token, cred.Secret)
 	tw.API.ReturnRateLimitError(true)
 
 	// ユーザー情報を取得
@@ -57,7 +58,7 @@ func (tw *TwitterAPI) Init(token, secret string) {
 }
 
 // Auth アプリケーション認証
-func (tw *TwitterAPI) Auth() (string, string) {
+func (tw *TwitterAPI) Auth() *oauth.Credentials {
 	authAPI := anaconda.NewTwitterApi("", "")
 
 	// 認証URL取得
@@ -79,6 +80,5 @@ func (tw *TwitterAPI) Auth() (string, string) {
 		panic(err)
 	}
 
-	tw.Init(cred.Token, cred.Secret)
-	return cred.Token, cred.Secret
+	return cred
 }
