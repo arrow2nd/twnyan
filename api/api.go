@@ -11,12 +11,16 @@ const (
 	consumerSecret = "umr6nOFzV3W0AfdQoWPxKSh2ZMEeRgHFih5xQDTlBRO3DoEq8z"
 )
 
+type list struct {
+	Names []string
+	IDs   []int64
+}
+
 // TwitterAPI API構造体
 type TwitterAPI struct {
-	API       *anaconda.TwitterApi
-	OwnUser   *anaconda.User
-	ListNames []string
-	ListIDs   []int64
+	API     *anaconda.TwitterApi
+	OwnUser *anaconda.User
+	List    list
 }
 
 func init() {
@@ -27,15 +31,14 @@ func init() {
 // New 生成
 func New() *TwitterAPI {
 	return &TwitterAPI{
-		API:       nil,
-		OwnUser:   &anaconda.User{},
-		ListNames: []string{},
-		ListIDs:   []int64{},
+		API:     nil,
+		OwnUser: &anaconda.User{},
+		List:    list{},
 	}
 }
 
 // Init 初期化
-func (tw *TwitterAPI) Init(token, secret string) error {
+func (tw *TwitterAPI) Init(token, secret string) {
 	var err error
 
 	tw.API = anaconda.NewTwitterApi(token, secret)
@@ -44,16 +47,13 @@ func (tw *TwitterAPI) Init(token, secret string) error {
 	// ユーザー情報を取得
 	tw.OwnUser, err = tw.fetchSelfInfo()
 	if err != nil {
-		return err
+		panic(tw.createAPIErrorMsg("", err))
 	}
 
 	// リスト情報を取得
-	tw.ListNames, tw.ListIDs, err = tw.createListInfoSlice()
-	if err != nil {
-		return err
+	if err := tw.createListInfoSlice(); err != nil {
+		panic(tw.createAPIErrorMsg("", err))
 	}
-
-	return nil
 }
 
 // Auth アプリケーション認証
