@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/arrow2nd/ishell"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
@@ -63,7 +63,7 @@ If there is more than one, please separate them with a space.`,
 
 func (cmd *Cmd) execTweetCmd(c *ishell.Context) {
 	// パイプからの入力を処理
-	if len(c.Args) == 0 && !terminal.IsTerminal(syscall.Stdin) {
+	if len(c.Args) == 0 && !term.IsTerminal(syscall.Stdin) {
 		stdin, _ := ioutil.ReadAll(os.Stdin)
 		cmd.tweet(string(stdin), nil)
 		return
