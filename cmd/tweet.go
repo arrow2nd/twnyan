@@ -1,9 +1,13 @@
 package cmd
 
 import (
+	"io/ioutil"
 	"net/url"
+	"os"
+	"syscall"
 
 	"github.com/arrow2nd/ishell"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
@@ -14,7 +18,9 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 		Func:    cmd.execTweetCmd,
 		Help:    "post a tweet",
 		LongHelp: createLongHelp(
-			"Post a tweet.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			`Post a tweet.
+If there is no tweet text, 'にゃーん' will be posted.
+If you are submitting an image, please add the file name separated by a space.`,
 			"tw",
 			"tweet [text] [image]...",
 			"tweet meow🐱 cat.png supercat.jpg",
@@ -28,7 +34,9 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 		Func:    cmd.execTweetMultiCmd,
 		Help:    "post a multi-line tweet",
 		LongHelp: createLongHelp(
-			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
+			`Post a multi-line tweet.
+Enter a semicolon to end the input.
+And if you want to cancel, input ":exit".`,
 			"ml",
 			"tweet multi [image]...",
 			"",
@@ -42,7 +50,8 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 		Func:    cmd.execTweetRemoveCmd,
 		Help:    "delete a tweet",
 		LongHelp: createLongHelp(
-			"Delete a tweet.\nIf there is more than one, please separate them with a space.",
+			`Delete a tweet.
+If there is more than one, please separate them with a space.`,
 			"rm",
 			"tweet remove [<tweetnumber>]",
 			"tweet remove 0 1",
@@ -53,8 +62,14 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) execTweetCmd(c *ishell.Context) {
-	text, images := cmd.parseTweetCmdArgs(c.Args)
-	cmd.tweet(text, images)
+	// パイプからの入力を処理
+	if len(c.Args) == 0 && !terminal.IsTerminal(syscall.Stdin) {
+		stdin, _ := ioutil.ReadAll(os.Stdin)
+		cmd.tweet(string(stdin), nil)
+		return
+	}
+
+	cmd.tweet(cmd.parseTweetCmdArgs(c.Args))
 }
 
 func (cmd *Cmd) execTweetMultiCmd(c *ishell.Context) {
