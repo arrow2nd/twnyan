@@ -22,7 +22,7 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 If there is no tweet text, 'にゃーん' will be posted.
 If you are submitting an image, please add the file name separated by a space.`,
 			"tw",
-			"tweet [text] [image]...",
+			"tweet [text] [images]...",
 			"tweet meow🐱 cat.png supercat.jpg",
 		),
 	}
@@ -38,7 +38,7 @@ If you are submitting an image, please add the file name separated by a space.`,
 Enter a semicolon to end the input.
 And if you want to cancel, input ":exit".`,
 			"ml",
-			"tweet multi [image]...",
+			"tweet multi [images]...",
 			"",
 		),
 	})

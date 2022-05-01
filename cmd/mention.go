@@ -12,7 +12,8 @@ func (cmd *Cmd) newMentionCmd() *ishell.Cmd {
 		Func:    cmd.execMentionCmd,
 		Help:    "get a Mentions to you",
 		LongHelp: createLongHelp(
-			"Get a Mentions to you.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Get a Mentions to you.
+If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"mt",
 			"mention [counts]",
 			"mention 50",

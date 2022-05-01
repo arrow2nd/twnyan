@@ -14,7 +14,8 @@ func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
 		},
 		Help: "like a tweet",
 		LongHelp: createLongHelp(
-			"Like a tweet.\nIf there is more than one, please separate them with a space.",
+			`Like a tweet.
+If there is more than one, please separate them with a space.`,
 			"lk, fv",
 			"like [<tweetnumber>]...",
 			"like 0 1",
@@ -30,7 +31,8 @@ func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
 		},
 		Help: "un-like a tweet",
 		LongHelp: createLongHelp(
-			"UnLike a tweet.\nIf there is more than one, please separate them with a space.",
+			`UnLike a tweet.
+If there is more than one, please separate them with a space.`,
 			"rm",
 			"like remove [<tweetnumber>]...",
 			"like remove 0 1",

@@ -14,9 +14,10 @@ func (cmd *Cmd) newUserCmd() *ishell.Cmd {
 		Func:    cmd.execUserCmd,
 		Help:    "get a user timeline",
 		LongHelp: createLongHelp(
-			"Get a user timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Get a user timeline.
+If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"ur",
-			"user [<username/tweetnumber>] [counts]",
+			"user [<username / tweetnumber>] [counts]",
 			"user github 25\n  user 2",
 		),
 	}
@@ -26,7 +27,8 @@ func (cmd *Cmd) newUserCmd() *ishell.Cmd {
 		Name: "own",
 		Help: "get your own timeline",
 		LongHelp: createLongHelp(
-			"Get your own timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Get your own timeline.
+If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"",
 			"user own [counts]",
 			"user own 25",

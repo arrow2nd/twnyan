@@ -14,9 +14,10 @@ func (cmd *Cmd) newMuteCmd() *ishell.Cmd {
 		},
 		Help: "mute a user",
 		LongHelp: createLongHelp(
-			"Mute a user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
+			`Mute a user.
+If you specify a tweetnumber, the person posting the tweet will be selected.`,
 			"mu",
-			"mute [<username/tweetnumber>]",
+			"mute [<username / tweetnumber>]",
 			"mute arrow_2nd\n  mute 2",
 		),
 	}
@@ -30,9 +31,10 @@ func (cmd *Cmd) newMuteCmd() *ishell.Cmd {
 		},
 		Help: "unmute a user",
 		LongHelp: createLongHelp(
-			"Unmute a user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
+			`Unmute a user.
+If you specify a tweetnumber, the person posting the tweet will be selected.`,
 			"rm",
-			"mute remove [<username/tweetnumber>]",
+			"mute remove [<username / tweetnumber>]",
 			"mute remove arrow_2nd\n  mute rm 2",
 		),
 	})

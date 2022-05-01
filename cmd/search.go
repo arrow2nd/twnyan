@@ -11,7 +11,8 @@ func (cmd *Cmd) newSearchCmd() *ishell.Cmd {
 		Func:    cmd.execSearchCmd,
 		Help:    "search for tweets from the past 7 days",
 		LongHelp: createLongHelp(
-			"Search for tweets from the past 7 days.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Search for tweets from the past 7 days.
+If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"sh",
 			"search [<keyword>] [counts]",
 			"search cats 50",

@@ -14,9 +14,10 @@ func (cmd *Cmd) newBlockCmd() *ishell.Cmd {
 		},
 		Help: "block a user",
 		LongHelp: createLongHelp(
-			"Block a user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
+			`Block a user.
+If you specify a tweetnumber, the person posting the tweet will be selected.`,
 			"bk",
-			"block [<username/tweetnumber>]",
+			"block [<username / tweetnumber>]",
 			"block arrow_2nd\n  block 2",
 		),
 	}
@@ -30,9 +31,10 @@ func (cmd *Cmd) newBlockCmd() *ishell.Cmd {
 		},
 		Help: "unblock a user",
 		LongHelp: createLongHelp(
-			"Unblock a user.\nIf you specify a tweetnumber, the person posting the tweet will be selected.",
+			`Unblock a user.
+If you specify a tweetnumber, the person posting the tweet will be selected.`,
 			"rm",
-			"block remove [<userName/tweetnumber>]",
+			"block remove [<username / tweetnumber>]",
 			"block remove arrow_2nd\n  block rm 2",
 		),
 	})

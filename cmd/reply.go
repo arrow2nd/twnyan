@@ -14,9 +14,11 @@ func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 		Func:    cmd.execReplyCmd,
 		Help:    "post a reply",
 		LongHelp: createLongHelp(
-			"Post a reply.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			`Post a reply.
+If there is no tweet text, 'にゃーん' will be posted.
+If you are submitting an image, please add the file name separated by a space.`,
 			"rp",
-			"reply [<tweetnumber>] [text] [image]...",
+			"reply [<tweetnumber>] [text] [images]...",
 			"reply 2 meow cat.jpg",
 		),
 	}
@@ -28,7 +30,9 @@ func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 		Func:    cmd.execReplyMultiCmd,
 		Help:    "post a multi-line reply",
 		LongHelp: createLongHelp(
-			"Post a multi-line reply.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
+			`Post a multi-line reply.
+Enter a semicolon to end the input.
+And if you want to cancel, input ":exit".`,
 			"ml",
 			"reply multi [<tweetnumber>]",
 			"reply multi 2",

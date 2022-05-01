@@ -12,7 +12,8 @@ func (cmd *Cmd) newTimelineCmd() *ishell.Cmd {
 		Func:    cmd.execTimelineCmd,
 		Help:    "get a home timeline",
 		LongHelp: createLongHelp(
-			"Get a home timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Get a home timeline.
+If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"tl",
 			"timeline [counts]",
 			"timeline 50",
@@ -22,9 +23,9 @@ func (cmd *Cmd) newTimelineCmd() *ishell.Cmd {
 
 func (cmd *Cmd) execTimelineCmd(c *ishell.Context) {
 	count := cmd.getCountFromCmdArg(c.Args)
+	query := api.CreateQuery(count)
 
 	// タイムラインのツイートを取得
-	query := api.CreateQuery(count)
 	tweets, err := cmd.api.FetchTimelineTweets("home", query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())

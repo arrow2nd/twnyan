@@ -17,7 +17,8 @@ func (cmd *Cmd) newStreamCmd() *ishell.Cmd {
 		Func:    cmd.execStreamCmd,
 		Help:    "start a pseudo-UserStream",
 		LongHelp: createLongHelp(
-			"After accumulating up to 250 tweets in the first minute, the tweets will be displayed with a one-minute delay, just like the UserStream API.\nCtrl+C to exit.",
+			`After accumulating up to 250 tweets in the first minute, the tweets will be displayed with a one-minute delay, just like the UserStream API.
+Ctrl+C to exit.`,
 			"st",
 			"stream",
 			"",

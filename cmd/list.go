@@ -14,7 +14,9 @@ func (cmd *Cmd) newListCmd() *ishell.Cmd {
 		Func:    cmd.execListCmd,
 		Help:    "get the list timeline",
 		LongHelp: createLongHelp(
-			"Get the list timeline.\nYou can use the tab key to complete the list name.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Get the list timeline.
+You can use the tab key to complete the list name.
+If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"ls",
 			"list [<listname>] [counts]",
 			"list cats 50",

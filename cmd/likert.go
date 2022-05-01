@@ -13,7 +13,8 @@ func (cmd *Cmd) newLikertCmd() *ishell.Cmd {
 		},
 		Help: "like and retweet a tweet",
 		LongHelp: createLongHelp(
-			"Like and Retweet a tweet.\nIf there is more than one, please separate them with a space.",
+			`Like and Retweet a tweet.
+If there is more than one, please separate them with a space.`,
 			"lr, fr",
 			"likert [<tweetnumber>]...",
 			"likert 0 1",
@@ -22,8 +23,7 @@ func (cmd *Cmd) newLikertCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) execLikert(tweetID string) (string, error) {
-	_, err := cmd.api.Favorite(tweetID)
-	if err != nil {
+	if _, err := cmd.api.Favorite(tweetID); err != nil {
 		return "", err
 	}
 

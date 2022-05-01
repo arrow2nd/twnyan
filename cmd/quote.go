@@ -14,9 +14,11 @@ func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
 		Func:    cmd.execQuoteCmd,
 		Help:    "quote a tweet",
 		LongHelp: createLongHelp(
-			"Quote a tweet.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			`Quote a tweet.
+If there is no tweet text, 'にゃーん' will be posted.
+If you are submitting an image, please add the file name separated by a space.`,
 			"qt",
-			"quote [<tweetnumber>] [text] [image]...",
+			"quote [<tweetnumber>] [text] [images]...",
 			"quote 0 cute!! cat.png",
 		),
 	}
@@ -28,7 +30,9 @@ func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
 		Func:    cmd.execQuoteMultiCmd,
 		Help:    "post a multi-line quote tweet",
 		LongHelp: createLongHelp(
-			"Post a multi-line quote tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
+			`Post a multi-line quote tweet.
+Enter a semicolon to end the input.
+And if you want to cancel, input ":exit".`,
 			"ml",
 			"quote multi [<tweetnumber>] [images]...",
 			"quote multi 0 apple.png",
