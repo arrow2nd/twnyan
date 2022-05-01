@@ -38,6 +38,7 @@ func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 func (cmd *Cmd) init() {
 	cmd.setDefaultPrompt()
 
+	// コマンドを登録
 	cmd.shell.AddCmd(cmd.newTweetCmd())
 	cmd.shell.AddCmd(cmd.newReplyCmd())
 	cmd.shell.AddCmd(cmd.newTimelineCmd())

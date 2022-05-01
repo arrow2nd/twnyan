@@ -63,8 +63,9 @@ func (tw *TwitterAPI) Auth() *oauth.Credentials {
 		panic(err)
 	}
 
-	// URLを表示してPINコードの入力を待つ
 	showLogo()
+
+	// URLを表示してPINコードの入力を待つ
 	showAuthUrl(uri)
 	pin := inputPinCode()
 

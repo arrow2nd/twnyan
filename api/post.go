@@ -27,6 +27,7 @@ func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
 // DeleteTweet ツイートを削除
 func (tw *TwitterAPI) DeleteTweet(tweetIDStr string) (string, error) {
 	tweetID, _ := strconv.ParseInt(tweetIDStr, 10, 64)
+
 	tweet, err := tw.API.DeleteTweet(tweetID, true)
 	if err != nil {
 		return "", errors.New(tw.createAPIErrorMsg("", err))

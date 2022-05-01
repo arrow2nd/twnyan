@@ -11,6 +11,7 @@ import (
 // FetchRelationships ユーザーとの関係性を取得
 func (tw *TwitterAPI) FetchRelationships(userID string) ([]string, error) {
 	values := url.Values{"user_id": {userID}}
+
 	relationships, err := tw.API.GetFriendshipsLookup(values)
 	if err != nil {
 		return nil, errors.New(tw.createAPIErrorMsg("/statuses/lookup", err))
@@ -51,6 +52,7 @@ func (tw *TwitterAPI) FetchTimelineTweets(category string, query url.Values) (*[
 // FetchListTweets リストのツイートを取得
 func (tw *TwitterAPI) FetchListTweets(listID int64, count string) (*[]anaconda.Tweet, error) {
 	query := CreateQuery(count)
+
 	timeline, err := tw.API.GetListTweets(listID, true, query)
 	if err != nil {
 		return nil, errors.New(tw.createAPIErrorMsg("/lists/statuses", err))

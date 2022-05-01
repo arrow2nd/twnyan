@@ -10,11 +10,10 @@ import (
 
 // CreateQuery クエリを作成
 func CreateQuery(count string) url.Values {
-	q := url.Values{}
-	q.Add("tweet_mode", "extended")
-	q.Add("count", count)
-
-	return q
+	return url.Values{
+		"tweet_mode": {"extended"},
+		"count":      {count},
+	}
 }
 
 // createUserInfoStr ユーザー情報の文字列を作成

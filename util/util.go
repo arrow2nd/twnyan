@@ -40,17 +40,6 @@ func AllReplace(str, reg, rep string) string {
 	return replace.ReplaceAllString(str, rep)
 }
 
-// IndexOf 引数と同じ内容を持つ最初の配列要素の添字を返す
-func IndexOf(array []string, str string) (int, bool) {
-	for i, value := range array {
-		if value == str {
-			return i, true
-		}
-	}
-
-	return 0, false
-}
-
 // IsThreeDigitsNumber ３桁までの数値かどうか
 func IsThreeDigitsNumber(str string) bool {
 	return regexp.MustCompile("^[0-9]{1,3}$").Match([]byte(str))

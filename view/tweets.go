@@ -25,6 +25,7 @@ func (v *View) ShowTweetsFromArray(tweets []anaconda.Tweet, shouldShowTweetNum b
 		if shouldShowTweetNum {
 			tagText = fmt.Sprintf(" %d ", i)
 		}
+
 		v.ShowTweet(&tweets[i], tagText, false)
 	}
 }
@@ -38,14 +39,24 @@ func (v *View) ShowTweet(tweets *anaconda.Tweet, tagText string, isQuote bool) {
 	if isQuote {
 		header += v.createSeparatorString(true)
 	}
+
 	// RTなら元のツイートに置換
 	if tweets.RetweetedStatus != nil {
-		header += color.HEX(v.cfg.Color.Retweet).Sprintf("RT by %s @%s\n", util.TruncateString(tweets.User.Name, halfWidth), tweets.User.ScreenName)
+		header += color.HEX(v.cfg.Color.Retweet).Sprintf(
+			"RT by %s @%s\n",
+			util.TruncateString(tweets.User.Name, halfWidth),
+			tweets.User.ScreenName,
+		)
+
 		tweets = tweets.RetweetedStatus
 	}
+
 	// リプライなら宛先を追加
 	if tweets.InReplyToScreenName != "" {
-		header += color.HEX(v.cfg.Color.Reply).Sprintf("Reply to @%s\n", tweets.InReplyToScreenName)
+		header += color.HEX(v.cfg.Color.Reply).Sprintf(
+			"Reply to @%s\n",
+			tweets.InReplyToScreenName,
+		)
 	}
 
 	// ヘッダー文字列を作成
@@ -55,6 +66,7 @@ func (v *View) ShowTweet(tweets *anaconda.Tweet, tagText string, isQuote bool) {
 	createdAtStr := v.createCreatedAtString(createdAt)
 	favCountStr := v.createCountString(tweets.FavoriteCount, tweets.Favorited, "Fav")
 	rtCountStr := v.createCountString(tweets.RetweetCount, tweets.Retweeted, "RT")
+
 	header += fmt.Sprintf("%s %s %s%s%s", tagStr, userInfoStr, createdAtStr, favCountStr, rtCountStr)
 
 	fmt.Printf("%s\n%s", header, v.editTweetText(tweets))
@@ -76,8 +88,7 @@ func (v *View) editTweetText(tweet *anaconda.Tweet) string {
 
 	// ハッシュタグをハイライト
 	if len(tweet.Entities.Hashtags) != 0 {
-		// 半角・全角英数字、漢字、平仮名、全角・半角片仮名、伸ばし棒、アンダースコア、中点
-		rep := regexp.MustCompile(`[#＃]([A-Za-z0-9Ａ-Ｚａ-ｚ０-９\x{4E00}-\x{9FFF}\x{3005}-\x{3007}ぁ-ヶｦ-ﾟー～_・]+)`)
+		rep := regexp.MustCompile(`[#＃]\S+`)
 		tweetText = rep.ReplaceAllString(tweetText, color.HEX(v.cfg.Color.Hashtag).Sprintf("#$1"))
 	}
 
@@ -91,8 +102,10 @@ func (v *View) editTweetText(tweet *anaconda.Tweet) string {
 }
 
 // createCountString いいね・RT数の文字列を作成
-func (v *View) createCountString(countNum int, reverseFlg bool, unitStr string) string {
+func (v *View) createCountString(countNum int, isReacted bool, unitStr string) string {
 	colorCode := v.cfg.Color.Favorite
+
+	// リツイートなら色を変更
 	if unitStr == "RT" {
 		colorCode = v.cfg.Color.Retweet
 	}
@@ -100,13 +113,14 @@ func (v *View) createCountString(countNum int, reverseFlg bool, unitStr string) 
 	if countNum <= 0 {
 		return ""
 	} else if countNum > 1 {
+		// カウントが1以上なら複数形にする
 		unitStr += "s"
 	}
 
 	countStr := " "
 
-	// フラグが立っていれば文字を反転する
-	if reverseFlg {
+	// リアクション済みなら文字色と背景色を反転させる
+	if isReacted {
 		countStr += color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unitStr)
 	} else {
 		countStr += color.HEX(colorCode).Sprintf("%d%s", countNum, unitStr)
