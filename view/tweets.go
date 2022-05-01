@@ -88,7 +88,7 @@ func (v *View) editTweetText(tweet *anaconda.Tweet) string {
 
 	// ハッシュタグをハイライト
 	if len(tweet.Entities.Hashtags) != 0 {
-		rep := regexp.MustCompile(`[#＃]\S+`)
+		rep := regexp.MustCompile(`[#＃](\S+)`)
 		tweetText = rep.ReplaceAllString(tweetText, color.HEX(v.cfg.Color.Hashtag).Sprintf("#$1"))
 	}
 
