@@ -36,14 +36,16 @@ func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 
 // parseTimelineCmdArgs タイムライン取得系のコマンドの引数をパース
 func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
-	if len(args) <= 0 {
+	argNum := len(args)
+
+	if argNum <= 0 {
 		return "", "", errors.New("no arguments")
 	}
 
 	str, count := args[0], cmd.cfg.Option.Counts
 
 	// 2つ目の引数があればcountに代入
-	if len(args) >= 2 {
+	if argNum >= 2 {
 		count = args[1]
 	}
 
@@ -198,9 +200,11 @@ func createLongHelp(help, alias, use, exp string) string {
 	if alias != "" {
 		longHelp += fmt.Sprintf("\nAlias:\n  %s\n", alias)
 	}
+
 	if use != "" {
 		longHelp += fmt.Sprintf("\nUse:\n  %s\n", use)
 	}
+
 	if exp != "" {
 		longHelp += fmt.Sprintf("\nExample:\n  %s\n", exp)
 	}
