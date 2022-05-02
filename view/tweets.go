@@ -12,6 +12,22 @@ import (
 	"github.com/gookit/color"
 )
 
+// DataType 取得するデータの種類
+type DataType uint8
+
+const (
+	ScreenName DataType = iota
+	TweetId
+)
+
+// Unit 単位
+type Unit string
+
+const (
+	Fav Unit = "Fav"
+	RT  Unit = "RT"
+)
+
 // ShowRegisteredTweets 登録済みのツイートを表示
 func (v *View) ShowRegisteredTweets() {
 	v.ShowTweetsFromArray(v.tweets, true)
@@ -92,8 +108,7 @@ func (v *View) ShowTweet(tweets *anaconda.Tweet, tagText string, isQuote bool) {
 // editTweetText ツイート文を編集
 func (v *View) editTweetText(tweet *anaconda.Tweet) string {
 	// 文字をアンエスケープ
-	tweetText := html.UnescapeString(tweet.FullText)
-	tweetText += "\n"
+	tweetText := html.UnescapeString(tweet.FullText) + "\n"
 
 	// ハッシュタグをハイライト
 	if len(tweet.Entities.Hashtags) != 0 {
@@ -111,11 +126,10 @@ func (v *View) editTweetText(tweet *anaconda.Tweet) string {
 }
 
 // createCountString いいね・RT数の文字列を作成
-func (v *View) createCountString(countNum int, isReacted bool, unitStr string) string {
+func (v *View) createCountString(countNum int, isReacted bool, unit Unit) string {
+	// 表示色
 	colorCode := v.cfg.Color.Favorite
-
-	// リツイートなら色を変更
-	if unitStr == "RT" {
+	if unit == RT {
 		colorCode = v.cfg.Color.Retweet
 	}
 
@@ -123,16 +137,16 @@ func (v *View) createCountString(countNum int, isReacted bool, unitStr string) s
 		return ""
 	} else if countNum > 1 {
 		// カウントが1以上なら複数形にする
-		unitStr += "s"
+		unit += "s"
 	}
 
 	countStr := " "
 
 	// リアクション済みなら文字色と背景色を反転させる
 	if isReacted {
-		countStr += color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unitStr)
+		countStr += color.HEXStyle(v.cfg.Color.BoxForground, colorCode).Sprintf(" %d%s ", countNum, unit)
 	} else {
-		countStr += color.HEX(colorCode).Sprintf("%d%s", countNum, unitStr)
+		countStr += color.HEX(colorCode).Sprintf("%d%s", countNum, unit)
 	}
 
 	return countStr
@@ -143,36 +157,35 @@ func (v *View) RegisterTweets(tweets *[]anaconda.Tweet) {
 	v.mu.Lock()
 	defer v.mu.Unlock()
 
-	tmp := []anaconda.Tweet{}
-	v.tweets = append(tmp, *tweets...)
+	v.tweets = append([]anaconda.Tweet{}, *tweets...)
 }
 
 // GetTweetURL ツイートのURLを取得
 func (v *View) GetTweetURL(tweetNumStr string) (string, error) {
-	screenName, err := v.GetDataFromTweetNum(tweetNumStr, "screenName")
+	screenName, err := v.GetDataFromTweetNum(tweetNumStr, ScreenName)
 	if err != nil {
 		return "", err
 	}
 
-	tweetID, err := v.GetDataFromTweetNum(tweetNumStr, "tweetID")
+	tweetId, err := v.GetDataFromTweetNum(tweetNumStr, TweetId)
 	if err != nil {
 		return "", err
 	}
 
-	return fmt.Sprintf("https://twitter.com/%s/status/%s", screenName, tweetID), nil
+	return fmt.Sprintf("https://twitter.com/%s/status/%s", screenName, tweetId), nil
 }
 
 // GetDataFromTweetNum ツイート番号から情報を取得
-func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error) {
+func (v *View) GetDataFromTweetNum(tweetNumStr string, dataType DataType) (string, error) {
 	if !util.IsThreeDigitsNumber(tweetNumStr) {
-		return "", errors.New("tweetnumber is invalid")
+		return "", errors.New("tweet-number is invalid")
 	}
 
 	tweetNum, _ := strconv.Atoi(tweetNumStr)
 
 	// ツイート番号が範囲外ならエラー
 	if tweetNum < 0 || tweetNum > len(v.tweets)-1 {
-		return "", errors.New("tweetnumber is out of range")
+		return "", errors.New("tweet-number is out of range")
 	}
 
 	// ツイートを取得
@@ -183,9 +196,9 @@ func (v *View) GetDataFromTweetNum(tweetNumStr, dataType string) (string, error)
 
 	// 指定されたデータを返す
 	switch dataType {
-	case "screenName":
+	case ScreenName:
 		return tweet.User.ScreenName, nil
-	case "tweetID":
+	case TweetId:
 		return tweet.IdStr, nil
 	}
 

@@ -4,6 +4,7 @@ import (
 	"github.com/arrow2nd/ishell"
 	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/util"
+	"github.com/arrow2nd/twnyan/view"
 )
 
 func (cmd *Cmd) newUserCmd() *ishell.Cmd {
@@ -17,7 +18,7 @@ func (cmd *Cmd) newUserCmd() *ishell.Cmd {
 			`Get a user timeline.
 If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"ur",
-			"user [<username / tweetnumber>] [counts]",
+			"user [<username / tweet-number>] [counts]",
 			"user github 25\n  user 2",
 		),
 	}
@@ -51,7 +52,7 @@ func (cmd *Cmd) execUserCmd(c *ishell.Context) {
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsThreeDigitsNumber(screenName) {
-		screenName, err = cmd.view.GetDataFromTweetNum(screenName, "screenName")
+		screenName, err = cmd.view.GetDataFromTweetNum(screenName, view.ScreenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -67,7 +68,7 @@ func (cmd *Cmd) showUserTimeline(screenName, count string) {
 	query.Add("screen_name", screenName)
 
 	// ユーザーのツイートを取得
-	tweets, err := cmd.api.FetchTimelineTweets("user", query)
+	tweets, err := cmd.api.FetchTimelineTweets(api.User, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return

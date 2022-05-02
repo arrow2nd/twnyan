@@ -15,7 +15,7 @@ func (cmd *Cmd) newOpenCmd() *ishell.Cmd {
 		LongHelp: createLongHelp(
 			"View the tweet in your browser.",
 			"op",
-			"open [<tweetnumber>]",
+			"open [<tweet-number>]",
 			"open 2",
 		),
 	}

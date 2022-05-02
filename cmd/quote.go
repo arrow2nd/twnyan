@@ -18,7 +18,7 @@ func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
 If there is no tweet text, 'にゃーん' will be posted.
 If you are submitting an image, please add the file name separated by a space.`,
 			"qt",
-			"quote [<tweetnumber>] [text] [images]...",
+			"quote [<tweet-number>] [text] [images]...",
 			"quote 0 cute!! cat.png",
 		),
 	}
@@ -34,7 +34,7 @@ If you are submitting an image, please add the file name separated by a space.`,
 Enter a semicolon to end the input.
 And if you want to cancel, input ":exit".`,
 			"ml",
-			"quote multi [<tweetnumber>] [images]...",
+			"quote multi [<tweet-number>] [images]...",
 			"quote multi 0 apple.png",
 		),
 	})

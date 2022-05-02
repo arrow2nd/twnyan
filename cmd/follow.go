@@ -15,9 +15,9 @@ func (cmd *Cmd) newFollowCmd() *ishell.Cmd {
 		Help: "follow a user",
 		LongHelp: createLongHelp(
 			`Follow a user.
-If you specify a tweetnumber, the person posting the tweet will be selected.`,
+If you specify a tweet-number, the person posting the tweet will be selected.`,
 			"fw",
-			"follow [<username / tweetnumber>]",
+			"follow [<username / tweet-number>]",
 			"follow arrow_2nd\n  follow 2",
 		),
 	}
@@ -32,9 +32,9 @@ If you specify a tweetnumber, the person posting the tweet will be selected.`,
 		Help: "unfollow a user",
 		LongHelp: createLongHelp(
 			`Unfollow a user.
-If you specify a tweetnumber, the person posting the tweet will be selected.`,
+If you specify a tweet-number, the person posting the tweet will be selected.`,
 			"rm",
-			"follow remove [<username / tweetnumber>]",
+			"follow remove [<username / tweet-number>]",
 			"follow remove arrow_2nd\n  follow rm 2",
 		),
 	})

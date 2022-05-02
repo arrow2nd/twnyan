@@ -13,14 +13,14 @@ import (
 type Cmd struct {
 	shell *ishell.Shell
 	cfg   *config.Config
-	api   *api.TwitterAPI
+	api   *api.Twitter
 	view  *view.View
 }
 
 type AccumulateTweets map[int64]anaconda.Tweet
 
 // New 作成
-func New(c *config.Config, a *api.TwitterAPI) *Cmd {
+func New(c *config.Config, a *api.Twitter) *Cmd {
 	nc := &Cmd{
 		shell: ishell.New(),
 		cfg:   c,

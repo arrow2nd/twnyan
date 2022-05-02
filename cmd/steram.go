@@ -123,7 +123,7 @@ func (cmd *Cmd) fetchHomeTimelineTweets(count, sinceId string) (*[]anaconda.Twee
 		query.Add("since_id", sinceId)
 	}
 
-	tweets, err := cmd.api.FetchTimelineTweets("home", query)
+	tweets, err := cmd.api.FetchTimelineTweets(api.Home, query)
 	if err != nil {
 		return nil, sinceId, err
 	}

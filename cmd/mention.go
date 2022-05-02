@@ -26,7 +26,7 @@ func (cmd *Cmd) execMentionCmd(c *ishell.Context) {
 
 	// メンションタイムラインを取得
 	query := api.CreateQuery(count)
-	tweets, err := cmd.api.FetchTimelineTweets("mention", query)
+	tweets, err := cmd.api.FetchTimelineTweets(api.Mention, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return

@@ -18,33 +18,31 @@ func CreateQuery(count string) url.Values {
 }
 
 // createUserInfoText ユーザー情報の文字列を作成
-func (tw *TwitterAPI) createUserInfoText(name, screenName string) string {
+func (tw *Twitter) createUserInfoText(name, screenName string) string {
 	return fmt.Sprintf("%s @%s", name, screenName)
 }
 
 // createAPIErrorText APIのエラーメッセージを作成
-func (tw *TwitterAPI) createAPIErrorText(resource string, err error) string {
-	bytes := []byte(err.Error())
-
+func (tw *Twitter) createAPIErrorText(resource string, err error) string {
 	// エラー文字列からメッセージを抽出
-	result := regexp.MustCompile(`"(message|error)":"([^"]+)"`).FindSubmatch(bytes)
-	if len(result) <= 0 {
+	result := regexp.MustCompile(`"(?:message|error)":"([^"]+)"`).FindSubmatch([]byte(err.Error()))
+	if len(result) == 0 {
 		return ""
 	}
 
-	errMsg := string(result[2])
+	errMsg := string(result[1])
 
 	// レート制限なら解除時刻を追加
 	if errMsg == "Rate limit exceeded" && resource != "" {
-		resetTimeStr := tw.fetchRateLimitResetTime(resource)
-		errMsg += fmt.Sprintf(" (Reset Time : %s)", resetTimeStr)
+		resetTime := tw.fetchRateLimitResetTime(resource)
+		errMsg += fmt.Sprintf(" (Reset Time : %s)", resetTime)
 	}
 
 	return errMsg
 }
 
 // createAPIError APIのエラーを作成
-func (tw *TwitterAPI) createAPIError(resource string, err error) error {
+func (tw *Twitter) createAPIError(resource string, err error) error {
 	return errors.New(tw.createAPIErrorText(resource, err))
 }
 

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/arrow2nd/twnyan/util"
+	"github.com/arrow2nd/twnyan/view"
 	"github.com/gookit/color"
 )
 
@@ -141,13 +142,13 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 
 	// 引数の数だけ処理
 	for _, v := range args {
-		tweetID, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
+		tweetId, err := cmd.view.GetDataFromTweetNum(v, view.TweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		tweetText, err := actionFunc(tweetID)
+		tweetText, err := actionFunc(tweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -170,7 +171,7 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsThreeDigitsNumber(args[0]) {
-		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenName")
+		screenName, err = cmd.view.GetDataFromTweetNum(args[0], view.ScreenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return

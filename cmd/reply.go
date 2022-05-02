@@ -4,6 +4,7 @@ import (
 	"net/url"
 
 	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/twnyan/view"
 )
 
 func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
@@ -18,7 +19,7 @@ func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 If there is no tweet text, 'にゃーん' will be posted.
 If you are submitting an image, please add the file name separated by a space.`,
 			"rp",
-			"reply [<tweetnumber>] [text] [images]...",
+			"reply [<tweet-number>] [text] [images]...",
 			"reply 2 meow cat.jpg",
 		),
 	}
@@ -34,7 +35,7 @@ If you are submitting an image, please add the file name separated by a space.`,
 Enter a semicolon to end the input.
 And if you want to cancel, input ":exit".`,
 			"ml",
-			"reply multi [<tweetnumber>]",
+			"reply multi [<tweet-number>]",
 			"reply multi 2",
 		),
 	})
@@ -71,7 +72,7 @@ func (cmd *Cmd) execReplyMultiCmd(c *ishell.Context) {
 
 func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 	// リプライ先のツイートIDを取得
-	tweetID, err := cmd.view.GetDataFromTweetNum(tweetNumStr, "tweetID")
+	tweetId, err := cmd.view.GetDataFromTweetNum(tweetNumStr, view.TweetId)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -79,7 +80,7 @@ func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 
 	// リプライ先を設定
 	query := url.Values{}
-	query.Add("in_reply_to_status_id", tweetID)
+	query.Add("in_reply_to_status_id", tweetId)
 	query.Add("auto_populate_reply_metadata", "true")
 
 	// 画像をアップロード

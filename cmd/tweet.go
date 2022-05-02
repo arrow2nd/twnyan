@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/twnyan/view"
 	"golang.org/x/term"
 )
 
@@ -53,7 +54,7 @@ And if you want to cancel, input ":exit".`,
 			`Delete a tweet.
 If there is more than one, please separate them with a space.`,
 			"rm",
-			"tweet remove [<tweetnumber>]",
+			"tweet remove [<tweet-number>]",
 			"tweet remove 0 1",
 		),
 	})
@@ -92,13 +93,13 @@ func (cmd *Cmd) execTweetRemoveCmd(c *ishell.Context) {
 
 	// 引数の数だけ削除処理
 	for _, tweetNumStr := range c.Args {
-		tweetID, err := cmd.view.GetDataFromTweetNum(tweetNumStr, "tweetID")
+		tweetId, err := cmd.view.GetDataFromTweetNum(tweetNumStr, view.TweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		tweetText, err := cmd.api.DeleteTweet(tweetID)
+		tweetText, err := cmd.api.DeleteTweet(tweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return

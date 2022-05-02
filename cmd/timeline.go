@@ -26,7 +26,7 @@ func (cmd *Cmd) execTimelineCmd(c *ishell.Context) {
 	query := api.CreateQuery(count)
 
 	// タイムラインのツイートを取得
-	tweets, err := cmd.api.FetchTimelineTweets("home", query)
+	tweets, err := cmd.api.FetchTimelineTweets(api.Home, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
