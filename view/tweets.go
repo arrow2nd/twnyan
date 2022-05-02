@@ -19,11 +19,20 @@ func (v *View) ShowRegisteredTweets() {
 
 // ShowTweetsFromArray 配列からツイートを表示
 func (v *View) ShowTweetsFromArray(tweets []anaconda.Tweet, shouldShowTweetNum bool) {
-	tagText := " "
+	// ツイートがない
+	if len(tweets) == 0 {
+		fmt.Print("\n-- No tweets --\n\n")
+		return
+	}
 
+	tagText := ""
+
+	// 逆順 (上から下に向けて最新) で出力
 	for i := len(tweets) - 1; i >= 0; i-- {
 		if shouldShowTweetNum {
 			tagText = fmt.Sprintf(" %d ", i)
+		} else {
+			tagText = " "
 		}
 
 		v.ShowTweet(&tweets[i], tagText, false)

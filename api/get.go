@@ -8,13 +8,23 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 )
 
+// FetchUserInfo ユーザー情報を取得
+func (tw *TwitterAPI) FetchUserInfo(username string) (*anaconda.User, error) {
+	user, err := tw.API.GetUsersShow(username, nil)
+	if err != nil {
+		return nil, tw.createAPIError("/users/show", err)
+	}
+
+	return &user, nil
+}
+
 // FetchRelationships ユーザーとの関係性を取得
 func (tw *TwitterAPI) FetchRelationships(userID string) ([]string, error) {
 	values := url.Values{"user_id": {userID}}
 
 	relationships, err := tw.API.GetFriendshipsLookup(values)
 	if err != nil {
-		return nil, errors.New(tw.createAPIErrorMsg("/statuses/lookup", err))
+		return nil, tw.createAPIError("/statuses/lookup", err)
 	}
 
 	return relationships[0].Connections, nil
@@ -43,7 +53,7 @@ func (tw *TwitterAPI) FetchTimelineTweets(category string, query url.Values) (*[
 	}
 
 	if err != nil {
-		return nil, errors.New(tw.createAPIErrorMsg(resourceName, err))
+		return nil, tw.createAPIError(resourceName, err)
 	}
 
 	return &timeline, nil
@@ -55,7 +65,7 @@ func (tw *TwitterAPI) FetchListTweets(listID int64, count string) (*[]anaconda.T
 
 	timeline, err := tw.API.GetListTweets(listID, true, query)
 	if err != nil {
-		return nil, errors.New(tw.createAPIErrorMsg("/lists/statuses", err))
+		return nil, tw.createAPIError("/lists/statuses", err)
 	}
 
 	return &timeline, nil
@@ -69,7 +79,7 @@ func (tw *TwitterAPI) FetchSearchResult(queryStr, count string) (*[]anaconda.Twe
 	// 検索結果を取得
 	result, err := tw.API.GetSearch(queryStr, query)
 	if err != nil {
-		return nil, errors.New(tw.createAPIErrorMsg("/search/tweets", err))
+		return nil, tw.createAPIError("/search/tweets", err)
 	}
 
 	// 検索結果が0件ならエラー
@@ -102,7 +112,7 @@ func (tw *TwitterAPI) fetchRateLimitResetTime(resouceName string) string {
 func (tw *TwitterAPI) fetchSelfInfo() (*anaconda.User, error) {
 	user, err := tw.API.GetSelf(nil)
 	if err != nil {
-		return nil, err
+		return nil, tw.createAPIError("", err)
 	}
 
 	return &user, nil
@@ -115,6 +125,8 @@ func (tw *TwitterAPI) cacheListInfo() error {
 	if err != nil {
 		return err
 	}
+
+	tw.List = map[string]int64{}
 
 	// リスト情報を追加
 	for _, ls := range lists {

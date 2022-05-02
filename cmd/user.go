@@ -73,15 +73,27 @@ func (cmd *Cmd) showUserTimeline(screenName, count string) {
 		return
 	}
 
-	// ユーザーとの関係を取得
-	user := (*tweets)[0].User
-	relationships, err := cmd.api.FetchRelationships(user.IdStr)
-	if err != nil {
-		cmd.showErrorMessage(err.Error())
-		return
+	user := cmd.api.OwnUser
+	relationships := []string{}
+
+	if screenName != "" {
+		// ユーザー情報を取得
+		user, err = cmd.api.FetchUserInfo(screenName)
+		if err != nil {
+			cmd.showErrorMessage(err.Error())
+			return
+		}
+
+		// ユーザーとの関係を取得
+		relationships, err = cmd.api.FetchRelationships(user.IdStr)
+		if err != nil {
+			cmd.showErrorMessage(err.Error())
+			return
+		}
 	}
 
 	cmd.view.RegisterTweets(tweets)
+
 	cmd.view.ShowRegisteredTweets()
-	cmd.view.ShowUserInfo(&user, relationships)
+	cmd.view.ShowUserInfo(user, relationships)
 }
