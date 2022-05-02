@@ -98,7 +98,7 @@ The same goes for replies and quote retweets.
 
 You can like or RT the tweets on the timeline.
 
-You can do this by specifying the tweetnumber displayed at the top of the tweet.
+You can do this by specifying the tweet-number displayed at the top of the tweet.
 
 ## Command list
 
@@ -133,7 +133,7 @@ Post a multi-line tweet.
 - To finish typing, type a semicolon `;` at the end of the sentence
 - To cancel, input `:exit`.
 
-### tweet remove [\<tweetnumber\>]...
+### tweet remove [\<tweet-number\>]...
 
 `Alias: rm`
 
@@ -192,14 +192,14 @@ Get a timeline of the list.
 
 `Alias: ur`
 
-### user [<username/tweetnumber>] [counts]
+### user [<username/tweet-number>] [counts]
 
 Get a timeline of the specified user.
 
-| Arguments            | Hints                                                                | Examples                  |
-| -------------------- | -------------------------------------------------------------------- | ------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional       | `user github`<br>`user 1` |
-| counts               | If you omit it, the default value is given in the configuration file | `user twitter 15`         |
+| Arguments             | Hints                                                                | Examples                  |
+| --------------------- | -------------------------------------------------------------------- | ------------------------- |
+| username/tweet-number | Either can be specified<br>The '@' in the username is optional       | `user github`<br>`user 1` |
+| counts                | If you omit it, the default value is given in the configuration file | `user twitter 15`         |
 
 ### user own [counts]
 
@@ -226,71 +226,71 @@ Searches for tweets tweets in the past 7 days.
 
 `Alias: lk, fv`
 
-### like [\<tweetnumber\>]
+### like [\<tweet-number\>]
 
 Like a tweet.
 
-| Arguments   | Hints                                                      | Examples   |
-| ----------- | ---------------------------------------------------------- | ---------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | `like 1 2` |
+| Arguments    | Hints                                                      | Examples   |
+| ------------ | ---------------------------------------------------------- | ---------- |
+| tweet-number | Separate each tweet with a space if there is more than one | `like 1 2` |
 
-### like remove [\<tweetnumber\>]
+### like remove [\<tweet-number\>]
 
 `Alias: rm`
 
 UnLike a tweet.
 
-| Arguments   | Hints                                                      | Examples          |
-| ----------- | ---------------------------------------------------------- | ----------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | `like remove 1 2` |
+| Arguments    | Hints                                                      | Examples          |
+| ------------ | ---------------------------------------------------------- | ----------------- |
+| tweet-number | Separate each tweet with a space if there is more than one | `like remove 1 2` |
 
 ## retweet
 
 `Alias: rt`
 
-### retweet [\<tweetnumber\>]...
+### retweet [\<tweet-number\>]...
 
 Retweet a tweet.
 
-| Arguments   | Hints                                                      | Examples      |
-| ----------- | ---------------------------------------------------------- | ------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | `retweet 1 5` |
+| Arguments    | Hints                                                      | Examples      |
+| ------------ | ---------------------------------------------------------- | ------------- |
+| tweet-number | Separate each tweet with a space if there is more than one | `retweet 1 5` |
 
-### retweet remove [\<tweetnumber\>]...
+### retweet remove [\<tweet-number\>]...
 
 `Alias: rm`
 
 UnRetweet tweet.
 
-| Arguments   | Hints                                                      | Examples             |
-| ----------- | ---------------------------------------------------------- | -------------------- |
-| tweetnumber | Separate each tweet with a space if there is more than one | `retweet remove 1 5` |
+| Arguments    | Hints                                                      | Examples             |
+| ------------ | ---------------------------------------------------------- | -------------------- |
+| tweet-number | Separate each tweet with a space if there is more than one | `retweet remove 1 5` |
 
 ## likert
 
 `Alias: lr, fr`
 
-### likert [\<tweetnumber\>]...
+### likert [\<tweet-number\>]...
 
 Like & Retweet the tweet.
 
-| Arguments   | Hints                                                      | Examples     |
-| ----------- | ---------------------------------------------------------- | ------------ |
-| tweetnumber | Separate each tweet with a space if there is more than one | `likert 2 3` |
+| Arguments    | Hints                                                      | Examples     |
+| ------------ | ---------------------------------------------------------- | ------------ |
+| tweet-number | Separate each tweet with a space if there is more than one | `likert 2 3` |
 
 ## quote
 
 `Alias: qt`
 
-### quote [\<tweetnumber\>] [text] [imagefile]
+### quote [\<tweet-number\>] [text] [imagefile]
 
 Quote a tweet.
 
-| Arguments   | Hints                                                                            | Examples                           |
-| ----------- | -------------------------------------------------------------------------------- | ---------------------------------- |
-| tweetnumber | Specify the number of the tweet to quote                                         | `quote 1 good!!!`                  |
-| text        | If there is no text and image file, the message will be posted with a "にゃーん" | `quote 1`                          |
-| imagefile   | If there is more than one, please separate them with a space                     | `quote 1 🍣 sushi1.png sushi2.png` |
+| Arguments    | Hints                                                                            | Examples                           |
+| ------------ | -------------------------------------------------------------------------------- | ---------------------------------- |
+| tweet-number | Specify the number of the tweet to quote                                         | `quote 1 good!!!`                  |
+| text         | If there is no text and image file, the message will be posted with a "にゃーん" | `quote 1`                          |
+| imagefile    | If there is more than one, please separate them with a space                     | `quote 1 🍣 sushi1.png sushi2.png` |
 
 ### quote multi
 
@@ -309,15 +309,15 @@ Post a multi-line quote retweet.
 
 `Alias: rp`
 
-### reply [\<tweetnumber\>] [text] [imagefile]
+### reply [\<tweet-number\>] [text] [imagefile]
 
 Post a reply.
 
-| Arguments   | Hints                                                                            | Examples                     |
-| ----------- | -------------------------------------------------------------------------------- | ---------------------------- |
-| tweetnumber | Specify the number of the tweet you want to reply to.                            | `reply 1 meow`               |
-| text        | If there is no text and image file, the message will be posted with a "にゃーん" | `reply 1`                    |
-| image file  | If there is more than one, please separate them with a space                     | `reply 1 good!!! sushi1.png` |
+| Arguments    | Hints                                                                            | Examples                     |
+| ------------ | -------------------------------------------------------------------------------- | ---------------------------- |
+| tweet-number | Specify the number of the tweet you want to reply to.                            | `reply 1 meow`               |
+| text         | If there is no text and image file, the message will be posted with a "にゃーん" | `reply 1`                    |
+| image file   | If there is more than one, please separate them with a space                     | `reply 1 good!!! sushi1.png` |
 
 - You can also omit the text and just post an image. (e.g. `reply 1 dog.png`)
 
@@ -338,79 +338,79 @@ Post a multi-line reply.
 
 `Alias: fw`
 
-### follow [<username/tweetnumber>]
+### follow [<username/tweet-number>]
 
 Follow a user.
 
-| Arguments            | Hints                                                          | Examples                      |
-| -------------------- | -------------------------------------------------------------- | ----------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `follow github`<br>`follow 1` |
+| Arguments             | Hints                                                          | Examples                      |
+| --------------------- | -------------------------------------------------------------- | ----------------------------- |
+| username/tweet-number | Either can be specified<br>The '@' in the username is optional | `follow github`<br>`follow 1` |
 
-### follow remove [<username/tweetnumber>]
+### follow remove [<username/tweet-number>]
 
 `Alias: rm`
 
 Unfollow a user.
 
-| Arguments            | Hints                                                          | Examples                                       |
-| -------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `follow remove arrow_2nd`<br>`follow remove 1` |
+| Arguments             | Hints                                                          | Examples                                       |
+| --------------------- | -------------------------------------------------------------- | ---------------------------------------------- |
+| username/tweet-number | Either can be specified<br>The '@' in the username is optional | `follow remove arrow_2nd`<br>`follow remove 1` |
 
 ## block
 
 `Alias: bk`
 
-### block [<username/tweetnumber>]
+### block [<username/tweet-number>]
 
 Block a user.
 
-| Arguments            | Hints                                                          | Examples                       |
-| -------------------- | -------------------------------------------------------------- | ------------------------------ |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `block arrow_2nd`<br>`block 1` |
+| Arguments             | Hints                                                          | Examples                       |
+| --------------------- | -------------------------------------------------------------- | ------------------------------ |
+| username/tweet-number | Either can be specified<br>The '@' in the username is optional | `block arrow_2nd`<br>`block 1` |
 
-### block remove [<username/tweetnumber>]
+### block remove [<username/tweet-number>]
 
 `Alias: rm`
 
 Unblock a user.
 
-| Arguments            | Hints                                                          | Examples                                     |
-| -------------------- | -------------------------------------------------------------- | -------------------------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `block remove arrow_2nd`<br>`block remove 1` |
+| Arguments             | Hints                                                          | Examples                                     |
+| --------------------- | -------------------------------------------------------------- | -------------------------------------------- |
+| username/tweet-number | Either can be specified<br>The '@' in the username is optional | `block remove arrow_2nd`<br>`block remove 1` |
 
 ## mute
 
 `Alias: mu`
 
-### mute [<username/tweetnumber>]
+### mute [<username/tweet-number>]
 
 Mute a user.
 
-| Arguments            | Hints                                                          | Examples                     |
-| -------------------- | -------------------------------------------------------------- | ---------------------------- |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `mute arrow_2nd`<br>`mute 1` |
+| Arguments             | Hints                                                          | Examples                     |
+| --------------------- | -------------------------------------------------------------- | ---------------------------- |
+| username/tweet-number | Either can be specified<br>The '@' in the username is optional | `mute arrow_2nd`<br>`mute 1` |
 
-### mute remove [<username/tweetnumber>]
+### mute remove [<username/tweet-number>]
 
 `Alias: rm`
 
 Unmute a user.
 
-| Arguments            | Hints                                                          | Examples                                   |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------------ |
-| username/tweetnumber | Either can be specified<br>The '@' in the username is optional | `mute remove arrow_2nd`<br>`mute remove 1` |
+| Arguments             | Hints                                                          | Examples                                   |
+| --------------------- | -------------------------------------------------------------- | ------------------------------------------ |
+| username/tweet-number | Either can be specified<br>The '@' in the username is optional | `mute remove arrow_2nd`<br>`mute remove 1` |
 
 ## open
 
 `Alias: op`
 
-### open [\<tweetnumber\>]
+### open [\<tweet-number\>]
 
 View the tweet in your browser.
 
-| Arguments   | Hints                                                          | Examples |
-| ----------- | -------------------------------------------------------------- | -------- |
-| tweetnumber | Specify the number of the tweet to be displayed in the browser | `open 2` |
+| Arguments    | Hints                                                          | Examples |
+| ------------ | -------------------------------------------------------------- | -------- |
+| tweet-number | Specify the number of the tweet to be displayed in the browser | `open 2` |
 
 ## clear
 
