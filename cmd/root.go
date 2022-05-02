@@ -19,7 +19,7 @@ type Cmd struct {
 
 type AccumulateTweets map[int64]anaconda.Tweet
 
-// New 構造体を初期化
+// New 作成
 func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 	nc := &Cmd{
 		shell: ishell.New(),
@@ -29,6 +29,7 @@ func New(c *config.Config, a *api.TwitterAPI) *Cmd {
 	}
 
 	nc.init()
+
 	return nc
 }
 
@@ -37,6 +38,7 @@ func (cmd *Cmd) init() {
 	cmd.setDefaultPrompt()
 
 	// コマンドを登録
+	cmd.shell.AddCmd(cmd.newAccountCmd())
 	cmd.shell.AddCmd(cmd.newTweetCmd())
 	cmd.shell.AddCmd(cmd.newReplyCmd())
 	cmd.shell.AddCmd(cmd.newTimelineCmd())

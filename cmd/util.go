@@ -68,11 +68,7 @@ func (cmd *Cmd) inputMultiLine() string {
 	cmd.shell.SetPrompt("... ")
 	defer cmd.setDefaultPrompt()
 
-	cmd.showMessage(
-		"MULTI",
-		"End typing with a semicolon. (If you want to cancel, input ':exit')",
-		cmd.cfg.Color.Accent3,
-	)
+	fmt.Println("End typing with a semicolon. (If you want to cancel, input ':exit')")
 
 	input := cmd.shell.ReadMultiLinesFunc(func(f string) bool {
 		return f != ":exit" && !strings.HasSuffix(f, ";")
@@ -80,11 +76,17 @@ func (cmd *Cmd) inputMultiLine() string {
 
 	// 文字列内に:exitがあればキャンセル
 	if strings.Contains(input, ":exit") {
-		cmd.showMessage("CANCELED", "Input interrupted.", cmd.cfg.Color.Accent2)
+		cmd.showMessage("CANCELED", "Input interrupted", cmd.cfg.Color.Accent2)
 		return ""
 	}
 
 	return strings.TrimRight(input, ";")
+}
+
+// showExecutionConf 実行確認を表示
+func (cmd *Cmd) showExecutionConf(msg string) bool {
+	result := cmd.shell.MultiChoice([]string{"No", "Yes"}, msg)
+	return result == 1
 }
 
 // upload 画像をアップロード
@@ -180,11 +182,8 @@ func (cmd *Cmd) showMessage(tips, text, bgColor string) {
 
 // showErrorMessage エラーメッセージを表示
 func (cmd *Cmd) showErrorMessage(msg string) {
-	width := util.GetWindowWidth()
-	text := util.TruncateString(msg, width-9)
-
-	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
-	fmt.Fprintln(os.Stderr, errMsg)
+	tips := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprint(" ERROR ")
+	fmt.Fprintf(os.Stderr, "%s %s\n", tips, msg)
 }
 
 // drawWrongArgError 引数ミスのメッセージを表示

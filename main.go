@@ -7,12 +7,19 @@ import (
 )
 
 func main() {
+	var err error
+
 	api := api.New()
 	cfg := config.New()
 
+	// TODO: ここらへんをまとめてcmd.Init()内に移動したい
+
 	// 設定ファイルが無いなら認証
 	if !cfg.Load() {
-		cfg.Cred.Main = api.Auth()
+		cfg.Cred.Main, _, err = api.Auth()
+		if err != nil {
+			panic(err)
+		}
 		cfg.Save()
 	}
 

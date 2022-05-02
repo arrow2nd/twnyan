@@ -1,7 +1,7 @@
 package api
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/garyburd/go-oauth/oauth"
@@ -53,14 +53,13 @@ func (tw *TwitterAPI) Init(cred *oauth.Credentials) {
 }
 
 // Auth アプリケーション認証
-func (tw *TwitterAPI) Auth() *oauth.Credentials {
+func (tw *TwitterAPI) Auth() (*oauth.Credentials, string, error) {
 	authAPI := anaconda.NewTwitterApi("", "")
 
 	// 認証URL取得
 	uri, cred, err := authAPI.AuthorizationURL("oob")
 	if err != nil {
-		fmt.Println("Error: Failed to issue the authentication URL")
-		panic(err)
+		return nil, "", errors.New("Failed to issue the authentication URL")
 	}
 
 	showLogo()
@@ -70,11 +69,10 @@ func (tw *TwitterAPI) Auth() *oauth.Credentials {
 	pin := inputPinCode()
 
 	// トークン発行
-	cred, _, err = authAPI.GetCredentials(cred, pin)
+	cred, values, err := authAPI.GetCredentials(cred, pin)
 	if err != nil {
-		fmt.Println("Error: Access token could not be obtained")
-		panic(err)
+		return nil, "", errors.New("Access token could not be obtained")
 	}
 
-	return cred
+	return cred, values.Get("screen_name"), nil
 }

@@ -51,7 +51,10 @@ type Config struct {
 // New 構造体を初期化
 func New() *Config {
 	return &Config{
-		Cred: &cred{},
+		Cred: &cred{
+			Main: &oauth.Credentials{},
+			Sub:  map[string]*oauth.Credentials{},
+		},
 		Option: &option{
 			ConfigDir:  getConfigDir(),
 			Counts:     "25",
