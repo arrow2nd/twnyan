@@ -12,7 +12,7 @@ const (
 	consumerSecret = "umr6nOFzV3W0AfdQoWPxKSh2ZMEeRgHFih5xQDTlBRO3DoEq8z"
 )
 
-// TwitterAPI API構造体
+// TwitterAPI API情報
 type TwitterAPI struct {
 	API     *anaconda.TwitterApi
 	OwnUser *anaconda.User
