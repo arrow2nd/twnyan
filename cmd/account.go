@@ -48,10 +48,8 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 	accountCmd.AddCmd(&ishell.Cmd{
 		Name:    "list",
 		Aliases: []string{"ls"},
-		Func: func(c *ishell.Context) {
-			fmt.Println("run: list")
-		},
-		Help: "List sub-accounts",
+		Func:    cmd.execAccountListCmd,
+		Help:    "List sub-accounts",
 		LongHelp: createLongHelp(
 			`List sub-accounts added to twnyan.`,
 			"ls",
@@ -129,4 +127,15 @@ func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
 	cmd.cfg.Save()
 
 	cmd.showMessage("REMOVED", screenName, cmd.cfg.Color.Accent3)
+}
+
+func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
+	if len(cmd.cfg.Cred.Sub) == 0 {
+		cmd.showErrorMessage("No sub-accounts")
+		return
+	}
+
+	for _, name := range cmd.accountNameCompleter(nil) {
+		fmt.Printf("- %s\n", name)
+	}
 }
