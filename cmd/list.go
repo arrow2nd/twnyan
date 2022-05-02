@@ -9,10 +9,11 @@ import (
 
 func (cmd *Cmd) newListCmd() *ishell.Cmd {
 	return &ishell.Cmd{
-		Name:    "list",
-		Aliases: []string{"ls"},
-		Func:    cmd.execListCmd,
-		Help:    "get the list timeline",
+		Name:      "list",
+		Aliases:   []string{"ls"},
+		Completer: cmd.listCmdCompleter,
+		Func:      cmd.execListCmd,
+		Help:      "get the list timeline",
 		LongHelp: createLongHelp(
 			`Get the list timeline.
 You can use the tab key to complete the list name.
@@ -21,7 +22,6 @@ If you omit the counts, the default value in the configuration file (25 by defau
 			"list [<listname>] [counts]",
 			"list cats 50",
 		),
-		Completer: cmd.listCmdCompleter,
 	}
 }
 
@@ -35,7 +35,7 @@ func (cmd *Cmd) execListCmd(c *ishell.Context) {
 	// リスト名からリストIDを取得
 	listId, ok := cmd.api.List[name]
 	if !ok {
-		cmd.showErrorMessage("No list exists!")
+		cmd.showErrorMessage("Not found in list")
 		return
 	}
 
