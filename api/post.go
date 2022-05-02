@@ -18,7 +18,7 @@ import (
 func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
 	tweet, err := tw.API.PostTweet(text, query)
 	if err != nil {
-		return "", errors.New(tw.createAPIErrorMsg("", err))
+		return "", tw.createAPIError("", err)
 	}
 
 	return tweet.FullText, nil
@@ -30,7 +30,7 @@ func (tw *TwitterAPI) DeleteTweet(tweetIDStr string) (string, error) {
 
 	tweet, err := tw.API.DeleteTweet(tweetID, true)
 	if err != nil {
-		return "", errors.New(tw.createAPIErrorMsg("", err))
+		return "", tw.createAPIError("", err)
 	}
 
 	return tweet.FullText, nil

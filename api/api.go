@@ -29,7 +29,7 @@ func New() *TwitterAPI {
 	return &TwitterAPI{
 		API:     nil,
 		OwnUser: nil,
-		List:    map[string]int64{},
+		List:    nil,
 	}
 }
 
@@ -43,12 +43,12 @@ func (tw *TwitterAPI) Init(cred *oauth.Credentials) {
 	// ユーザー情報を取得
 	tw.OwnUser, err = tw.fetchSelfInfo()
 	if err != nil {
-		panic(tw.createAPIErrorMsg("", err))
+		panic(tw.createAPIErrorText("", err))
 	}
 
 	// リスト情報を取得
 	if err := tw.cacheListInfo(); err != nil {
-		panic(tw.createAPIErrorMsg("", err))
+		panic(tw.createAPIErrorText("", err))
 	}
 }
 

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -16,13 +17,13 @@ func CreateQuery(count string) url.Values {
 	}
 }
 
-// createUserInfoStr ユーザー情報の文字列を作成
-func (tw *TwitterAPI) createUserInfoStr(name, screenName string) string {
+// createUserInfoText ユーザー情報の文字列を作成
+func (tw *TwitterAPI) createUserInfoText(name, screenName string) string {
 	return fmt.Sprintf("%s @%s", name, screenName)
 }
 
-// createAPIErrorMsg エラーメッセージを作成
-func (tw *TwitterAPI) createAPIErrorMsg(resourceName string, err error) string {
+// createAPIErrorText APIのエラーメッセージを作成
+func (tw *TwitterAPI) createAPIErrorText(resource string, err error) string {
 	bytes := []byte(err.Error())
 
 	// エラー文字列からメッセージを抽出
@@ -34,12 +35,17 @@ func (tw *TwitterAPI) createAPIErrorMsg(resourceName string, err error) string {
 	errMsg := string(result[2])
 
 	// レート制限なら解除時刻を追加
-	if errMsg == "Rate limit exceeded" && resourceName != "" {
-		resetTimeStr := tw.fetchRateLimitResetTime(resourceName)
+	if errMsg == "Rate limit exceeded" && resource != "" {
+		resetTimeStr := tw.fetchRateLimitResetTime(resource)
 		errMsg += fmt.Sprintf(" (Reset Time : %s)", resetTimeStr)
 	}
 
 	return errMsg
+}
+
+// createAPIError APIのエラーを作成
+func (tw *TwitterAPI) createAPIError(resource string, err error) error {
+	return errors.New(tw.createAPIErrorText(resource, err))
 }
 
 // showLogo ロゴを表示
