@@ -52,6 +52,28 @@ func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 	return str, count, nil
 }
 
+// parseAccountCmdArgs アカウント系のコマンド引数をパース
+func (cmd *Cmd) parseAccountCmdArgs(args []string, allowMain bool) (string, error) {
+	// 対象のスクリーン名が指定されていない
+	if len(args) == 0 {
+		return "", errors.New("Specify the screen name of the target account")
+	}
+
+	screenName := args[0]
+
+	// メインアカウントを示す "main" が許可されているなら通す
+	if allowMain && screenName == "main" {
+		return "main", nil
+	}
+
+	// アカウントの存在チェック
+	if _, ok := cmd.cfg.Cred.Sub[screenName]; !ok {
+		return "", errors.New("Account does not exist")
+	}
+
+	return screenName, nil
+}
+
 // getCountFromCmdArg 引数からツイート取得件数を取得
 func (cmd *Cmd) getCountFromCmdArg(args []string) string {
 	// 引数が無い、または数値以外ならデフォルト値を返す

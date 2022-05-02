@@ -59,12 +59,11 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 	})
 
 	accountCmd.AddCmd(&ishell.Cmd{
-		Name:    "switch",
-		Aliases: []string{"sw"},
-		Func: func(c *ishell.Context) {
-			fmt.Println("run: switch")
-		},
-		Help: "switch the account to use",
+		Name:      "switch",
+		Aliases:   []string{"sw"},
+		Completer: cmd.switchAccountNameCompleter,
+		Func:      cmd.execAccountSwitchCmd,
+		Help:      "switch the account to use",
 		LongHelp: createLongHelp(
 			`Switch the account to use.`,
 			"sw",
@@ -77,6 +76,10 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) accountNameCompleter([]string) []string {
+	if len(cmd.cfg.Cred.Sub) == 0 {
+		return nil
+	}
+
 	items := []string{}
 
 	for name := range cmd.cfg.Cred.Sub {
@@ -84,6 +87,14 @@ func (cmd *Cmd) accountNameCompleter([]string) []string {
 	}
 
 	return items
+}
+
+func (cmd *Cmd) switchAccountNameCompleter([]string) []string {
+	if items := cmd.accountNameCompleter(nil); items != nil {
+		return append(items, "main")
+	}
+
+	return nil
 }
 
 func (cmd *Cmd) execAccountAddCmd(c *ishell.Context) {
@@ -104,16 +115,9 @@ func (cmd *Cmd) execAccountAddCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
-	if len(c.Args) == 0 {
-		cmd.showWrongArgMessage("account " + c.Cmd.Name)
-		return
-	}
-
-	// アカウントの存在を確認
-	screenName := c.Args[0]
-	if _, ok := cmd.cfg.Cred.Sub[screenName]; !ok {
-		cmd.showErrorMessage("No account found")
-		return
+	screenName, err := cmd.parseAccountCmdArgs(c.Args, false)
+	if err != nil {
+		cmd.showErrorMessage(err.Error())
 	}
 
 	// 実行確認
@@ -138,4 +142,28 @@ func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
 	for _, name := range cmd.accountNameCompleter(nil) {
 		fmt.Printf("- %s\n", name)
 	}
+}
+
+func (cmd *Cmd) execAccountSwitchCmd(c *ishell.Context) {
+	screenName, err := cmd.parseAccountCmdArgs(c.Args, true)
+	if err != nil {
+		cmd.showErrorMessage(err.Error())
+		return
+	}
+
+	prevScreenName := cmd.api.OwnUser.ScreenName
+
+	// アカウントを切り替え
+	switch screenName {
+	case "main":
+		cmd.api.Init(cmd.cfg.Cred.Main)
+	default:
+		cmd.api.Init(cmd.cfg.Cred.Sub[screenName])
+	}
+
+	// デフォルトプロンプトを更新
+	cmd.setDefaultPrompt()
+
+	msg := fmt.Sprintf("%s -> %s\n", prevScreenName, cmd.api.OwnUser.ScreenName)
+	cmd.showMessage("CHANGED", msg, cmd.cfg.Color.Accent3)
 }
