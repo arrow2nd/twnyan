@@ -4,7 +4,7 @@ import (
 	"net/url"
 
 	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/view"
+	"github.com/arrow2nd/twnyan/twitter"
 )
 
 func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
@@ -72,7 +72,7 @@ func (cmd *Cmd) execReplyMultiCmd(c *ishell.Context) {
 
 func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 	// リプライ先のツイートIDを取得
-	tweetId, err := cmd.view.GetDataFromTweetNum(tweetNumStr, view.TweetId)
+	tweetId, err := cmd.twitter.GetDataFromTweetNum(tweetNumStr, twitter.TweetId)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -90,11 +90,11 @@ func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 	}
 
 	// リプライを投稿
-	tweetText, err := cmd.api.PostTweet(query, status)
+	tweetText, err := cmd.twitter.PostTweet(query, status)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.showMessage("REPLYED", tweetText, cmd.cfg.Color.Reply)
+	cmd.showMessage("REPLYED", tweetText, cmd.config.Color.Reply)
 }

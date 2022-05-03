@@ -8,14 +8,14 @@ import (
 	"os"
 	"strings"
 
+	"github.com/arrow2nd/twnyan/twitter"
 	"github.com/arrow2nd/twnyan/util"
-	"github.com/arrow2nd/twnyan/view"
 	"github.com/gookit/color"
 )
 
 // setDefaultPrompt デフォルトのプロンプトを設定
 func (cmd *Cmd) setDefaultPrompt() {
-	prompt := fmt.Sprintf("@%s : ", cmd.api.OwnUser.ScreenName)
+	prompt := fmt.Sprintf("@%s : ", cmd.twitter.OwnUser.ScreenName)
 	cmd.shell.SetPrompt(prompt)
 }
 
@@ -43,7 +43,7 @@ func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 		return "", "", errors.New("no arguments")
 	}
 
-	str, count := args[0], cmd.cfg.Option.Counts
+	str, count := args[0], cmd.config.Option.Counts
 
 	// 2つ目の引数があればcountに代入
 	if argNum >= 2 {
@@ -68,7 +68,7 @@ func (cmd *Cmd) parseAccountCmdArgs(args []string, allowMain bool) (string, erro
 	}
 
 	// アカウントの存在チェック
-	if _, ok := cmd.cfg.Cred.Sub[screenName]; !ok {
+	if _, ok := cmd.config.Cred.Sub[screenName]; !ok {
 		return "", errors.New("Account does not exist")
 	}
 
@@ -79,7 +79,7 @@ func (cmd *Cmd) parseAccountCmdArgs(args []string, allowMain bool) (string, erro
 func (cmd *Cmd) getCountFromCmdArg(args []string) string {
 	// 引数が無い、または数値以外ならデフォルト値を返す
 	if len(args) <= 0 || !util.IsThreeDigitsNumber(args[0]) {
-		return cmd.cfg.Option.Counts
+		return cmd.config.Option.Counts
 	}
 
 	return args[0]
@@ -99,7 +99,7 @@ func (cmd *Cmd) inputMultiLine() string {
 
 	// 文字列内に:exitがあればキャンセル
 	if strings.Contains(input, ":exit") {
-		cmd.showMessage("CANCELED", "Input interrupted", cmd.cfg.Color.Accent2)
+		cmd.showMessage("CANCELED", "Input interrupted", cmd.config.Color.Accent2)
 		return ""
 	}
 
@@ -123,7 +123,7 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 
-	mediaIDs, err := cmd.api.UploadImage(images)
+	mediaIDs, err := cmd.twitter.UploadImage(images)
 	cmd.shell.ProgressBar().Stop()
 	if err != nil {
 		return err
@@ -142,7 +142,7 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 
 	// 引数の数だけ処理
 	for _, v := range args {
-		tweetId, err := cmd.view.GetDataFromTweetNum(v, view.TweetId)
+		tweetId, err := cmd.twitter.GetDataFromTweetNum(v, twitter.TweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -171,7 +171,7 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsThreeDigitsNumber(args[0]) {
-		screenName, err = cmd.view.GetDataFromTweetNum(args[0], view.ScreenName)
+		screenName, err = cmd.twitter.GetDataFromTweetNum(args[0], twitter.ScreenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -188,6 +188,11 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 	cmd.showMessage(actionName, userName, bgColor)
 }
 
+// showTweets 登録されたツイートを一覧表示
+func (cmd *Cmd) showTweets() {
+	cmd.view.ShowTweets(cmd.twitter.Tweets, true)
+}
+
 // showMessage メッセージを表示
 func (cmd *Cmd) showMessage(tips, text, bgColor string) {
 	width := util.GetWindowWidth()
@@ -199,13 +204,13 @@ func (cmd *Cmd) showMessage(tips, text, bgColor string) {
 	// 画面内に収まるよう丸める
 	text = util.TruncateString(text, width-len(tips)-3)
 
-	color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Printf(" %s ", tips)
+	color.HEXStyle(cmd.config.Color.BoxForground, bgColor).Printf(" %s ", tips)
 	fmt.Printf(" %s\n", text)
 }
 
 // showErrorMessage エラーメッセージを表示
 func (cmd *Cmd) showErrorMessage(msg string) {
-	tips := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprint(" ERROR ")
+	tips := color.HEXStyle(cmd.config.Color.BoxForground, cmd.config.Color.Error).Sprint(" ERROR ")
 	fmt.Fprintf(os.Stderr, "%s %s\n", tips, msg)
 }
 

@@ -76,13 +76,13 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) accountNameCompleter([]string) []string {
-	if len(cmd.cfg.Cred.Sub) == 0 {
+	if len(cmd.config.Cred.Sub) == 0 {
 		return nil
 	}
 
 	items := []string{}
 
-	for name := range cmd.cfg.Cred.Sub {
+	for name := range cmd.config.Cred.Sub {
 		items = append(items, name)
 	}
 
@@ -101,17 +101,17 @@ func (cmd *Cmd) execAccountAddCmd(c *ishell.Context) {
 	c.ClearScreen()
 
 	// Auth認証
-	newCred, screenName, err := cmd.api.Auth()
+	newCred, screenName, err := cmd.twitter.Auth()
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
 	// 追加して保存
-	cmd.cfg.Cred.Sub[screenName] = newCred
-	cmd.cfg.Save()
+	cmd.config.Cred.Sub[screenName] = newCred
+	cmd.config.Save()
 
-	cmd.showMessage("ADDED", screenName, cmd.cfg.Color.Accent3)
+	cmd.showMessage("ADDED", screenName, cmd.config.Color.Accent3)
 }
 
 func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
@@ -123,18 +123,18 @@ func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
 	// 実行確認
 	msg := fmt.Sprintf("Delete account (%s) from twnyan?", screenName)
 	if ok := cmd.showExecutionConf(msg); !ok {
-		cmd.showMessage("CANCELED", "Interrupted", cmd.cfg.Color.Accent2)
+		cmd.showMessage("CANCELED", "Interrupted", cmd.config.Color.Accent2)
 		return
 	}
 
-	delete(cmd.cfg.Cred.Sub, screenName)
-	cmd.cfg.Save()
+	delete(cmd.config.Cred.Sub, screenName)
+	cmd.config.Save()
 
-	cmd.showMessage("REMOVED", screenName, cmd.cfg.Color.Accent3)
+	cmd.showMessage("REMOVED", screenName, cmd.config.Color.Accent3)
 }
 
 func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
-	if len(cmd.cfg.Cred.Sub) == 0 {
+	if len(cmd.config.Cred.Sub) == 0 {
 		cmd.showErrorMessage("No sub-accounts")
 		return
 	}
@@ -151,19 +151,19 @@ func (cmd *Cmd) execAccountSwitchCmd(c *ishell.Context) {
 		return
 	}
 
-	prevScreenName := cmd.api.OwnUser.ScreenName
+	prevScreenName := cmd.twitter.OwnUser.ScreenName
 
 	// アカウントを切り替え
 	switch screenName {
 	case "main":
-		cmd.api.Init(cmd.cfg.Cred.Main)
+		cmd.twitter.Init(cmd.config.Cred.Main)
 	default:
-		cmd.api.Init(cmd.cfg.Cred.Sub[screenName])
+		cmd.twitter.Init(cmd.config.Cred.Sub[screenName])
 	}
 
 	// デフォルトプロンプトを更新
 	cmd.setDefaultPrompt()
 
-	msg := fmt.Sprintf("%s -> %s\n", prevScreenName, cmd.api.OwnUser.ScreenName)
-	cmd.showMessage("CHANGED", msg, cmd.cfg.Color.Accent3)
+	msg := fmt.Sprintf("%s -> %s\n", prevScreenName, cmd.twitter.OwnUser.ScreenName)
+	cmd.showMessage("SWITCHED", msg, cmd.config.Color.Accent3)
 }

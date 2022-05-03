@@ -22,22 +22,25 @@ func (v *View) ShowUserInfo(user *anaconda.User, relationships []string) {
 	fmt.Print(v.createSeparatorString(false))
 
 	// 各種カウント
-	tweetsCount := color.HEX(v.cfg.Color.Accent1).Sprintf("%d Tweets", user.StatusesCount)
-	followingCount := color.HEX(v.cfg.Color.Accent2).Sprintf("%d Following", user.FriendsCount)
-	followersCount := color.HEX(v.cfg.Color.Accent3).Sprintf("%d Followers", user.FollowersCount)
+	tweetsCount := color.HEX(v.config.Color.Accent1).Sprintf("%d Tweets", user.StatusesCount)
+	followingCount := color.HEX(v.config.Color.Accent2).Sprintf("%d Following", user.FriendsCount)
+	followersCount := color.HEX(v.config.Color.Accent3).Sprintf("%d Followers", user.FollowersCount)
 
 	fmt.Printf("%s %s %s\n", tweetsCount, followingCount, followersCount)
 
+	// BIO
 	bio := runewidth.Wrap(html.UnescapeString(user.Description), width-5)
 	if bio != "" {
 		fmt.Printf("📄 : %s\n", util.AllReplace(bio, "\n", "\n     "))
 	}
 
+	// 場所
 	locate := html.UnescapeString(user.Location)
 	if locate != "" {
 		fmt.Printf("📍 : %s\n", locate)
 	}
 
+	// Webサイト
 	url := user.URL
 	if url != "" {
 		fmt.Printf("🔗 : %s\n", url)
@@ -46,16 +49,17 @@ func (v *View) ShowUserInfo(user *anaconda.User, relationships []string) {
 	fmt.Print("\n")
 }
 
-// createUserInfoString ユーザー基本情報の文字列を作成
+// createUserInfoString ユーザ基本情報の文字列を作成
 func (v *View) createUserInfoString(u *anaconda.User) string {
-	halfWidth := util.GetWindowWidth() / 2
+	screenName := color.HEX(v.config.Color.ScreenName).Sprintf("@%s", u.ScreenName)
 
-	screenName := color.HEX(v.cfg.Color.ScreenName).Sprintf("@%s", u.ScreenName)
-	userName := color.HEX(v.cfg.Color.UserName).Sprint(
-		util.TruncateString(u.Name, halfWidth),
+	// NOTE: ユーザ名が長すぎると右側のスペースがなくなるので 1/3 に制限
+	width := util.GetWindowWidth() / 3
+	userName := color.HEX(v.config.Color.UserName).Sprint(
+		util.TruncateString(u.Name, width),
 	)
 
-	// アカウントタイプ
+	// アカウントの種類
 	accountType := ""
 	if u.Verified {
 		accountType += " ✅"
@@ -74,13 +78,16 @@ func (v *View) createRelationshipInfoString(relationships []string) string {
 	for _, str := range relationships {
 		switch str {
 		case "followed_by":
-			relationshipInfo += color.HEX(v.cfg.Color.FollowedBy).Sprint("Followed by ")
+			relationshipInfo += color.HEX(v.config.Color.FollowedBy).Sprint("Followed by ")
+			continue
 		case "following":
-			relationshipInfo += color.HEX(v.cfg.Color.Following).Sprint("Following ")
+			relationshipInfo += color.HEX(v.config.Color.Following).Sprint("Following ")
+			continue
 		case "blocking":
-			relationshipInfo += color.HEX(v.cfg.Color.Block).Sprint("Blocking ")
+			relationshipInfo += color.HEX(v.config.Color.Block).Sprint("Blocking ")
+			continue
 		case "muting":
-			relationshipInfo += color.HEX(v.cfg.Color.Mute).Sprint("Muting ")
+			relationshipInfo += color.HEX(v.config.Color.Mute).Sprint("Muting ")
 		}
 	}
 

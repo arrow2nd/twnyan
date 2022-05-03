@@ -3,26 +3,22 @@ package view
 import (
 	"fmt"
 	"strings"
-	"sync"
 	"time"
 
-	"github.com/ChimeraCoder/anaconda"
 	"github.com/arrow2nd/twnyan/config"
 	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
 )
 
+// View 表示処理
 type View struct {
-	tweets []anaconda.Tweet
-	cfg    *config.Config
-	mu     sync.Mutex
+	config *config.Config
 }
 
-// New 構造体を初期化
+// New 生成
 func New(c *config.Config) *View {
 	return &View{
-		tweets: []anaconda.Tweet{},
-		cfg:    c,
+		config: c,
 	}
 }
 
@@ -30,14 +26,14 @@ func New(c *config.Config) *View {
 func (v *View) createCreatedAtString(postTime time.Time) string {
 	format := ""
 
-	// 今日の時刻なら、日付を省略する
+	// 今日の日付なら時刻のみを表示
 	if util.IsSameDate(postTime) {
-		format = v.cfg.Option.TimeFormat
+		format = v.config.Option.TimeFormat
 	} else {
-		format = fmt.Sprintf("%s %s", v.cfg.Option.DateFormat, v.cfg.Option.TimeFormat)
+		format = fmt.Sprintf("%s %s", v.config.Option.DateFormat, v.config.Option.TimeFormat)
 	}
 
-	return color.HEX(v.cfg.Color.Accent2).Sprint(
+	return color.HEX(v.config.Color.Accent2).Sprint(
 		postTime.Local().Format(format),
 	)
 }
@@ -49,7 +45,7 @@ func (v *View) createSeparatorString(hasInsertSpace bool) string {
 		width -= 2
 	}
 
-	sep := color.HEX(v.cfg.Color.Separator).Sprintf("%s\n", strings.Repeat("-", width))
+	sep := color.HEX(v.config.Color.Separator).Sprintf("%s\n", strings.Repeat("-", width))
 	if hasInsertSpace {
 		return " " + sep
 	}

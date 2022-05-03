@@ -10,7 +10,7 @@ func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
 		Name:    "like",
 		Aliases: []string{"lk", "fv"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("LIKED", c.Cmd.Name, cmd.cfg.Color.Favorite, c.Args, cmd.api.Favorite)
+			cmd.actionOnTweet("LIKED", c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.twitter.Favorite)
 		},
 		Help: "like a tweet",
 		LongHelp: createLongHelp(
@@ -27,7 +27,7 @@ If there is more than one, please separate them with a space.`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("UN-LIKED", "like "+c.Cmd.Name, cmd.cfg.Color.Favorite, c.Args, cmd.api.Unfavorite)
+			cmd.actionOnTweet("UN-LIKED", "like "+c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.twitter.Unfavorite)
 		},
 		Help: "un-like a tweet",
 		LongHelp: createLongHelp(

@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/view"
+	"github.com/arrow2nd/twnyan/twitter"
 	"golang.org/x/term"
 )
 
@@ -93,19 +93,19 @@ func (cmd *Cmd) execTweetRemoveCmd(c *ishell.Context) {
 
 	// 引数の数だけ削除処理
 	for _, tweetNumStr := range c.Args {
-		tweetId, err := cmd.view.GetDataFromTweetNum(tweetNumStr, view.TweetId)
+		tweetId, err := cmd.twitter.GetDataFromTweetNum(tweetNumStr, twitter.TweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		tweetText, err := cmd.api.DeleteTweet(tweetId)
+		tweetText, err := cmd.twitter.DeleteTweet(tweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		cmd.showMessage("DELETED", tweetText, cmd.cfg.Color.Accent3)
+		cmd.showMessage("DELETED", tweetText, cmd.config.Color.Accent3)
 	}
 }
 
@@ -119,11 +119,11 @@ func (cmd *Cmd) tweet(text string, images []string) {
 	}
 
 	// ツイートを投稿
-	tweetText, err := cmd.api.PostTweet(query, text)
+	tweetText, err := cmd.twitter.PostTweet(query, text)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.showMessage("TWEETED", tweetText, cmd.cfg.Color.Accent3)
+	cmd.showMessage("TWEETED", tweetText, cmd.config.Color.Accent3)
 }

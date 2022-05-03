@@ -28,12 +28,12 @@ func (cmd *Cmd) execSearchCmd(c *ishell.Context) {
 	}
 
 	// 検索結果を取得
-	tweets, err := cmd.api.FetchSearchResult(keyword, count)
+	tweets, err := cmd.twitter.FetchSearchResult(keyword, count)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.view.RegisterTweets(tweets)
-	cmd.view.ShowRegisteredTweets()
+	cmd.twitter.RegisterTweets(tweets)
+	cmd.showTweets()
 }

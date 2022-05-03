@@ -3,31 +3,30 @@ package cmd
 import (
 	"os"
 
-	"github.com/ChimeraCoder/anaconda"
 	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/api"
 	"github.com/arrow2nd/twnyan/config"
+	"github.com/arrow2nd/twnyan/twitter"
 	"github.com/arrow2nd/twnyan/view"
 )
 
+// Cmd コマンド管理
 type Cmd struct {
-	shell *ishell.Shell
-	cfg   *config.Config
-	api   *api.Twitter
-	view  *view.View
+	shell   *ishell.Shell
+	config  *config.Config
+	twitter *twitter.Twitter
+	view    *view.View
 }
 
-type AccumulateTweets map[int64]anaconda.Tweet
-
 // New 作成
-func New(c *config.Config, a *api.Twitter) *Cmd {
+func New(c *config.Config, t *twitter.Twitter) *Cmd {
 	nc := &Cmd{
-		shell: ishell.New(),
-		cfg:   c,
-		api:   a,
-		view:  view.New(c),
+		shell:   ishell.New(),
+		config:  c,
+		twitter: t,
+		view:    view.New(c),
 	}
 
+	// TODO: 後でAuth処理と統合
 	nc.init()
 
 	return nc

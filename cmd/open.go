@@ -28,12 +28,12 @@ func (cmd *Cmd) execOpenCmd(c *ishell.Context) {
 	}
 
 	// 該当ツイートのURLを取得
-	url, err := cmd.view.GetTweetURL(c.Args[0])
+	url, err := cmd.twitter.GetTweetURL(c.Args[0])
 	if err != nil {
 		color.Error.Prompt(err.Error())
 		return
 	}
 
-	cmd.showMessage("OPENED", url, cmd.cfg.Color.Accent3)
+	cmd.showMessage("OPENED", url, cmd.config.Color.Accent3)
 	browser.OpenURL(url)
 }

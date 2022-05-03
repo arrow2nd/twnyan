@@ -10,7 +10,7 @@ func (cmd *Cmd) newFollowCmd() *ishell.Cmd {
 		Name:    "follow",
 		Aliases: []string{"fw"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnUser("FOLLOWED", c.Cmd.Name, cmd.cfg.Color.Following, c.Args, cmd.api.Follow)
+			cmd.actionOnUser("FOLLOWED", c.Cmd.Name, cmd.config.Color.Following, c.Args, cmd.twitter.Follow)
 		},
 		Help: "follow a user",
 		LongHelp: createLongHelp(
@@ -27,7 +27,7 @@ If you specify a tweet-number, the person posting the tweet will be selected.`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnUser("UNFOLLOWED", "follow "+c.Cmd.Name, cmd.cfg.Color.Following, c.Args, cmd.api.Unfollow)
+			cmd.actionOnUser("UNFOLLOWED", "follow "+c.Cmd.Name, cmd.config.Color.Following, c.Args, cmd.twitter.Unfollow)
 		},
 		Help: "unfollow a user",
 		LongHelp: createLongHelp(

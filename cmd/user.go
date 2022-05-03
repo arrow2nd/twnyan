@@ -2,9 +2,8 @@ package cmd
 
 import (
 	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/api"
+	"github.com/arrow2nd/twnyan/twitter"
 	"github.com/arrow2nd/twnyan/util"
-	"github.com/arrow2nd/twnyan/view"
 )
 
 func (cmd *Cmd) newUserCmd() *ishell.Cmd {
@@ -52,7 +51,7 @@ func (cmd *Cmd) execUserCmd(c *ishell.Context) {
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsThreeDigitsNumber(screenName) {
-		screenName, err = cmd.view.GetDataFromTweetNum(screenName, view.ScreenName)
+		screenName, err = cmd.twitter.GetDataFromTweetNum(screenName, twitter.ScreenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -64,37 +63,37 @@ func (cmd *Cmd) execUserCmd(c *ishell.Context) {
 
 // showUserTimeline ユーザータイムラインを表示
 func (cmd *Cmd) showUserTimeline(screenName, count string) {
-	query := api.CreateQuery(count)
+	query := twitter.CreateQuery(count)
 	query.Add("screen_name", screenName)
 
 	// ユーザーのツイートを取得
-	tweets, err := cmd.api.FetchTimelineTweets(api.User, query)
+	tweets, err := cmd.twitter.FetchTimelineTweets(twitter.User, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	user := cmd.api.OwnUser
+	user := cmd.twitter.OwnUser
 	relationships := []string{}
 
 	if screenName != "" {
 		// ユーザー情報を取得
-		user, err = cmd.api.FetchUserInfo(screenName)
+		user, err = cmd.twitter.FetchUserInfo(screenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
 		// ユーザーとの関係を取得
-		relationships, err = cmd.api.FetchRelationships(user.IdStr)
+		relationships, err = cmd.twitter.FetchRelationships(user.IdStr)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 	}
 
-	cmd.view.RegisterTweets(tweets)
+	cmd.twitter.RegisterTweets(tweets)
+	cmd.showTweets()
 
-	cmd.view.ShowRegisteredTweets()
 	cmd.view.ShowUserInfo(user, relationships)
 }

@@ -10,7 +10,7 @@ func (cmd *Cmd) newMuteCmd() *ishell.Cmd {
 		Name:    "mute",
 		Aliases: []string{"mu"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnUser("MUTED", c.Cmd.Name, cmd.cfg.Color.Mute, c.Args, cmd.api.Mute)
+			cmd.actionOnUser("MUTED", c.Cmd.Name, cmd.config.Color.Mute, c.Args, cmd.twitter.Mute)
 		},
 		Help: "mute a user",
 		LongHelp: createLongHelp(
@@ -27,7 +27,7 @@ If you specify a tweet-number, the person posting the tweet will be selected.`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnUser("UNMUTED", "mute "+c.Cmd.Name, cmd.cfg.Color.Mute, c.Args, cmd.api.Unmute)
+			cmd.actionOnUser("UNMUTED", "mute "+c.Cmd.Name, cmd.config.Color.Mute, c.Args, cmd.twitter.Unmute)
 		},
 		Help: "unmute a user",
 		LongHelp: createLongHelp(

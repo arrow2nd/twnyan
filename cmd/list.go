@@ -33,34 +33,33 @@ func (cmd *Cmd) execListCmd(c *ishell.Context) {
 	}
 
 	// リスト名からリストIDを取得
-	listId, ok := cmd.api.List[name]
+	listId, ok := cmd.twitter.List[name]
 	if !ok {
 		cmd.showErrorMessage("Not found in list")
 		return
 	}
 
 	// リストのツイートを取得
-	tweets, err := cmd.api.FetchListTweets(listId, counts)
+	tweets, err := cmd.twitter.FetchListTweets(listId, counts)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// 登録して表示
-	cmd.view.RegisterTweets(tweets)
-	cmd.view.ShowRegisteredTweets()
+	cmd.twitter.RegisterTweets(tweets)
+	cmd.showTweets()
 }
 
 func (cmd *Cmd) listCmdCompleter([]string) []string {
 	// リストが無いなら処理しない
-	if len(cmd.api.List) == 0 {
+	if len(cmd.twitter.List) == 0 {
 		return nil
 	}
 
 	// 入力補完用のスライスを作成
 	items := []string{}
 
-	for name := range cmd.api.List {
+	for name := range cmd.twitter.List {
 		// リスト名が空白を含んでいるならダブルクオートで囲む
 		if util.MatchesRegexp("\\s", name) {
 			name = fmt.Sprintf("\"%s\"", name)

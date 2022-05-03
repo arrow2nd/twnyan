@@ -10,7 +10,7 @@ func (cmd *Cmd) newBlockCmd() *ishell.Cmd {
 		Name:    "block",
 		Aliases: []string{"bk"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnUser("BLOCKED", c.Cmd.Name, cmd.cfg.Color.Block, c.Args, cmd.api.Block)
+			cmd.actionOnUser("BLOCKED", c.Cmd.Name, cmd.config.Color.Block, c.Args, cmd.twitter.Block)
 		},
 		Help: "block a user",
 		LongHelp: createLongHelp(
@@ -27,7 +27,7 @@ If you specify a tweet-number, the person posting the tweet will be selected.`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnUser("UNBLOCKED", "block "+c.Cmd.Name, cmd.cfg.Color.Block, c.Args, cmd.api.Unblock)
+			cmd.actionOnUser("UNBLOCKED", "block "+c.Cmd.Name, cmd.config.Color.Block, c.Args, cmd.twitter.Unblock)
 		},
 		Help: "unblock a user",
 		LongHelp: createLongHelp(

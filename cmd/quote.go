@@ -73,7 +73,7 @@ func (cmd *Cmd) execQuote(tweetNumStr, text string, images []string) {
 	query := url.Values{}
 
 	// 引用するツイートのURLを取得
-	tweetUrl, err := cmd.view.GetTweetURL(tweetNumStr)
+	tweetUrl, err := cmd.twitter.GetTweetURL(tweetNumStr)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -87,11 +87,11 @@ func (cmd *Cmd) execQuote(tweetNumStr, text string, images []string) {
 
 	// URLを追加してツイート
 	text += " " + tweetUrl
-	tweetText, err := cmd.api.PostTweet(query, text)
+	tweetText, err := cmd.twitter.PostTweet(query, text)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.showMessage("QUOTED", tweetText, cmd.cfg.Color.Retweet)
+	cmd.showMessage("QUOTED", tweetText, cmd.config.Color.Retweet)
 }

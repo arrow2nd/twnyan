@@ -1,4 +1,4 @@
-package api
+package twitter
 
 import (
 	"errors"

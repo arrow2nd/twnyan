@@ -1,7 +1,8 @@
-package api
+package twitter
 
 import (
 	"errors"
+	"sync"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/garyburd/go-oauth/oauth"
@@ -12,11 +13,17 @@ const (
 	consumerSecret = "umr6nOFzV3W0AfdQoWPxKSh2ZMEeRgHFih5xQDTlBRO3DoEq8z"
 )
 
-// Twitter API
+// Twitter APIと付随するデータの管理
 type Twitter struct {
-	API     *anaconda.TwitterApi
+	// API TwitterAPI
+	API *anaconda.TwitterApi
+	// OwnUser ユーザの情報
 	OwnUser *anaconda.User
-	List    map[string]int64
+	// Tweets 操作対象のツイート
+	Tweets []anaconda.Tweet
+	// List リスト情報
+	List map[string]int64
+	mu   sync.Mutex
 }
 
 func init() {
@@ -29,7 +36,9 @@ func New() *Twitter {
 	return &Twitter{
 		API:     nil,
 		OwnUser: nil,
+		Tweets:  []anaconda.Tweet{},
 		List:    nil,
+		mu:      sync.Mutex{},
 	}
 }
 

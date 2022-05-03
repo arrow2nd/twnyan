@@ -10,7 +10,7 @@ func (cmd *Cmd) newRetweetCmd() *ishell.Cmd {
 		Name:    "retweet",
 		Aliases: []string{"rt"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("RETWEETED", c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.Retweet)
+			cmd.actionOnTweet("RETWEETED", c.Cmd.Name, cmd.config.Color.Retweet, c.Args, cmd.twitter.Retweet)
 		},
 		Help: "retweet a tweet",
 		LongHelp: createLongHelp(
@@ -27,7 +27,7 @@ If there is more than one, please separate them with a space.`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("UN-RETWEETED", "retweet "+c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.UnRetweet)
+			cmd.actionOnTweet("UN-RETWEETED", "retweet "+c.Cmd.Name, cmd.config.Color.Retweet, c.Args, cmd.twitter.UnRetweet)
 		},
 		Help: "un-retweet a tweet",
 		LongHelp: createLongHelp(

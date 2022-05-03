@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/api"
+	"github.com/arrow2nd/twnyan/twitter"
 )
 
 func (cmd *Cmd) newMentionCmd() *ishell.Cmd {
@@ -23,15 +23,15 @@ If you omit the counts, the default value in the configuration file (25 by defau
 
 func (cmd *Cmd) execMentionCmd(c *ishell.Context) {
 	count := cmd.getCountFromCmdArg(c.Args)
-	query := api.CreateQuery(count)
+	query := twitter.CreateQuery(count)
 
 	// メンションタイムラインを取得
-	tweets, err := cmd.api.FetchTimelineTweets(api.Mention, query)
+	tweets, err := cmd.twitter.FetchTimelineTweets(twitter.Mention, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.view.RegisterTweets(tweets)
-	cmd.view.ShowRegisteredTweets()
+	cmd.twitter.RegisterTweets(tweets)
+	cmd.showTweets()
 }
