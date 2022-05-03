@@ -12,7 +12,7 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Aliases: []string{"acc"},
 		Help:    "manage and switch accounts",
 		LongHelp: createLongHelp(
-			`Manage and switch accounts.`,
+			"Manage and switch accounts.",
 			"acc",
 			"",
 			"",
@@ -24,7 +24,7 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Func: cmd.execAccountAddCmd,
 		Help: "add a sub-account",
 		LongHelp: createLongHelp(
-			`Add a sub-account to twnyan.`,
+			"Add a sub-account to twnyan.",
 			"",
 			"account add",
 			"",
@@ -36,9 +36,9 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Aliases:   []string{"rm"},
 		Completer: cmd.accountNameCompleter,
 		Func:      cmd.execAccountRemoveCmd,
-		Help:      "remove sub-accounts",
+		Help:      "remove sub-account",
 		LongHelp: createLongHelp(
-			`Remove sub-accounts from twnyan.`,
+			"Remove sub-account from twnyan.",
 			"rm",
 			"account remove",
 			"",
@@ -51,7 +51,7 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Func:    cmd.execAccountListCmd,
 		Help:    "List sub-accounts",
 		LongHelp: createLongHelp(
-			`List sub-accounts added to twnyan.`,
+			"List sub-accounts added to twnyan.",
 			"ls",
 			"account list",
 			"",
@@ -65,7 +65,7 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Func:      cmd.execAccountSwitchCmd,
 		Help:      "switch the account to use",
 		LongHelp: createLongHelp(
-			`Switch the account to use.`,
+			"Switch the account to use.",
 			"sw",
 			"account switch",
 			"",
@@ -122,7 +122,7 @@ func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
 	}
 
 	// 実行確認
-	msg := fmt.Sprintf("Delete account (%s) from twnyan?", screenName)
+	msg := fmt.Sprintf("Remove account (%s) from twnyan?", screenName)
 	if ok := cmd.showExecutionConf(msg); !ok {
 		cmd.showMessage("CANCELED", "Interrupted", cmd.config.Color.Accent2)
 		return

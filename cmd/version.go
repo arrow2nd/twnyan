@@ -13,6 +13,6 @@ func (c *Cmd) newVersionCmd() *ishell.Cmd {
 		Func: func(c *ishell.Context) {
 			c.Printf("🐈 twnyan ver.%s\n", version)
 		},
-		Help: "show version",
+		Help: "display version",
 	}
 }

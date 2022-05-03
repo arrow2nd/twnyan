@@ -27,9 +27,9 @@ If there is more than one, please separate them with a space.`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("UN-RETWEETED", "retweet "+c.Cmd.Name, cmd.config.Color.Retweet, c.Args, cmd.twitter.UnRetweet)
+			cmd.actionOnTweet("UNRETWEETED", "retweet "+c.Cmd.Name, cmd.config.Color.Retweet, c.Args, cmd.twitter.UnRetweet)
 		},
-		Help: "un-retweet a tweet",
+		Help: "unretweet a tweet",
 		LongHelp: createLongHelp(
 			`UnRetweet a tweet.
 If there is more than one, please separate them with a space.`,

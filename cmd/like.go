@@ -27,9 +27,9 @@ If there is more than one, please separate them with a space.`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("UN-LIKED", "like "+c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.twitter.Unfavorite)
+			cmd.actionOnTweet("UNLIKED", "like "+c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.twitter.Unfavorite)
 		},
-		Help: "un-like a tweet",
+		Help: "unlike a tweet",
 		LongHelp: createLongHelp(
 			`UnLike a tweet.
 If there is more than one, please separate them with a space.`,
