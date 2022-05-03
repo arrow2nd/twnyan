@@ -91,7 +91,7 @@ func (cmd *Cmd) inputMultiLine() string {
 	cmd.shell.SetPrompt("... ")
 	defer cmd.setDefaultPrompt()
 
-	fmt.Println("End typing with a semicolon. (If you want to cancel, input ':exit')")
+	cmd.shell.Println("End typing with a semicolon. (If you want to cancel, input ':exit')")
 
 	input := cmd.shell.ReadMultiLinesFunc(func(f string) bool {
 		return f != ":exit" && !strings.HasSuffix(f, ";")
@@ -119,7 +119,7 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 	}
 
 	// プログレスバー開始
-	fmt.Print("Uploading... 🐾 ")
+	cmd.shell.Print("Uploading... 🐾 ")
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 

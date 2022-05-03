@@ -136,7 +136,7 @@ func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
 		if name == "main" {
 			name = fmt.Sprintf("%s (main)", cmd.twitter.OwnUser.ScreenName)
 		}
-		fmt.Printf("- %s\n", name)
+		c.Printf("- %s\n", name)
 	}
 }
 

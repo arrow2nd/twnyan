@@ -73,7 +73,7 @@ func (cmd *Cmd) Run() {
 
 	// ヘルプの表示
 	if ok, _ := cmd.flagSet.GetBool("help"); ok {
-		fmt.Print(cmd.shell.HelpText())
+		cmd.shell.Print(cmd.shell.HelpText())
 		cmd.flagSet.Usage()
 		return
 	}
@@ -98,7 +98,7 @@ func (cmd *Cmd) registerFlags() {
 
 	// フラグのヘルプ表示
 	cmd.flagSet.Usage = func() {
-		fmt.Println("Flags:")
+		cmd.shell.Println("Flags:")
 		cmd.flagSet.PrintDefaults()
 	}
 }
