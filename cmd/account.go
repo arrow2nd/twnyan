@@ -118,6 +118,7 @@ func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
 	screenName, err := cmd.parseAccountCmdArgs(c.Args, false)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
+		return
 	}
 
 	// 実行確認
