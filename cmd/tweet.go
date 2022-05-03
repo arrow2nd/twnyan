@@ -6,7 +6,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 	"github.com/arrow2nd/twnyan/twitter"
 	"golang.org/x/term"
 )

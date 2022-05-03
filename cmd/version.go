@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 )
 
 const version = "1.7.2"

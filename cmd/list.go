@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 	"github.com/arrow2nd/twnyan/util"
 )
 

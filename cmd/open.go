@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 	"github.com/gookit/color"
 	"github.com/pkg/browser"
 )

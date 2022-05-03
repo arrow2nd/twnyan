@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 )
 
 func (cmd *Cmd) newAccountCmd() *ishell.Cmd {

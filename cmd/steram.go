@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 	"github.com/arrow2nd/twnyan/twitter"
 )
 
