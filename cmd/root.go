@@ -18,22 +18,52 @@ type Cmd struct {
 }
 
 // New 作成
-func New(c *config.Config, t *twitter.Twitter) *Cmd {
-	nc := &Cmd{
+func New() *Cmd {
+	config := config.New()
+
+	return &Cmd{
 		shell:   ishell.New(),
-		config:  c,
-		twitter: t,
-		view:    view.New(c),
+		config:  config,
+		twitter: twitter.New(),
+		view:    view.New(config),
 	}
-
-	// TODO: 後でAuth処理と統合
-	nc.init()
-
-	return nc
 }
 
-// init 初期化
-func (cmd *Cmd) init() {
+// Init 初期化
+func (cmd *Cmd) Init() {
+	var err error
+
+	// 設定ファイル読み込み
+	if !cmd.config.Load() {
+		if cmd.config.Cred.Main, _, err = cmd.twitter.Auth(); err != nil {
+			panic(err)
+		}
+		cmd.config.Save()
+	}
+
+	// 認証
+	cmd.twitter.Init(cmd.config.Cred.Main)
+
+	cmd.initCommand()
+}
+
+// Run 実行
+func (cmd *Cmd) Run() {
+	// 対話モードで実行
+	if len(os.Args) <= 1 {
+		cmd.shell.Process("timeline")
+		cmd.shell.Run()
+		return
+	}
+
+	// 直接実行
+	if err := cmd.shell.Process(os.Args[1:]...); err != nil {
+		os.Exit(1)
+	}
+}
+
+// initCommand コマンドの登録
+func (cmd *Cmd) initCommand() {
 	cmd.setDefaultPrompt()
 
 	// コマンドを登録
@@ -60,19 +90,4 @@ func (cmd *Cmd) init() {
 	cmd.shell.NotFound(func(c *ishell.Context) {
 		cmd.showErrorMessage("command not found: " + c.Args[0])
 	})
-}
-
-// Run 実行
-func (cmd *Cmd) Run() {
-	// 対話モードで実行
-	if len(os.Args) <= 1 {
-		cmd.shell.Process("timeline")
-		cmd.shell.Run()
-		return
-	}
-
-	// 直接実行
-	if err := cmd.shell.Process(os.Args[1:]...); err != nil {
-		os.Exit(1)
-	}
 }
