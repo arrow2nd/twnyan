@@ -17,7 +17,7 @@ func CreateQuery(count string) url.Values {
 	}
 }
 
-// createUserInfoText ユーザー情報の文字列を作成
+// createUserInfoText ユーザ情報の文字列を作成
 func (tw *Twitter) createUserInfoText(name, screenName string) string {
 	return fmt.Sprintf("%s @%s", name, screenName)
 }

@@ -61,12 +61,12 @@ func (cmd *Cmd) execUserCmd(c *ishell.Context) {
 	cmd.showUserTimeline(screenName, count)
 }
 
-// showUserTimeline ユーザータイムラインを表示
+// showUserTimeline ユーザタイムラインを表示
 func (cmd *Cmd) showUserTimeline(screenName, count string) {
 	query := twitter.CreateQuery(count)
 	query.Add("screen_name", screenName)
 
-	// ユーザーのツイートを取得
+	// ユーザのツイートを取得
 	tweets, err := cmd.twitter.FetchTimelineTweets(twitter.User, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
@@ -77,14 +77,14 @@ func (cmd *Cmd) showUserTimeline(screenName, count string) {
 	relationships := []string{}
 
 	if screenName != "" {
-		// ユーザー情報を取得
+		// ユーザ情報を取得
 		user, err = cmd.twitter.FetchUserInfo(screenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		// ユーザーとの関係を取得
+		// ユーザとの関係を取得
 		relationships, err = cmd.twitter.FetchRelationships(user.IdStr)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())

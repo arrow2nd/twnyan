@@ -49,7 +49,7 @@ func (tw *Twitter) Init(cred *oauth.Credentials) {
 	tw.API = anaconda.NewTwitterApi(cred.Token, cred.Secret)
 	tw.API.ReturnRateLimitError(true)
 
-	// ユーザー情報を取得
+	// ユーザ情報を取得
 	tw.OwnUser, err = tw.fetchSelfInfo()
 	if err != nil {
 		panic(tw.createAPIErrorText("", err))

@@ -158,7 +158,7 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 	}
 }
 
-// actionOnUser ユーザーに対しての操作
+// actionOnUser ユーザに対しての操作
 func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string, actionFunc func(string) (string, error)) {
 	var err error
 

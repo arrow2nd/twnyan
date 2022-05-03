@@ -16,7 +16,7 @@ const (
 	User
 )
 
-// FetchUserInfo ユーザー情報を取得
+// FetchUserInfo ユーザ情報を取得
 func (tw *Twitter) FetchUserInfo(screenName string) (*anaconda.User, error) {
 	user, err := tw.API.GetUsersShow(screenName, nil)
 	if err != nil {
@@ -26,7 +26,7 @@ func (tw *Twitter) FetchUserInfo(screenName string) (*anaconda.User, error) {
 	return &user, nil
 }
 
-// FetchRelationships ユーザーとの関係性を取得
+// FetchRelationships ユーザとの関係性を取得
 func (tw *Twitter) FetchRelationships(userId string) ([]string, error) {
 	query := url.Values{"user_id": {userId}}
 
@@ -115,7 +115,7 @@ func (tw *Twitter) fetchRateLimitResetTime(resouceName string) string {
 	return ""
 }
 
-// fetchSelfInfo 自分のユーザー情報を取得
+// fetchSelfInfo 自分のユーザ情報を取得
 func (tw *Twitter) fetchSelfInfo() (*anaconda.User, error) {
 	user, err := tw.API.GetSelf(nil)
 	if err != nil {

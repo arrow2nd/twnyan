@@ -10,7 +10,7 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-// ShowUserInfo ユーザー情報を表示
+// ShowUserInfo ユーザ情報を表示
 func (v *View) ShowUserInfo(user *anaconda.User, relationships []string) {
 	width := util.GetWindowWidth()
 
@@ -71,7 +71,7 @@ func (v *View) createUserInfoString(u *anaconda.User) string {
 	return fmt.Sprintf("%s %s%s", userName, screenName, accountType)
 }
 
-// createRelationshipInfoString ユーザーとの関係性を表す文字列を作成
+// createRelationshipInfoString ユーザとの関係性を表す文字列を作成
 func (v *View) createRelationshipInfoString(relationships []string) string {
 	relationshipInfo := ""
 
