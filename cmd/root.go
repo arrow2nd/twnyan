@@ -15,6 +15,7 @@ import (
 // Cmd コマンド管理
 type Cmd struct {
 	shell   *ishell.Shell
+	flagSet *pflag.FlagSet
 	config  *config.Config
 	twitter *twitter.Twitter
 	view    *view.View
@@ -26,6 +27,7 @@ func New() *Cmd {
 
 	return &Cmd{
 		shell:   ishell.New(),
+		flagSet: pflag.NewFlagSet("twnyan", pflag.ContinueOnError),
 		config:  config,
 		twitter: twitter.New(),
 		view:    view.New(config),
@@ -36,6 +38,10 @@ func New() *Cmd {
 func (cmd *Cmd) Init() {
 	var err error
 
+	// コマンド・フラグを登録
+	cmd.registerCommands()
+	cmd.registerFlags()
+
 	// 設定ファイル読み込み
 	if !cmd.config.Load() {
 		if cmd.config.Cred.Main, _, err = cmd.twitter.Auth(); err != nil {
@@ -45,34 +51,56 @@ func (cmd *Cmd) Init() {
 		cmd.config.Save()
 	}
 
-	// 認証
-	if err = cmd.initTwitter(); err != nil {
+	// アカウント認証
+	if err = cmd.authAccount(); err != nil {
 		cmd.showErrorMessage(err.Error())
 		os.Exit(1)
 	}
 
-	cmd.initCommand()
+	cmd.setDefaultPrompt()
 }
 
 // Run 実行
 func (cmd *Cmd) Run() {
+	// フラグをパース
+	if err := cmd.flagSet.Parse(os.Args[1:]); err != nil {
+		cmd.showErrorMessage(err.Error())
+		os.Exit(1)
+	}
+
+	// ヘルプの表示
+	if ok, _ := cmd.flagSet.GetBool("help"); ok {
+		fmt.Print(cmd.shell.HelpText())
+		cmd.flagSet.Usage()
+		return
+	}
+
 	// 対話モードで実行
-	if pflag.NArg() == 0 {
+	if cmd.flagSet.NArg() == 0 {
 		cmd.shell.Process("timeline")
 		cmd.shell.Run()
 		return
 	}
 
 	// 直接実行
-	if err := cmd.shell.Process(pflag.Args()...); err != nil {
+	if err := cmd.shell.Process(cmd.flagSet.Args()...); err != nil {
 		os.Exit(1)
 	}
 }
 
-// initCommand コマンドの登録
-func (cmd *Cmd) initCommand() {
-	cmd.setDefaultPrompt()
+func (cmd *Cmd) registerFlags() {
+	// フラグを登録
+	cmd.flagSet.StringP("account", "A", "", "specify the account to use")
+	cmd.flagSet.BoolP("help", "H", false, "display help")
 
+	// フラグのヘルプ表示
+	cmd.flagSet.Usage = func() {
+		fmt.Println("Flags:")
+		cmd.flagSet.PrintDefaults()
+	}
+}
+
+func (cmd *Cmd) registerCommands() {
 	// コマンドを登録
 	cmd.shell.AddCmd(cmd.newAccountCmd())
 	cmd.shell.AddCmd(cmd.newTweetCmd())
@@ -93,28 +121,26 @@ func (cmd *Cmd) initCommand() {
 	cmd.shell.AddCmd(cmd.newStreamCmd())
 	cmd.shell.AddCmd(cmd.newVersionCmd())
 
-	// コマンドエラー時の表示を設定
+	// コマンドエラー時の表示
 	cmd.shell.NotFound(func(c *ishell.Context) {
-		cmd.showErrorMessage("command not found: " + c.Args[0])
+		cmd.showErrorMessage(fmt.Sprintf("command not found: %s", c.Args[0]))
 	})
 }
 
-// initTwitter アカウント認証
-func (cmd *Cmd) initTwitter() error {
-	screenName := pflag.StringP("account", "A", "", "Specify the account to use")
-	pflag.Parse()
+func (cmd *Cmd) authAccount() error {
+	screenName, _ := cmd.flagSet.GetString("account")
 
 	// メインアカウントで認証
-	if *screenName == "" {
+	if screenName == "" {
 		cmd.twitter.Init(cmd.config.Cred.Main)
 		return nil
 	}
 
 	// サブアカウントで認証
-	if cred, ok := cmd.config.Cred.Sub[*screenName]; ok {
+	if cred, ok := cmd.config.Cred.Sub[screenName]; ok {
 		cmd.twitter.Init(cred)
 		return nil
 	}
 
-	return errors.New(fmt.Sprintf("account does not exist: %s", *screenName))
+	return errors.New(fmt.Sprintf("account does not exist: %s", screenName))
 }
