@@ -54,7 +54,7 @@ func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 }
 
 // parseAccountCmdArgs アカウント系のコマンド引数をパース
-func (cmd *Cmd) parseAccountCmdArgs(args []string, allowMain bool) (string, error) {
+func (cmd *Cmd) parseAccountCmdArgs(args []string) (string, error) {
 	// 対象のスクリーン名が指定されていない
 	if len(args) == 0 {
 		return "", errors.New("Specify the screen name of the target account")
@@ -63,7 +63,7 @@ func (cmd *Cmd) parseAccountCmdArgs(args []string, allowMain bool) (string, erro
 	screenName := args[0]
 
 	// メインアカウントを示す "main" が許可されているなら通す
-	if allowMain && screenName == "main" {
+	if screenName == "main" {
 		return "main", nil
 	}
 
@@ -194,7 +194,7 @@ func (cmd *Cmd) showTweets() {
 }
 
 // showMessage メッセージを表示
-func (cmd *Cmd) showMessage(tips, text, bgColor string) {
+func (cmd *Cmd) showMessage(title, text, bgColor string) {
 	width := util.GetWindowWidth()
 
 	// 不要な文字を削除
@@ -202,10 +202,10 @@ func (cmd *Cmd) showMessage(tips, text, bgColor string) {
 	text = html.UnescapeString(text)
 
 	// 画面内に収まるよう丸める
-	text = util.TruncateString(text, width-len(tips)-3)
+	text = util.TruncateString(text, width-len(title)-3)
 
-	color.HEXStyle(cmd.config.Color.BoxForground, bgColor).Printf(" %s ", tips)
-	fmt.Printf(" %s\n", text)
+	tips := color.HEXStyle(cmd.config.Color.BoxForground, bgColor).Sprintf(" %s ", title)
+	cmd.shell.Printf("%s %s\n", tips, text)
 }
 
 // showErrorMessage エラーメッセージを表示

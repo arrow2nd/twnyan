@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/arrow2nd/ishell/v2"
+	"github.com/garyburd/go-oauth/oauth"
 )
 
 func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
@@ -61,7 +62,7 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 	accountCmd.AddCmd(&ishell.Cmd{
 		Name:      "switch",
 		Aliases:   []string{"sw"},
-		Completer: cmd.switchAccountNameCompleter,
+		Completer: cmd.accountNameCompleter,
 		Func:      cmd.execAccountSwitchCmd,
 		Help:      "switch the account to use",
 		LongHelp: createLongHelp(
@@ -76,25 +77,13 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) accountNameCompleter([]string) []string {
-	if len(cmd.config.Cred.Sub) == 0 {
-		return nil
-	}
-
-	items := []string{}
+	items := []string{"main"}
 
 	for name := range cmd.config.Cred.Sub {
 		items = append(items, name)
 	}
 
 	return items
-}
-
-func (cmd *Cmd) switchAccountNameCompleter([]string) []string {
-	if items := cmd.accountNameCompleter(nil); items != nil {
-		return append(items, "main")
-	}
-
-	return nil
 }
 
 func (cmd *Cmd) execAccountAddCmd(c *ishell.Context) {
@@ -115,7 +104,7 @@ func (cmd *Cmd) execAccountAddCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
-	screenName, err := cmd.parseAccountCmdArgs(c.Args, false)
+	screenName, err := cmd.parseAccountCmdArgs(c.Args)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -128,25 +117,31 @@ func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
 		return
 	}
 
-	delete(cmd.config.Cred.Sub, screenName)
+	// 認証情報を削除
+	switch screenName {
+	case "main":
+		cmd.config.Cred.Main = &oauth.Credentials{}
+		break
+	default:
+		delete(cmd.config.Cred.Sub, screenName)
+	}
+
 	cmd.config.Save()
 
 	cmd.showMessage("REMOVED", screenName, cmd.config.Color.Accent3)
 }
 
 func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
-	if len(cmd.config.Cred.Sub) == 0 {
-		cmd.showErrorMessage("No sub-accounts")
-		return
-	}
-
 	for _, name := range cmd.accountNameCompleter(nil) {
+		if name == "main" {
+			name = fmt.Sprintf("%s (main)", cmd.twitter.OwnUser.ScreenName)
+		}
 		fmt.Printf("- %s\n", name)
 	}
 }
 
 func (cmd *Cmd) execAccountSwitchCmd(c *ishell.Context) {
-	screenName, err := cmd.parseAccountCmdArgs(c.Args, true)
+	screenName, err := cmd.parseAccountCmdArgs(c.Args)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -165,6 +160,6 @@ func (cmd *Cmd) execAccountSwitchCmd(c *ishell.Context) {
 	// デフォルトプロンプトを更新
 	cmd.setDefaultPrompt()
 
-	msg := fmt.Sprintf("%s -> %s\n", prevScreenName, cmd.twitter.OwnUser.ScreenName)
+	msg := fmt.Sprintf("%s -> %s", prevScreenName, cmd.twitter.OwnUser.ScreenName)
 	cmd.showMessage("SWITCHED", msg, cmd.config.Color.Accent3)
 }

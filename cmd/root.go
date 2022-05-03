@@ -43,7 +43,10 @@ func (cmd *Cmd) Init() {
 	cmd.registerFlags()
 
 	// 設定ファイル読み込み
-	if !cmd.config.Load() {
+	ok := cmd.config.Load()
+
+	// メインアカウントがない場合、認証
+	if !ok || cmd.config.Cred.Main.Token == "" || cmd.config.Cred.Main.Secret == "" {
 		if cmd.config.Cred.Main, _, err = cmd.twitter.Auth(); err != nil {
 			cmd.showErrorMessage(err.Error())
 			os.Exit(1)
@@ -51,8 +54,8 @@ func (cmd *Cmd) Init() {
 		cmd.config.Save()
 	}
 
-	// アカウント認証
-	if err = cmd.authAccount(); err != nil {
+	// ログイン
+	if err = cmd.login(); err != nil {
 		cmd.showErrorMessage(err.Error())
 		os.Exit(1)
 	}
@@ -127,16 +130,16 @@ func (cmd *Cmd) registerCommands() {
 	})
 }
 
-func (cmd *Cmd) authAccount() error {
+func (cmd *Cmd) login() error {
 	screenName, _ := cmd.flagSet.GetString("account")
 
-	// メインアカウントで認証
+	// メインアカウント
 	if screenName == "" {
 		cmd.twitter.Init(cmd.config.Cred.Main)
 		return nil
 	}
 
-	// サブアカウントで認証
+	// サブアカウント
 	if cred, ok := cmd.config.Cred.Sub[screenName]; ok {
 		cmd.twitter.Init(cred)
 		return nil
