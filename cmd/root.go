@@ -1,12 +1,15 @@
 package cmd
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 	"github.com/arrow2nd/twnyan/config"
 	"github.com/arrow2nd/twnyan/twitter"
 	"github.com/arrow2nd/twnyan/view"
+	"github.com/spf13/pflag"
 )
 
 // Cmd コマンド管理
@@ -33,31 +36,41 @@ func New() *Cmd {
 func (cmd *Cmd) Init() {
 	var err error
 
+	// フラグをパース
+	userName := pflag.StringP("user", "U", "", "Specify the user to use")
+	pflag.Parse()
+
 	// 設定ファイル読み込み
 	if !cmd.config.Load() {
 		if cmd.config.Cred.Main, _, err = cmd.twitter.Auth(); err != nil {
-			panic(err)
+			cmd.showErrorMessage(err.Error())
+			os.Exit(1)
 		}
 		cmd.config.Save()
 	}
 
 	// 認証
-	cmd.twitter.Init(cmd.config.Cred.Main)
+	if err := cmd.initTwitter(userName); err != nil {
+		cmd.showErrorMessage(err.Error())
+		os.Exit(1)
+	}
 
 	cmd.initCommand()
 }
 
 // Run 実行
 func (cmd *Cmd) Run() {
+	args := pflag.Args()
+
 	// 対話モードで実行
-	if len(os.Args) <= 1 {
+	if len(args) == 0 {
 		cmd.shell.Process("timeline")
 		cmd.shell.Run()
 		return
 	}
 
 	// 直接実行
-	if err := cmd.shell.Process(os.Args[1:]...); err != nil {
+	if err := cmd.shell.Process(args...); err != nil {
 		os.Exit(1)
 	}
 }
@@ -90,4 +103,21 @@ func (cmd *Cmd) initCommand() {
 	cmd.shell.NotFound(func(c *ishell.Context) {
 		cmd.showErrorMessage("command not found: " + c.Args[0])
 	})
+}
+
+// initTwitter アカウント認証
+func (cmd *Cmd) initTwitter(userName *string) error {
+	// メインアカウントで認証
+	if *userName == "" {
+		cmd.twitter.Init(cmd.config.Cred.Main)
+		return nil
+	}
+
+	// サブアカウントで認証
+	if cred, ok := cmd.config.Cred.Sub[*userName]; ok {
+		cmd.twitter.Init(cred)
+		return nil
+	}
+
+	return errors.New(fmt.Sprintf("user does not exist: %s", *userName))
 }
