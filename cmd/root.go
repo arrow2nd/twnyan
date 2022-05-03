@@ -36,10 +36,6 @@ func New() *Cmd {
 func (cmd *Cmd) Init() {
 	var err error
 
-	// フラグをパース
-	screenName := pflag.StringP("account", "A", "", "Specify the account to use")
-	pflag.Parse()
-
 	// 設定ファイル読み込み
 	if !cmd.config.Load() {
 		if cmd.config.Cred.Main, _, err = cmd.twitter.Auth(); err != nil {
@@ -50,7 +46,7 @@ func (cmd *Cmd) Init() {
 	}
 
 	// 認証
-	if err := cmd.initTwitter(screenName); err != nil {
+	if err = cmd.initTwitter(); err != nil {
 		cmd.showErrorMessage(err.Error())
 		os.Exit(1)
 	}
@@ -60,17 +56,15 @@ func (cmd *Cmd) Init() {
 
 // Run 実行
 func (cmd *Cmd) Run() {
-	args := pflag.Args()
-
 	// 対話モードで実行
-	if len(args) == 0 {
+	if pflag.NArg() == 0 {
 		cmd.shell.Process("timeline")
 		cmd.shell.Run()
 		return
 	}
 
 	// 直接実行
-	if err := cmd.shell.Process(args...); err != nil {
+	if err := cmd.shell.Process(pflag.Args()...); err != nil {
 		os.Exit(1)
 	}
 }
@@ -106,7 +100,10 @@ func (cmd *Cmd) initCommand() {
 }
 
 // initTwitter アカウント認証
-func (cmd *Cmd) initTwitter(screenName *string) error {
+func (cmd *Cmd) initTwitter() error {
+	screenName := pflag.StringP("account", "A", "", "Specify the account to use")
+	pflag.Parse()
+
 	// メインアカウントで認証
 	if *screenName == "" {
 		cmd.twitter.Init(cmd.config.Cred.Main)
