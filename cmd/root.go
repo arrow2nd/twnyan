@@ -37,7 +37,7 @@ func (cmd *Cmd) Init() {
 	var err error
 
 	// フラグをパース
-	userName := pflag.StringP("user", "U", "", "Specify the user to use")
+	screenName := pflag.StringP("account", "A", "", "Specify the account to use")
 	pflag.Parse()
 
 	// 設定ファイル読み込み
@@ -50,7 +50,7 @@ func (cmd *Cmd) Init() {
 	}
 
 	// 認証
-	if err := cmd.initTwitter(userName); err != nil {
+	if err := cmd.initTwitter(screenName); err != nil {
 		cmd.showErrorMessage(err.Error())
 		os.Exit(1)
 	}
@@ -106,18 +106,18 @@ func (cmd *Cmd) initCommand() {
 }
 
 // initTwitter アカウント認証
-func (cmd *Cmd) initTwitter(userName *string) error {
+func (cmd *Cmd) initTwitter(screenName *string) error {
 	// メインアカウントで認証
-	if *userName == "" {
+	if *screenName == "" {
 		cmd.twitter.Init(cmd.config.Cred.Main)
 		return nil
 	}
 
 	// サブアカウントで認証
-	if cred, ok := cmd.config.Cred.Sub[*userName]; ok {
+	if cred, ok := cmd.config.Cred.Sub[*screenName]; ok {
 		cmd.twitter.Init(cred)
 		return nil
 	}
 
-	return errors.New(fmt.Sprintf("user does not exist: %s", *userName))
+	return errors.New(fmt.Sprintf("account does not exist: %s", *screenName))
 }
