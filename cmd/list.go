@@ -63,10 +63,10 @@ func (cmd *Cmd) listCmdCompleter([]string) []string {
 	for name := range cmd.api.List {
 		// リスト名が空白を含んでいるならダブルクオートで囲む
 		if util.MatchesRegexp("\\s", name) {
-			items = append(items, fmt.Sprintf("\"%s\"", name))
-		} else {
-			items = append(items, name)
+			name = fmt.Sprintf("\"%s\"", name)
 		}
+
+		items = append(items, name)
 	}
 
 	return items

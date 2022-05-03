@@ -34,6 +34,6 @@ func (cmd *Cmd) execOpenCmd(c *ishell.Context) {
 		return
 	}
 
-	cmd.showMessage("OPENED", url, cmd.cfg.Color.Accent2)
+	cmd.showMessage("OPENED", url, cmd.cfg.Color.Accent3)
 	browser.OpenURL(url)
 }

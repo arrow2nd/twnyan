@@ -23,9 +23,9 @@ If you omit the counts, the default value in the configuration file (25 by defau
 
 func (cmd *Cmd) execMentionCmd(c *ishell.Context) {
 	count := cmd.getCountFromCmdArg(c.Args)
+	query := api.CreateQuery(count)
 
 	// メンションタイムラインを取得
-	query := api.CreateQuery(count)
 	tweets, err := cmd.api.FetchTimelineTweets(api.Mention, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())

@@ -105,7 +105,7 @@ func (cmd *Cmd) execTweetRemoveCmd(c *ishell.Context) {
 			return
 		}
 
-		cmd.showMessage("DELETED", tweetText, cmd.cfg.Color.Accent2)
+		cmd.showMessage("DELETED", tweetText, cmd.cfg.Color.Accent3)
 	}
 }
 
@@ -125,5 +125,5 @@ func (cmd *Cmd) tweet(text string, images []string) {
 		return
 	}
 
-	cmd.showMessage("TWEETED", tweetText, cmd.cfg.Color.Accent2)
+	cmd.showMessage("TWEETED", tweetText, cmd.cfg.Color.Accent3)
 }
