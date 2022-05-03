@@ -65,15 +65,15 @@ func (cmd *Cmd) init() {
 
 // Run 実行
 func (cmd *Cmd) Run() {
-	// 引数があるなら直接実行
-	if len(os.Args) > 1 {
-		if err := cmd.shell.Process(os.Args[1:]...); err != nil {
-			cmd.showErrorMessage(err.Error())
-		}
-		os.Exit(0)
+	// 対話モードで実行
+	if len(os.Args) <= 1 {
+		cmd.shell.Process("timeline")
+		cmd.shell.Run()
+		return
 	}
 
-	// 対話モードで実行
-	cmd.shell.Process("timeline")
-	cmd.shell.Run()
+	// 直接実行
+	if err := cmd.shell.Process(os.Args[1:]...); err != nil {
+		os.Exit(1)
+	}
 }
