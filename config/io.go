@@ -46,7 +46,7 @@ func (cfg *Config) configFileExists() bool {
 	return true
 }
 
-// saveYAML ファイルに保存
+// saveYaml 保存
 func (cfg *Config) saveYaml(filename string, in interface{}) {
 	buf, err := yaml.Marshal(in)
 	if err != nil {
@@ -60,7 +60,7 @@ func (cfg *Config) saveYaml(filename string, in interface{}) {
 	}
 }
 
-// loadYAML ファイルから読込
+// loadYaml 読み込み
 func (cfg *Config) loadYaml(filename string, out interface{}) {
 	path := filepath.Join(cfg.Option.ConfigDir, filename)
 

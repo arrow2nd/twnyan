@@ -9,8 +9,10 @@ const (
 )
 
 type cred struct {
+	// Main メインアカウント
 	Main *oauth.Credentials `yaml:"Main,inline"`
-	Sub  map[string]*oauth.Credentials
+	// Sub サブアカウント
+	Sub map[string]*oauth.Credentials
 }
 
 type option struct {
@@ -41,14 +43,17 @@ type color struct {
 	Mute         string
 }
 
-// Config 設定構造体
+// Config 設定管理
 type Config struct {
-	Cred   *cred
+	// Cred 認証情報
+	Cred *cred
+	// Option 設定情報
 	Option *option
-	Color  *color
+	// Color 色情報
+	Color *color
 }
 
-// New 構造体を初期化
+// New 生成
 func New() *Config {
 	return &Config{
 		Cred: &cred{
