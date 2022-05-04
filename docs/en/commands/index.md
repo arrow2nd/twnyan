@@ -6,6 +6,16 @@ twnyan is a simple Twitter client that runs in the terminal.
 twnyan [Option] [Command]
 ```
 
+## Example
+
+```
+# Tweet in your main account
+twnyan tweet hello,nekochan!
+
+# Tweet with @subaccount
+twnyan -A subaccount tweet "I want to eat sushi..."
+```
+
 ## Option
 
 - `-A` `--account <username>`
