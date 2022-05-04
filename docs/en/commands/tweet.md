@@ -7,6 +7,7 @@ twnyan tweet {[text] [image...] | <command>}
 twnyan tw {[text] [image...] | <command>}
 ```
 
+- Pipe input is also supported (e.g. `echo "nyaan..." | twnyan tweet`)
 - If no text is specified, "にゃーん" will be posted
 - You can also submit images only (e.g. `tweet cat.png`)
 - If there are multiple images, please specify them separated by a single space
