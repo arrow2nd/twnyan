@@ -6,7 +6,7 @@
 [![test](https://github.com/arrow2nd/twnyan/actions/workflows/test.yml/badge.svg)](https://github.com/arrow2nd/twnyan/actions/workflows/test.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/arrow2nd/twnyan)](https://goreportcard.com/report/github.com/arrow2nd/twnyan)
 ![GitHub all releases](https://img.shields.io/github/downloads/arrow2nd/twnyan/total)
-[![GitHub license](https://img.shields.io/github/license/arrow2nd/twnyan)](https://github.com/arrow2nd/twnyan/blob/main/LICENSE.txt)
+[![GitHub license](https://img.shields.io/github/license/arrow2nd/twnyan)](https://github.com/arrow2nd/twnyan/blob/main/LICENSE)
 
 > **[English](README_EN.md)**
 
