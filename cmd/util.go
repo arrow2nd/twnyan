@@ -108,8 +108,13 @@ func (cmd *Cmd) inputMultiLine() string {
 
 // showExecutionConf 実行確認を表示
 func (cmd *Cmd) showExecutionConf(msg string) bool {
-	result := cmd.shell.MultiChoice([]string{"No", "Yes"}, msg)
-	return result == 1
+	cmd.shell.SetPrompt("y/N: ")
+	defer cmd.setDefaultPrompt()
+
+	fmt.Println(msg)
+	result := cmd.shell.ReadLine()
+
+	return strings.ToLower(result) == "y"
 }
 
 // upload 画像をアップロード
