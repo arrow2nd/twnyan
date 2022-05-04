@@ -57,7 +57,7 @@ func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
 func (cmd *Cmd) parseAccountCmdArgs(args []string) (string, error) {
 	// 対象のスクリーン名が指定されていない
 	if len(args) == 0 {
-		return "", errors.New("Specify the screen name of the target account")
+		return "", errors.New("specify the screen name of the target account")
 	}
 
 	screenName := strings.Replace(args[0], "@", "", 1)
@@ -69,7 +69,7 @@ func (cmd *Cmd) parseAccountCmdArgs(args []string) (string, error) {
 
 	// アカウントの存在チェック
 	if _, ok := cmd.config.Cred.Sub[screenName]; !ok {
-		return "", errors.New("Account does not exist")
+		return "", errors.New("account does not exist")
 	}
 
 	return screenName, nil
@@ -91,7 +91,7 @@ func (cmd *Cmd) inputMultiLine() string {
 	cmd.shell.SetPrompt("... ")
 	defer cmd.setDefaultPrompt()
 
-	cmd.shell.Println("End typing with a semicolon. (If you want to cancel, input ':exit')")
+	fmt.Println("End typing with a semicolon. (If you want to cancel, input ':exit')")
 
 	input := cmd.shell.ReadMultiLinesFunc(func(f string) bool {
 		return f != ":exit" && !strings.HasSuffix(f, ";")
@@ -108,8 +108,13 @@ func (cmd *Cmd) inputMultiLine() string {
 
 // showExecutionConf 実行確認を表示
 func (cmd *Cmd) showExecutionConf(msg string) bool {
-	result := cmd.shell.MultiChoice([]string{"No", "Yes"}, msg)
-	return result == 1
+	cmd.shell.SetPrompt("y/N: ")
+	defer cmd.setDefaultPrompt()
+
+	fmt.Println(msg)
+	result := cmd.shell.ReadLine()
+
+	return strings.ToLower(result) == "y"
 }
 
 // upload 画像をアップロード
@@ -119,7 +124,7 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 	}
 
 	// プログレスバー開始
-	cmd.shell.Print("Uploading... 🐾 ")
+	fmt.Print("Uploading... 🐾 ")
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 
@@ -205,7 +210,7 @@ func (cmd *Cmd) showMessage(title, text, bgColor string) {
 	text = util.TruncateString(text, width-len(title)-3)
 
 	tips := color.HEXStyle(cmd.config.Color.BoxForground, bgColor).Sprintf(" %s ", title)
-	cmd.shell.Printf("%s %s\n", tips, text)
+	fmt.Printf("%s %s\n", tips, text)
 }
 
 // showErrorMessage エラーメッセージを表示
@@ -222,7 +227,7 @@ func (cmd *Cmd) showWrongArgMessage(cmdName string) {
 
 // createLongHelp 詳細なヘルプ文を作成
 func createLongHelp(help, alias, use, exp string) string {
-	longHelp := fmt.Sprintf("%s", help)
+	longHelp := help
 
 	if alias != "" {
 		longHelp += fmt.Sprintf("\n\nAlias:\n  %s", alias)

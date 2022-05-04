@@ -87,8 +87,6 @@ func (cmd *Cmd) accountNameCompleter([]string) []string {
 }
 
 func (cmd *Cmd) execAccountAddCmd(c *ishell.Context) {
-	c.ClearScreen()
-
 	// Auth認証
 	newCred, screenName, err := cmd.twitter.Auth()
 	if err != nil {
@@ -121,7 +119,6 @@ func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
 	switch screenName {
 	case "main":
 		cmd.config.Cred.Main = &oauth.Credentials{}
-		break
 	default:
 		delete(cmd.config.Cred.Sub, screenName)
 	}
@@ -136,7 +133,7 @@ func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
 		if name == "main" {
 			name = fmt.Sprintf("%s (main)", cmd.twitter.OwnUser.ScreenName)
 		}
-		c.Printf("- %s\n", name)
+		fmt.Printf("- %s\n", name)
 	}
 }
 

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -73,7 +72,7 @@ func (cmd *Cmd) Init() {
 func (cmd *Cmd) Run() {
 	// ヘルプの表示
 	if ok, _ := cmd.flagSet.GetBool("help"); ok {
-		cmd.shell.Print(cmd.shell.HelpText())
+		fmt.Print(cmd.shell.HelpText())
 		cmd.flagSet.Usage()
 		return
 	}
@@ -98,8 +97,9 @@ func (cmd *Cmd) registerFlags() {
 
 	// フラグのヘルプ表示
 	cmd.flagSet.Usage = func() {
-		cmd.shell.Println("Flags:")
+		fmt.Println("Flags:")
 		cmd.flagSet.PrintDefaults()
+		fmt.Print("\n")
 	}
 }
 
@@ -145,5 +145,5 @@ func (cmd *Cmd) login() error {
 		return nil
 	}
 
-	return errors.New(fmt.Sprintf("account does not exist: %s", screenName))
+	return fmt.Errorf("account does not exist: %s", screenName)
 }
