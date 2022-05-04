@@ -130,8 +130,8 @@ func (cmd *Cmd) execAccountRemoveCmd(c *ishell.Context) {
 
 func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
 	for _, name := range cmd.accountNameCompleter(nil) {
-		if name == "main" {
-			name = fmt.Sprintf("%s (main)", cmd.twitter.OwnUser.ScreenName)
+		if name != "main" {
+			name = fmt.Sprintf("@%s", name)
 		}
 		fmt.Printf("- %s\n", name)
 	}
