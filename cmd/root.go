@@ -54,6 +54,12 @@ func (cmd *Cmd) Init() {
 		cmd.config.Save()
 	}
 
+	// フラグをパース
+	if err := cmd.flagSet.Parse(os.Args[1:]); err != nil {
+		cmd.showErrorMessage(err.Error())
+		os.Exit(1)
+	}
+
 	// ログイン
 	if err = cmd.login(); err != nil {
 		cmd.showErrorMessage(err.Error())
@@ -65,12 +71,6 @@ func (cmd *Cmd) Init() {
 
 // Run 実行
 func (cmd *Cmd) Run() {
-	// フラグをパース
-	if err := cmd.flagSet.Parse(os.Args[1:]); err != nil {
-		cmd.showErrorMessage(err.Error())
-		os.Exit(1)
-	}
-
 	// ヘルプの表示
 	if ok, _ := cmd.flagSet.GetBool("help"); ok {
 		cmd.shell.Print(cmd.shell.HelpText())
