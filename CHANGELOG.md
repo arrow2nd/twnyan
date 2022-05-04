@@ -10,8 +10,8 @@
 
 ### Added
 
-- マルチアカウントに対応 #15
-- `tweet` コマンドをパイプ入力に対応 #16
+- マルチアカウントに対応 [#15](https://github.com/arrow2nd/twnyan/issues/15)
+- `tweet` コマンドをパイプ入力に対応 [#16](https://github.com/arrow2nd/twnyan/issues/16)
 
 ### Changed
 
