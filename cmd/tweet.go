@@ -64,7 +64,7 @@ If there is more than one, please separate them with a space.`,
 
 func (cmd *Cmd) execTweetCmd(c *ishell.Context) {
 	// パイプからの入力を処理
-	if len(c.Args) == 0 && !term.IsTerminal(syscall.Stdin) {
+	if len(c.Args) == 0 && !term.IsTerminal(int(syscall.Stdin)) {
 		stdin, _ := ioutil.ReadAll(os.Stdin)
 		cmd.tweet(string(stdin), nil)
 		return
