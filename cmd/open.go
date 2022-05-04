@@ -11,11 +11,11 @@ func (cmd *Cmd) newOpenCmd() *ishell.Cmd {
 		Name:    "open",
 		Aliases: []string{"op"},
 		Func:    cmd.execOpenCmd,
-		Help:    "view the tweet in your browser",
+		Help:    "open a tweet in browser",
 		LongHelp: createLongHelp(
-			"View the tweet in your browser.",
+			"Open a tweet in your browser.",
 			"op",
-			"open [<tweet-number>]",
+			"open <tweet-number>",
 			"open 2",
 		),
 	}

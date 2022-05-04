@@ -9,20 +9,20 @@ func (cmd *Cmd) newLikertCmd() *ishell.Cmd {
 		Name:    "likert",
 		Aliases: []string{"lr", "fr"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("LIKE&RT", c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.execLikert)
+			cmd.actionOnTweet("LIKE&RT", c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.execLikertCmd)
 		},
-		Help: "like and retweet a tweet",
+		Help: "like & retweet a tweet",
 		LongHelp: createLongHelp(
-			`Like and Retweet a tweet.
+			`Like & Retweet a tweet.
 If there is more than one, please separate them with a space.`,
 			"lr, fr",
-			"likert [<tweet-number>]...",
+			"likert <tweet-number>...",
 			"likert 0 1",
 		),
 	}
 }
 
-func (cmd *Cmd) execLikert(tweetId string) (string, error) {
+func (cmd *Cmd) execLikertCmd(tweetId string) (string, error) {
 	if _, err := cmd.twitter.Favorite(tweetId); err != nil {
 		return "", err
 	}

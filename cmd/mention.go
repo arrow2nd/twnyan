@@ -10,9 +10,9 @@ func (cmd *Cmd) newMentionCmd() *ishell.Cmd {
 		Name:    "mention",
 		Aliases: []string{"mt"},
 		Func:    cmd.execMentionCmd,
-		Help:    "get a Mentions to you",
+		Help:    "displays mention tweets",
 		LongHelp: createLongHelp(
-			`Get a Mentions to you.
+			`Displays Mention Tweets addressed to you.
 If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
 			"mt",
 			"mention [counts]",

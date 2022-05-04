@@ -23,7 +23,7 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 If there is no tweet text, 'にゃーん' will be posted.
 If you are submitting an image, please add the file name separated by a space.`,
 			"tw",
-			"tweet [text] [images]...",
+			"tweet [text] [image]...",
 			"tweet meow🐱 cat.png supercat.jpg",
 		),
 	}
@@ -39,7 +39,7 @@ If you are submitting an image, please add the file name separated by a space.`,
 Enter a semicolon to end the input.
 And if you want to cancel, input ":exit".`,
 			"ml",
-			"tweet multi [images]...",
+			"tweet multi [image]...",
 			"",
 		),
 	})
@@ -49,12 +49,12 @@ And if you want to cancel, input ":exit".`,
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func:    cmd.execTweetRemoveCmd,
-		Help:    "delete a tweet",
+		Help:    "remove a tweet",
 		LongHelp: createLongHelp(
-			`Delete a tweet.
+			`Remove a tweet.
 If there is more than one, please separate them with a space.`,
 			"rm",
-			"tweet remove [<tweet-number>]",
+			"tweet remove <tweet-number>...",
 			"tweet remove 0 1",
 		),
 	})

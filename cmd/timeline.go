@@ -10,12 +10,12 @@ func (cmd *Cmd) newTimelineCmd() *ishell.Cmd {
 		Name:    "timeline",
 		Aliases: []string{"tl"},
 		Func:    cmd.execTimelineCmd,
-		Help:    "get a home timeline",
+		Help:    "displays the home timeline",
 		LongHelp: createLongHelp(
-			`Get a home timeline.
-If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
+			`Displays the home timeline.
+If number of acquisitions is omitted, the default value in the configuration file is specified.`,
 			"tl",
-			"timeline [counts]",
+			"timeline [number]",
 			"timeline 50",
 		),
 	}

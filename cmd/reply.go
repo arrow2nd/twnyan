@@ -19,7 +19,7 @@ func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 If there is no tweet text, 'にゃーん' will be posted.
 If you are submitting an image, please add the file name separated by a space.`,
 			"rp",
-			"reply [<tweet-number>] [text] [images]...",
+			"reply <tweet-number> [text] [image]...",
 			"reply 2 meow cat.jpg",
 		),
 	}
@@ -35,7 +35,7 @@ If you are submitting an image, please add the file name separated by a space.`,
 Enter a semicolon to end the input.
 And if you want to cancel, input ":exit".`,
 			"ml",
-			"reply multi [<tweet-number>]",
+			"reply multi <tweet-number> [image]...",
 			"reply multi 2",
 		),
 	})

@@ -17,7 +17,7 @@ func (cmd *Cmd) newBlockCmd() *ishell.Cmd {
 			`Block a user.
 If you specify a tweet-number, the person posting the tweet will be selected.`,
 			"bk",
-			"block [<username / tweet-number>]",
+			"block <username / tweet-number>",
 			"block arrow_2nd\n  block 2",
 		),
 	}
@@ -34,7 +34,7 @@ If you specify a tweet-number, the person posting the tweet will be selected.`,
 			`Unblock a user.
 If you specify a tweet-number, the person posting the tweet will be selected.`,
 			"rm",
-			"block remove [<username / tweet-number>]",
+			"block remove <username / tweet-number>",
 			"block remove arrow_2nd\n  block rm 2",
 		),
 	})

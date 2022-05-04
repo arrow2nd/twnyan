@@ -17,7 +17,7 @@ func (cmd *Cmd) newRetweetCmd() *ishell.Cmd {
 			`Retweet a tweet.
 If there is more than one, please separate them with a space.`,
 			"rt",
-			"retweet [<tweet-number>]...",
+			"retweet <tweet-number>...",
 			"retweet 0 1",
 		),
 	}
@@ -31,10 +31,10 @@ If there is more than one, please separate them with a space.`,
 		},
 		Help: "unretweet a tweet",
 		LongHelp: createLongHelp(
-			`UnRetweet a tweet.
+			`Unretweet a tweet.
 If there is more than one, please separate them with a space.`,
 			"rm",
-			"retweet remove [<tweet-number>]...",
+			"retweet remove <tweet-number>...",
 			"retweet remove 0 1",
 		),
 	})

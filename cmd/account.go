@@ -13,9 +13,9 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Aliases: []string{"acc"},
 		Help:    "manage and switch accounts",
 		LongHelp: createLongHelp(
-			"Manage and switch accounts.",
+			"Manage and switch accounts used by twnyan.",
 			"acc",
-			"",
+			"twnyan account <command>",
 			"",
 		),
 	}
@@ -23,9 +23,9 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 	accountCmd.AddCmd(&ishell.Cmd{
 		Name: "add",
 		Func: cmd.execAccountAddCmd,
-		Help: "add a sub-account",
+		Help: "add account",
 		LongHelp: createLongHelp(
-			"Add a sub-account to twnyan.",
+			"Add account to twnyan.",
 			"",
 			"account add",
 			"",
@@ -37,12 +37,12 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Aliases:   []string{"rm"},
 		Completer: cmd.accountNameCompleter,
 		Func:      cmd.execAccountRemoveCmd,
-		Help:      "remove sub-account",
+		Help:      "remove account",
 		LongHelp: createLongHelp(
-			"Remove sub-account from twnyan.",
+			"Remove account from twnyan.",
 			"rm",
-			"account remove",
-			"",
+			"account remove <username>",
+			"account remove nekochan",
 		),
 	})
 
@@ -50,9 +50,9 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Name:    "list",
 		Aliases: []string{"ls"},
 		Func:    cmd.execAccountListCmd,
-		Help:    "List sub-accounts",
+		Help:    "List accounts",
 		LongHelp: createLongHelp(
-			"List sub-accounts added to twnyan.",
+			"Lists accounts added to twnyan.",
 			"ls",
 			"account list",
 			"",
@@ -66,10 +66,10 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Func:      cmd.execAccountSwitchCmd,
 		Help:      "switch the account to use",
 		LongHelp: createLongHelp(
-			"Switch the account to use.",
+			"Switch the account to be used.",
 			"sw",
-			"account switch",
-			"",
+			"account switch <username>",
+			"account switch nekochan",
 		),
 	})
 

@@ -17,7 +17,7 @@ func (cmd *Cmd) newFollowCmd() *ishell.Cmd {
 			`Follow a user.
 If you specify a tweet-number, the person posting the tweet will be selected.`,
 			"fw",
-			"follow [<username / tweet-number>]",
+			"follow <username / tweet-number>",
 			"follow arrow_2nd\n  follow 2",
 		),
 	}
@@ -34,7 +34,7 @@ If you specify a tweet-number, the person posting the tweet will be selected.`,
 			`Unfollow a user.
 If you specify a tweet-number, the person posting the tweet will be selected.`,
 			"rm",
-			"follow remove [<username / tweet-number>]",
+			"follow remove <username / tweet-number>",
 			"follow remove arrow_2nd\n  follow rm 2",
 		),
 	})
