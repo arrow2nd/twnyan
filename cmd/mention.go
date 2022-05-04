@@ -13,9 +13,9 @@ func (cmd *Cmd) newMentionCmd() *ishell.Cmd {
 		Help:    "displays mention tweets",
 		LongHelp: createLongHelp(
 			`Displays Mention Tweets addressed to you.
-If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
+If number of acquisitions is omitted, the default value in the configuration file is specified.`,
 			"mt",
-			"mention [counts]",
+			"mention [number]",
 			"mention 50",
 		),
 	}

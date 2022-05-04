@@ -17,9 +17,9 @@ func (cmd *Cmd) newListCmd() *ishell.Cmd {
 		LongHelp: createLongHelp(
 			`Displays the list timeline.
 You can use the tab key to complete the list name.
-If you omit the counts, the default value in the configuration file (25 by default) will be specified.`,
+If number of acquisitions is omitted, the default value in the configuration file is specified.`,
 			"ls",
-			"list <listname> [counts]",
+			"list <listname> [number]",
 			"list cats 50",
 		),
 	}
