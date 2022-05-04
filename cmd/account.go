@@ -87,8 +87,6 @@ func (cmd *Cmd) accountNameCompleter([]string) []string {
 }
 
 func (cmd *Cmd) execAccountAddCmd(c *ishell.Context) {
-	c.ClearScreen()
-
 	// Auth認証
 	newCred, screenName, err := cmd.twitter.Auth()
 	if err != nil {
