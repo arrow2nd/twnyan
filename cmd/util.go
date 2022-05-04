@@ -60,7 +60,7 @@ func (cmd *Cmd) parseAccountCmdArgs(args []string) (string, error) {
 		return "", errors.New("Specify the screen name of the target account")
 	}
 
-	screenName := args[0]
+	screenName := strings.Replace(args[0], "@", "", 1)
 
 	// メインアカウントを示す "main" が許可されているなら通す
 	if screenName == "main" {
