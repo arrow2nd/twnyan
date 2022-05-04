@@ -24,8 +24,8 @@ twnyan [フラグオプション] [コマンド]
 - [tweet](./tweet.md)
 - [reply](./reply.md)
 - [like](./like.md)
-- [likert](./likert.md)
 - [retweet](./retweet.md)
+- [likert](./likert.md)
 - [quote](./quote.md)
 - [open](./open.md)
 
