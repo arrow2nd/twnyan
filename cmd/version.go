@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/arrow2nd/ishell/v2"
 )
 
@@ -11,7 +13,7 @@ func (c *Cmd) newVersionCmd() *ishell.Cmd {
 		Name:    "version",
 		Aliases: []string{"ver"},
 		Func: func(c *ishell.Context) {
-			c.Printf("🐈 twnyan ver.%s\n", version)
+			fmt.Printf("🐈 twnyan ver.%s\n", version)
 		},
 		Help:     "display version",
 		LongHelp: "Display twnyan version.",
