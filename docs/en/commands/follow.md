@@ -1,10 +1,10 @@
 # follow
 
-Follow the user.
+Follow a user.
 
 ```
-twnyan follow {<User Name / Tweet Number> | <Command>}
-twnyan fw {<User Name / Tweet Number> | <Command>}
+twnyan follow {<username / tweet-number> | <command>}
+twnyan fw {<username / tweet-number> | <command>}
 ```
 
 - The `@` in the user name can be omitted
@@ -16,8 +16,8 @@ twnyan fw {<User Name / Tweet Number> | <Command>}
 Unfollow a user.
 
 ```
-twnyan follow remove <User Name / Tweet Number>
-twnyan follow rm <User Name / Tweet Number>
+twnyan follow remove <username / tweet-number>
+twnyan follow rm <username / tweet-number>
 ```
 
 - The `@` in the user name can be omitted

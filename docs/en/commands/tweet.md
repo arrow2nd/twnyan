@@ -1,10 +1,10 @@
 # tweet
 
-Post tweet.
+Post a tweet.
 
 ```
-twnyan tweet {[Text] [Image...] | <Command>}
-twnyan tw {[Text] [Image...] | <Command>}
+twnyan tweet {[text] [image...] | <command>}
+twnyan tw {[text] [image...] | <command>}
 ```
 
 - If no text is specified, "にゃーん" will be posted
@@ -18,8 +18,8 @@ twnyan tw {[Text] [Image...] | <Command>}
 Post a multi-line tweet.
 
 ```
-twnyan tweet multi [Image...]
-twnyan tweet ml [Image...]
+twnyan tweet multi [image...]
+twnyan tweet ml [image...]
 ```
 
 - If there are multiple images, please specify them separated by a single space
@@ -28,11 +28,11 @@ twnyan tweet ml [Image...]
 
 ### tweet remove
 
-Remove tweet.
+Remove a tweet.
 
 ```
-twnyan tweet remove [<Tweet Number>...]
-twnyan tweet rm [<Tweet Number>...]
+twnyan tweet remove [<tweet-number>...]
+twnyan tweet rm [<tweet-number>...]
 ```
 
 - If there are multiple tweet numbers, please specify them separated by spaces

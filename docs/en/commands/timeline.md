@@ -3,11 +3,11 @@
 Displays the home timeline.
 
 ```
-twnyan timeline {[Count] | <Command>}
-twnyan tl {[Count] | <Command>}
+twnyan timeline {[number] | <command>}
+twnyan tl {[number] | <command>}
 ```
 
-- If count is omitted, the default value in the configuration file is specified
+- If number of acquisitions is omitted, the default value in the configuration file is specified
 
 ## Command
 

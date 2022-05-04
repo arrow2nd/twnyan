@@ -3,11 +3,11 @@
 Displays Mention Tweets addressed to you.
 
 ```
-twnyan mention {[Count] | <Command>}
-twnyan mt {[Count] | <Command>}
+twnyan mention {[number] | <command>}
+twnyan mt {[number] | <command>}
 ```
 
-- If count is omitted, the default value in the configuration file is specified
+- If number of acquisitions is omitted, the default value in the configuration file is specified
 
 ## Command
 

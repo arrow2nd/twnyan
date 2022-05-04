@@ -1,10 +1,10 @@
 # block
 
-Blocks the user.
+Block a user.
 
 ```
-twnyan block {<User Name / Tweet Number> | <Command>}
-twnyan bk {<User Name / Tweet Number> | <Command>}
+twnyan block {<username / tweet-number> | <command>}
+twnyan bk {<username / tweet-number> | <command>}
 ```
 
 - The `@` in the user name can be omitted
@@ -16,8 +16,8 @@ twnyan bk {<User Name / Tweet Number> | <Command>}
 Unblock a user.
 
 ```
-twnyan block remove <User Name / Tweet Number>
-twnyan block rm <User Name / Tweet Number>
+twnyan block remove <username / tweet-number>
+twnyan block rm <username / tweet-number>
 ```
 
 - The `@` in the user name can be omitted

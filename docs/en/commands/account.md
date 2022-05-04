@@ -3,8 +3,8 @@
 Manage and switch accounts used by twnyan.
 
 ```
-twnyan account <Command>
-twnyan acc <Command>
+twnyan account <command>
+twnyan acc <command>
 ```
 
 ## Commands
@@ -31,8 +31,8 @@ twnyan account ls
 Remove your account from twnyan.
 
 ```
-twnyan account remove <User Name>
-twnyan account rm <User Name>
+twnyan account remove <username>
+twnyan account rm <username>
 ```
 
 ### account switch
@@ -40,8 +40,8 @@ twnyan account rm <User Name>
 Switch the account to be used.
 
 ```
-twnyan account switch <User Name>
-twnyan account sw <User Name>
+twnyan account switch <username>
+twnyan account sw <username>
 ```
 
 ### account help

@@ -1,10 +1,10 @@
 # retweet
 
-Retweet tweets.
+Retweet a tweet.
 
 ```
-twnyan retweet {<Tweet Number>... | <Command>}
-twnyan rt {<Tweet Number>... | <Command>}
+twnyan retweet {<tweet-number>... | <command>}
+twnyan rt {<tweet-number>... | <command>}
 ```
 
 - Multiple tweet numbers can be specified by separating them with a single space
@@ -13,11 +13,11 @@ twnyan rt {<Tweet Number>... | <Command>}
 
 ### retweet remove
 
-Remove retweet.
+Unretweet a tweet.
 
 ```
-twnyan retweet remove <Tweet Number>...
-twnyan retweet rm <Tweet Number>...
+twnyan retweet remove <tweet-number>...
+twnyan retweet rm <tweet-number>...
 ```
 
 - Multiple tweet numbers can be specified by separating them with a single space

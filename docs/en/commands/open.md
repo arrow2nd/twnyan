@@ -1,9 +1,9 @@
 # open
 
-Displays the specified tweets in the browser.
+Open a tweet in your browser.
 
 ```
-twnyan open {<Tweet Number> | <Command>}
+twnyan open {<tweet-number> | <command>}
 ```
 
 - Your environment's default browser will start

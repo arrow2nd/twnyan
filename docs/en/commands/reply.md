@@ -1,10 +1,10 @@
 # reply
 
-Post Reply.
+Post a Reply.
 
 ```
-twnyan reply {<Tweet Number> [Text] [Image]... | <Command>}
-twnyan rp {<Tweet Number> [Text] [Image]... | <Command>}
+twnyan reply {<tweet-number> [text] [image]... | <command>}
+twnyan rp {<tweet-number> [text] [image]... | <command>}
 ```
 
 - If no text is specified, "にゃーん" will be posted
@@ -17,8 +17,8 @@ twnyan rp {<Tweet Number> [Text] [Image]... | <Command>}
 Post a multi-line reply.
 
 ```
-twnyan reply multi [Image...]
-twnyan reply ml [Image...]
+twnyan reply multi <tweet-number> [image]...
+twnyan reply ml <tweet-number> [image]...
 ```
 
 - If there are multiple images, please specify them separated by a single space

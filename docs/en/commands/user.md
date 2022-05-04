@@ -3,12 +3,12 @@
 Displays the timeline of the specified user.
 
 ```
-twnyan user {<User Name / Tweet Number> [Count] | <Command>}
-twnyan ur {<User Name / Tweet Number> [Count] | <Command>}
+twnyan user {<username / tweet-number> [number] | <command>}
+twnyan ur {<username / tweet-number> [number] | <command>}
 ```
 
 - The `@` in the user name can be omitted
-- If count is omitted, the default value in the configuration file is specified
+- If number of acquisitions is omitted, the default value in the configuration file is specified
 
 ## Command
 
@@ -17,10 +17,10 @@ twnyan ur {<User Name / Tweet Number> [Count] | <Command>}
 Display your own timeline.
 
 ```
-twnyan user own [Count]
+twnyan user own [number]
 ```
 
-- If count is omitted, the default value in the configuration file is specified
+- If number of acquisitions is omitted, the default value in the configuration file is specified
 
 ### user help
 

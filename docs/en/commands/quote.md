@@ -1,10 +1,10 @@
 # quote
 
-Retweet tweets.
+Quote a tweet.
 
 ```
-twnyan quote {<Tweet Number> [Text] []... | <Command>}
-twnyan qt {<Tweet Number> [Text] [Image]... | <Command>}
+twnyan quote {<tweet-number> [text] []... | <command>}
+twnyan qt {<tweet-number> [text] [image]... | <command>}
 ```
 
 - If no text is specified, "にゃーん" will be posted
@@ -17,8 +17,8 @@ twnyan qt {<Tweet Number> [Text] [Image]... | <Command>}
 Post a multi-line quote retweet.
 
 ```
-twnyan quote multi [Image]...
-twnyan quote ml [Image]...
+twnyan quote multi [image]...
+twnyan quote ml [image]...
 ```
 
 - If there are multiple images, please specify them separated by a single space

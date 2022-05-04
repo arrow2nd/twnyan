@@ -1,11 +1,11 @@
 # likert
 
-Like & Retweet tweets.
+Like & Retweet a tweet.
 
 ```
-twnyan likert {<Tweet Number>... | <Command>}
-twnyan lr {<Tweet Number>... | <Command>}
-twnyan fr {<Tweet Number>... | <Command>}
+twnyan likert {<tweet-number>... | <command>}
+twnyan lr {<tweet-number>... | <command>}
+twnyan fr {<tweet-number>... | <command>}
 ```
 
 - Multiple tweet numbers can be specified by separating them with a single space

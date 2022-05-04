@@ -8,7 +8,7 @@ twnyan [Option] [Command]
 
 ## Option
 
-- `-A` `--account <User Name>`
+- `-A` `--account <username>`
   - Specify account to use (if not specified, the main account will be used)
 - `-H` `--help`
   - Display help with options

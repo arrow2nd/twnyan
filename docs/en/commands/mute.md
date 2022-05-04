@@ -1,10 +1,10 @@
 # mute
 
-Mutes the user.
+Mute a user.
 
 ```
-twnyan mute {<User Name / Tweet Number> | <Command>}
-twnyan mu {<User Name / Tweet Number> | <Command>}
+twnyan mute {<username / tweet-number> | <command>}
+twnyan mu {<username / tweet-number> | <command>}
 ```
 
 - The `@` in the user name can be omitted
@@ -13,11 +13,11 @@ twnyan mu {<User Name / Tweet Number> | <Command>}
 
 ### mute remove
 
-Unmutes the user.
+Unmute a user.
 
 ```
-twnyan mute remove <User Name / Tweet Number>
-twnyan mute rm <User Name / Tweet Number>
+twnyan mute remove <username / tweet-number>
+twnyan mute rm <username / tweet-number>
 ```
 
 - The `@` in the user name can be omitted
