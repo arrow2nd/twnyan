@@ -7,7 +7,7 @@ twnyan follow {<User Name / Tweet Number> | <Command>}
 twnyan fw {<User Name / Tweet Number> | <Command>}
 ```
 
-- The `@` in the user name can be omitted.
+- The `@` in the user name can be omitted
 
 ## Command
 
@@ -20,7 +20,7 @@ twnyan follow remove <User Name / Tweet Number>
 twnyan follow rm <User Name / Tweet Number>
 ```
 
-- The `@` in the user name can be omitted.
+- The `@` in the user name can be omitted
 
 ### follow help
 

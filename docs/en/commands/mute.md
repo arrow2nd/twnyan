@@ -7,6 +7,8 @@ twnyan mute {<User Name / Tweet Number> | <Command>}
 twnyan mu {<User Name / Tweet Number> | <Command>}
 ```
 
+- The `@` in the user name can be omitted
+
 ## Command
 
 ### mute remove

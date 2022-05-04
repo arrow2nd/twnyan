@@ -7,8 +7,8 @@ twnyan user {<User Name / Tweet Number> [Count] | <Command>}
 twnyan ur {<User Name / Tweet Number> [Count] | <Command>}
 ```
 
-- The `@` in the user name can be omitted.
-- If count is omitted, the default value in the configuration file is specified.
+- The `@` in the user name can be omitted
+- If count is omitted, the default value in the configuration file is specified
 
 ## Command
 
@@ -20,7 +20,7 @@ Display your own timeline.
 twnyan user own [Count]
 ```
 
-- If count is omitted, the default value in the configuration file is specified.
+- If count is omitted, the default value in the configuration file is specified
 
 ### user help
 

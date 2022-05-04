@@ -17,7 +17,7 @@ A file containing account credentials.
 
 Optional settings file.
 
-| 名前       | 説明                                |
+| Name       | Description                         |
 | ---------- | ----------------------------------- |
 | ConfigDir  | Path of the configuration directory |
 | Counts     | Default number of acquisitions      |
@@ -30,7 +30,7 @@ Optional settings file.
 
 Color setting file.
 
-| 名前         | 説明                           |
+| Name         | Description                    |
 | ------------ | ------------------------------ |
 | Accent1      | Accent Color 1                 |
 | Accent2      | Accent Color 2                 |

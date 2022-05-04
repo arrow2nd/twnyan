@@ -3,10 +3,10 @@
 twnyan is a simple Twitter client that runs in the terminal.
 
 ```
-twnyan [Options] [Command]
+twnyan [Option] [Command]
 ```
 
-## Options
+## Option
 
 - `-A` `--account <User Name>`
   - Specify account to use (if not specified, the main account will be used)
@@ -24,8 +24,8 @@ twnyan [Options] [Command]
 - [tweet](./tweet.md)
 - [reply](./reply.md)
 - [like](./like.md)
-- [likert](./likert.md)
 - [retweet](./retweet.md)
+- [likert](./likert.md)
 - [quote](./quote.md)
 - [open](./open.md)
 
