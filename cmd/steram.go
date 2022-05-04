@@ -6,18 +6,22 @@ import (
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
-	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/api"
+	"github.com/arrow2nd/ishell/v2"
+	"github.com/arrow2nd/twnyan/twitter"
 )
+
+// AccumulateTweets 蓄積されたツイート
+type AccumulateTweets map[int64]anaconda.Tweet
 
 func (cmd *Cmd) newStreamCmd() *ishell.Cmd {
 	return &ishell.Cmd{
 		Name:    "stream",
 		Aliases: []string{"st"},
 		Func:    cmd.execStreamCmd,
-		Help:    "start a pseudo-UserStream",
+		Help:    "start a pseudo userstream mode",
 		LongHelp: createLongHelp(
-			"After accumulating up to 250 tweets in the first minute, the tweets will be displayed with a one-minute delay, just like the UserStream API.\nCtrl+C to exit.",
+			`Provide a one-minute buffer time for displaying the home timeline to simulate real-time updates like the UserStream API.
+Ctrl+C to exit.`,
 			"st",
 			"stream",
 			"",
@@ -33,15 +37,15 @@ func (cmd *Cmd) execStreamCmd(c *ishell.Context) {
 	}
 
 	// タイムラインを表示
-	cmd.view.ShowTweetsFromArray(*tweets, false)
+	cmd.view.ShowTweets(*tweets, false)
 
-	// Ctrl+Cが入力されたら通知する
+	// Ctrl+Cでの割り込みを通知
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 
 	go cmd.startUserStream(sinceId, quit)
 
-	// 通知が来たら終了
+	// 割り込みがあったら終了
 	<-quit
 	signal.Stop(quit)
 	close(quit)
@@ -59,7 +63,7 @@ func (cmd *Cmd) startUserStream(startSinceId string, quit chan os.Signal) {
 		for i := 0; i < 60; i++ {
 			select {
 			case <-quit:
-				// 中断された
+				// 中断
 				return
 			default:
 				// 蓄積したツイートを表示
@@ -114,15 +118,15 @@ func (cmd *Cmd) createNewAccumulateTweets(sinceId string) (AccumulateTweets, str
 func (cmd *Cmd) fetchHomeTimelineTweets(count, sinceId string) (*[]anaconda.Tweet, string, error) {
 	// 取得件数が指定されていないならデフォルト値を代入
 	if count == "" {
-		count = cmd.cfg.Option.Counts
+		count = cmd.config.Option.Counts
 	}
 
-	query := api.CreateQuery(count)
+	query := twitter.CreateQuery(count)
 	if sinceId != "" {
 		query.Add("since_id", sinceId)
 	}
 
-	tweets, err := cmd.api.FetchTimelineTweets("home", query)
+	tweets, err := cmd.twitter.FetchTimelineTweets(twitter.Home, query)
 	if err != nil {
 		return nil, sinceId, err
 	}

@@ -1,4 +1,4 @@
-package api
+package twitter
 
 import (
 	"context"
@@ -15,28 +15,29 @@ import (
 )
 
 // PostTweet ツイートを投稿
-func (tw *TwitterAPI) PostTweet(query url.Values, text string) (string, error) {
+func (tw *Twitter) PostTweet(query url.Values, text string) (string, error) {
 	tweet, err := tw.API.PostTweet(text, query)
 	if err != nil {
-		return "", errors.New(tw.createAPIErrorMsg("", err))
+		return "", tw.createAPIError("", err)
 	}
 
 	return tweet.FullText, nil
 }
 
 // DeleteTweet ツイートを削除
-func (tw *TwitterAPI) DeleteTweet(tweetIDStr string) (string, error) {
-	tweetID, _ := strconv.ParseInt(tweetIDStr, 10, 64)
-	tweet, err := tw.API.DeleteTweet(tweetID, true)
+func (tw *Twitter) DeleteTweet(tweetId string) (string, error) {
+	id, _ := strconv.ParseInt(tweetId, 10, 64)
+
+	tweet, err := tw.API.DeleteTweet(id, true)
 	if err != nil {
-		return "", errors.New(tw.createAPIErrorMsg("", err))
+		return "", tw.createAPIError("", err)
 	}
 
 	return tweet.FullText, nil
 }
 
 // UploadImage 画像をアップロード
-func (tw *TwitterAPI) UploadImage(images []string) (string, error) {
+func (tw *Twitter) UploadImage(images []string) (string, error) {
 	fileNum := len(images)
 
 	// 画像数が4枚を超えるならエラー

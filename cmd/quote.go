@@ -3,7 +3,7 @@ package cmd
 import (
 	"net/url"
 
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 )
 
 func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
@@ -14,9 +14,11 @@ func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
 		Func:    cmd.execQuoteCmd,
 		Help:    "quote a tweet",
 		LongHelp: createLongHelp(
-			"Quote a tweet.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			`Quote a tweet.
+If there is no tweet text, 'にゃーん' will be posted.
+If you are submitting an image, please add the file name separated by a space.`,
 			"qt",
-			"quote [<tweetnumber>] [text] [image]...",
+			"quote <tweet-number> [text] [image]...",
 			"quote 0 cute!! cat.png",
 		),
 	}
@@ -28,9 +30,11 @@ func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
 		Func:    cmd.execQuoteMultiCmd,
 		Help:    "post a multi-line quote tweet",
 		LongHelp: createLongHelp(
-			"Post a multi-line quote tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
+			`Post a multi-line quote tweet.
+Enter a semicolon to end the input.
+And if you want to cancel, input ":exit".`,
 			"ml",
-			"quote multi [<tweetnumber>] [images]...",
+			"quote multi <tweet-number> [image]...",
 			"quote multi 0 apple.png",
 		),
 	})
@@ -69,7 +73,7 @@ func (cmd *Cmd) execQuote(tweetNumStr, text string, images []string) {
 	query := url.Values{}
 
 	// 引用するツイートのURLを取得
-	tweetUrl, err := cmd.view.GetTweetURL(tweetNumStr)
+	tweetUrl, err := cmd.twitter.GetTweetURL(tweetNumStr)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -83,11 +87,11 @@ func (cmd *Cmd) execQuote(tweetNumStr, text string, images []string) {
 
 	// URLを追加してツイート
 	text += " " + tweetUrl
-	tweetText, err := cmd.api.PostTweet(query, text)
+	tweetText, err := cmd.twitter.PostTweet(query, text)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.showMessage("QUOTED", tweetText, cmd.cfg.Color.Retweet)
+	cmd.showMessage("QUOTED", tweetText, cmd.config.Color.Retweet)
 }

@@ -1,43 +1,111 @@
 package cmd
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
-	"github.com/ChimeraCoder/anaconda"
-	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/api"
+	"github.com/arrow2nd/ishell/v2"
 	"github.com/arrow2nd/twnyan/config"
+	"github.com/arrow2nd/twnyan/twitter"
 	"github.com/arrow2nd/twnyan/view"
+	"github.com/spf13/pflag"
 )
 
-const versionStr = "1.7.2"
-
+// Cmd コマンド管理
 type Cmd struct {
-	shell *ishell.Shell
-	cfg   *config.Config
-	api   *api.TwitterAPI
-	view  *view.View
+	shell   *ishell.Shell
+	flagSet *pflag.FlagSet
+	config  *config.Config
+	twitter *twitter.Twitter
+	view    *view.View
 }
 
-type AccumulateTweets map[int64]anaconda.Tweet
+// New 作成
+func New() *Cmd {
+	config := config.New()
 
-// New 構造体を初期化
-func New(c *config.Config, a *api.TwitterAPI) *Cmd {
-	nc := &Cmd{
-		shell: ishell.New(),
-		cfg:   c,
-		api:   a,
-		view:  view.New(c),
+	return &Cmd{
+		shell:   ishell.New(),
+		flagSet: pflag.NewFlagSet("twnyan", pflag.ContinueOnError),
+		config:  config,
+		twitter: twitter.New(),
+		view:    view.New(config),
+	}
+}
+
+// Init 初期化
+func (cmd *Cmd) Init() {
+	var err error
+
+	// コマンド・フラグを登録
+	cmd.registerCommands()
+	cmd.registerFlags()
+
+	// 設定ファイル読み込み
+	ok := cmd.config.Load()
+
+	// メインアカウントがない場合、認証
+	if !ok || cmd.config.Cred.Main.Token == "" || cmd.config.Cred.Main.Secret == "" {
+		if cmd.config.Cred.Main, _, err = cmd.twitter.Auth(); err != nil {
+			cmd.showErrorMessage(err.Error())
+			os.Exit(1)
+		}
+		cmd.config.Save()
 	}
 
-	nc.init()
-	return nc
+	// フラグをパース
+	if err := cmd.flagSet.Parse(os.Args[1:]); err != nil {
+		cmd.showErrorMessage(err.Error())
+		os.Exit(1)
+	}
+
+	// ログイン
+	if err = cmd.login(); err != nil {
+		cmd.showErrorMessage(err.Error())
+		os.Exit(1)
+	}
+
+	cmd.setDefaultPrompt()
 }
 
-// init 初期化
-func (cmd *Cmd) init() {
-	cmd.setDefaultPrompt()
+// Run 実行
+func (cmd *Cmd) Run() {
+	// ヘルプの表示
+	if ok, _ := cmd.flagSet.GetBool("help"); ok {
+		cmd.shell.Print(cmd.shell.HelpText())
+		cmd.flagSet.Usage()
+		return
+	}
 
+	// 対話モードで実行
+	if cmd.flagSet.NArg() == 0 {
+		cmd.shell.Process("timeline")
+		cmd.shell.Run()
+		return
+	}
+
+	// 直接実行
+	if err := cmd.shell.Process(cmd.flagSet.Args()...); err != nil {
+		os.Exit(1)
+	}
+}
+
+func (cmd *Cmd) registerFlags() {
+	// フラグを登録
+	cmd.flagSet.StringP("account", "A", "", "specify the account to use")
+	cmd.flagSet.BoolP("help", "H", false, "display help with options")
+
+	// フラグのヘルプ表示
+	cmd.flagSet.Usage = func() {
+		cmd.shell.Println("Flags:")
+		cmd.flagSet.PrintDefaults()
+	}
+}
+
+func (cmd *Cmd) registerCommands() {
+	// コマンドを登録
+	cmd.shell.AddCmd(cmd.newAccountCmd())
 	cmd.shell.AddCmd(cmd.newTweetCmd())
 	cmd.shell.AddCmd(cmd.newReplyCmd())
 	cmd.shell.AddCmd(cmd.newTimelineCmd())
@@ -56,23 +124,26 @@ func (cmd *Cmd) init() {
 	cmd.shell.AddCmd(cmd.newStreamCmd())
 	cmd.shell.AddCmd(cmd.newVersionCmd())
 
-	// コマンドエラー時の表示を設定
+	// コマンドエラー時の表示
 	cmd.shell.NotFound(func(c *ishell.Context) {
-		cmd.showErrorMessage("command not found: " + c.Args[0])
+		cmd.showErrorMessage(fmt.Sprintf("command not found: %s", c.Args[0]))
 	})
 }
 
-// Run 実行
-func (cmd *Cmd) Run() {
-	// 引数があるなら直接実行
-	if len(os.Args) > 1 {
-		if err := cmd.shell.Process(os.Args[1:]...); err != nil {
-			cmd.showErrorMessage(err.Error())
-		}
-		os.Exit(0)
+func (cmd *Cmd) login() error {
+	screenName, _ := cmd.flagSet.GetString("account")
+
+	// メインアカウント
+	if screenName == "" {
+		cmd.twitter.Init(cmd.config.Cred.Main)
+		return nil
 	}
 
-	// 対話モードで実行
-	cmd.shell.Process("timeline")
-	cmd.shell.Run()
+	// サブアカウント
+	if cred, ok := cmd.config.Cred.Sub[screenName]; ok {
+		cmd.twitter.Init(cred)
+		return nil
+	}
+
+	return errors.New(fmt.Sprintf("account does not exist: %s", screenName))
 }

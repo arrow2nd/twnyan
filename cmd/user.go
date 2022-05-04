@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/api"
+	"github.com/arrow2nd/ishell/v2"
+	"github.com/arrow2nd/twnyan/twitter"
 	"github.com/arrow2nd/twnyan/util"
 )
 
@@ -12,11 +12,12 @@ func (cmd *Cmd) newUserCmd() *ishell.Cmd {
 		Name:    "user",
 		Aliases: []string{"ur"},
 		Func:    cmd.execUserCmd,
-		Help:    "get a user timeline",
+		Help:    "displays the timeline of user",
 		LongHelp: createLongHelp(
-			"Get a user timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Displays the timeline of the specified user.
+If number of acquisitions is omitted, the default value in the configuration file is specified.`,
 			"ur",
-			"user [<username/tweetnumber>] [counts]",
+			"user <username / tweet-number> [number]",
 			"user github 25\n  user 2",
 		),
 	}
@@ -24,11 +25,12 @@ func (cmd *Cmd) newUserCmd() *ishell.Cmd {
 	// use own
 	userCmd.AddCmd(&ishell.Cmd{
 		Name: "own",
-		Help: "get your own timeline",
+		Help: "display your own timeline",
 		LongHelp: createLongHelp(
-			"Get your own timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Display your own timeline.
+If number of acquisitions is omitted, the default value in the configuration file is specified.`,
 			"",
-			"user own [counts]",
+			"user own [number]",
 			"user own 25",
 		),
 		Func: func(c *ishell.Context) {
@@ -49,7 +51,7 @@ func (cmd *Cmd) execUserCmd(c *ishell.Context) {
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsThreeDigitsNumber(screenName) {
-		screenName, err = cmd.view.GetDataFromTweetNum(screenName, "screenName")
+		screenName, err = cmd.twitter.GetDataFromTweetNum(screenName, twitter.ScreenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -59,27 +61,39 @@ func (cmd *Cmd) execUserCmd(c *ishell.Context) {
 	cmd.showUserTimeline(screenName, count)
 }
 
-// showUserTimeline ユーザータイムラインを表示
+// showUserTimeline ユーザタイムラインを表示
 func (cmd *Cmd) showUserTimeline(screenName, count string) {
-	query := api.CreateQuery(count)
+	query := twitter.CreateQuery(count)
 	query.Add("screen_name", screenName)
 
-	// ユーザーのツイートを取得
-	tweets, err := cmd.api.FetchTimelineTweets("user", query)
+	// ユーザのツイートを取得
+	tweets, err := cmd.twitter.FetchTimelineTweets(twitter.User, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	// ユーザーとの関係を取得
-	user := (*tweets)[0].User
-	relationships, err := cmd.api.FetchRelationships(user.IdStr)
-	if err != nil {
-		cmd.showErrorMessage(err.Error())
-		return
+	user := cmd.twitter.OwnUser
+	relationships := []string{}
+
+	if screenName != "" {
+		// ユーザ情報を取得
+		user, err = cmd.twitter.FetchUserInfo(screenName)
+		if err != nil {
+			cmd.showErrorMessage(err.Error())
+			return
+		}
+
+		// ユーザとの関係を取得
+		relationships, err = cmd.twitter.FetchRelationships(user.IdStr)
+		if err != nil {
+			cmd.showErrorMessage(err.Error())
+			return
+		}
 	}
 
-	cmd.view.RegisterTweets(tweets)
-	cmd.view.ShowRegisteredTweets()
-	cmd.view.ShowUserInfo(&user, relationships)
+	cmd.twitter.RegisterTweets(tweets)
+	cmd.showTweets()
+
+	cmd.view.ShowUserInfo(user, relationships)
 }

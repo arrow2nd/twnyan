@@ -3,7 +3,8 @@ package cmd
 import (
 	"net/url"
 
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
+	"github.com/arrow2nd/twnyan/twitter"
 )
 
 func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
@@ -14,9 +15,11 @@ func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 		Func:    cmd.execReplyCmd,
 		Help:    "post a reply",
 		LongHelp: createLongHelp(
-			"Post a reply.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			`Post a reply.
+If there is no tweet text, 'にゃーん' will be posted.
+If you are submitting an image, please add the file name separated by a space.`,
 			"rp",
-			"reply [<tweetnumber>] [text] [image]...",
+			"reply <tweet-number> [text] [image]...",
 			"reply 2 meow cat.jpg",
 		),
 	}
@@ -28,9 +31,11 @@ func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 		Func:    cmd.execReplyMultiCmd,
 		Help:    "post a multi-line reply",
 		LongHelp: createLongHelp(
-			"Post a multi-line reply.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
+			`Post a multi-line reply.
+Enter a semicolon to end the input.
+And if you want to cancel, input ":exit".`,
 			"ml",
-			"reply multi [<tweetnumber>]",
+			"reply multi <tweet-number> [image]...",
 			"reply multi 2",
 		),
 	})
@@ -67,7 +72,7 @@ func (cmd *Cmd) execReplyMultiCmd(c *ishell.Context) {
 
 func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 	// リプライ先のツイートIDを取得
-	tweetID, err := cmd.view.GetDataFromTweetNum(tweetNumStr, "tweetID")
+	tweetId, err := cmd.twitter.GetDataFromTweetNum(tweetNumStr, twitter.TweetId)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
@@ -75,7 +80,7 @@ func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 
 	// リプライ先を設定
 	query := url.Values{}
-	query.Add("in_reply_to_status_id", tweetID)
+	query.Add("in_reply_to_status_id", tweetId)
 	query.Add("auto_populate_reply_metadata", "true")
 
 	// 画像をアップロード
@@ -85,11 +90,11 @@ func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
 	}
 
 	// リプライを投稿
-	tweetText, err := cmd.api.PostTweet(query, status)
+	tweetText, err := cmd.twitter.PostTweet(query, status)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.showMessage("REPLYED", tweetText, cmd.cfg.Color.Reply)
+	cmd.showMessage("REPLYED", tweetText, cmd.config.Color.Reply)
 }

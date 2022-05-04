@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 )
 
 func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
@@ -10,13 +10,14 @@ func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
 		Name:    "like",
 		Aliases: []string{"lk", "fv"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("LIKED", c.Cmd.Name, cmd.cfg.Color.Favorite, c.Args, cmd.api.Favorite)
+			cmd.actionOnTweet("LIKED", c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.twitter.Favorite)
 		},
 		Help: "like a tweet",
 		LongHelp: createLongHelp(
-			"Like a tweet.\nIf there is more than one, please separate them with a space.",
+			`Like a tweet.
+If there is more than one, please separate them with a space.`,
 			"lk, fv",
-			"like [<tweetnumber>]...",
+			"like <tweet-number>...",
 			"like 0 1",
 		),
 	}
@@ -26,13 +27,14 @@ func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("UN-LIKED", "like "+c.Cmd.Name, cmd.cfg.Color.Favorite, c.Args, cmd.api.Unfavorite)
+			cmd.actionOnTweet("UNLIKED", "like "+c.Cmd.Name, cmd.config.Color.Favorite, c.Args, cmd.twitter.Unfavorite)
 		},
-		Help: "un-like a tweet",
+		Help: "unlike a tweet",
 		LongHelp: createLongHelp(
-			"UnLike a tweet.\nIf there is more than one, please separate them with a space.",
+			`Unlike a tweet.
+If there is more than one, please separate them with a space.`,
 			"rm",
-			"like remove [<tweetnumber>]...",
+			"like remove <tweet-number>...",
 			"like remove 0 1",
 		),
 	})

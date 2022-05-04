@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/arrow2nd/ishell"
-	"github.com/arrow2nd/twnyan/api"
+	"github.com/arrow2nd/ishell/v2"
+	"github.com/arrow2nd/twnyan/twitter"
 )
 
 func (cmd *Cmd) newTimelineCmd() *ishell.Cmd {
@@ -10,11 +10,12 @@ func (cmd *Cmd) newTimelineCmd() *ishell.Cmd {
 		Name:    "timeline",
 		Aliases: []string{"tl"},
 		Func:    cmd.execTimelineCmd,
-		Help:    "get a home timeline",
+		Help:    "displays the home timeline",
 		LongHelp: createLongHelp(
-			"Get a home timeline.\nIf you omit the counts, the default value in the configuration file (25 by default) will be specified.",
+			`Displays the home timeline.
+If number of acquisitions is omitted, the default value in the configuration file is specified.`,
 			"tl",
-			"timeline [counts]",
+			"timeline [number]",
 			"timeline 50",
 		),
 	}
@@ -22,15 +23,15 @@ func (cmd *Cmd) newTimelineCmd() *ishell.Cmd {
 
 func (cmd *Cmd) execTimelineCmd(c *ishell.Context) {
 	count := cmd.getCountFromCmdArg(c.Args)
+	query := twitter.CreateQuery(count)
 
 	// タイムラインのツイートを取得
-	query := api.CreateQuery(count)
-	tweets, err := cmd.api.FetchTimelineTweets("home", query)
+	tweets, err := cmd.twitter.FetchTimelineTweets(twitter.Home, query)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.view.RegisterTweets(tweets)
-	cmd.view.ShowRegisteredTweets()
+	cmd.twitter.RegisterTweets(tweets)
+	cmd.showTweets()
 }

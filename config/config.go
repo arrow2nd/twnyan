@@ -1,21 +1,18 @@
 package config
 
+import "github.com/garyburd/go-oauth/oauth"
+
 const (
 	crdFile = ".cred.yaml"
 	optFile = "option.yaml"
 	colFile = "color.yaml"
 )
 
-// Config 設定構造体
-type Config struct {
-	Cred   *cred
-	Option *option
-	Color  *color
-}
-
 type cred struct {
-	Token  string
-	Secret string
+	// Main メインアカウント
+	Main *oauth.Credentials `yaml:"Main,inline"`
+	// Sub サブアカウント
+	Sub map[string]*oauth.Credentials
 }
 
 type option struct {
@@ -46,12 +43,22 @@ type color struct {
 	Mute         string
 }
 
-// New 構造体を初期化
+// Config 設定管理
+type Config struct {
+	// Cred 認証情報
+	Cred *cred
+	// Option 設定情報
+	Option *option
+	// Color 色情報
+	Color *color
+}
+
+// New 生成
 func New() *Config {
 	return &Config{
 		Cred: &cred{
-			Token:  "",
-			Secret: "",
+			Main: &oauth.Credentials{},
+			Sub:  map[string]*oauth.Credentials{},
 		},
 		Option: &option{
 			ConfigDir:  getConfigDir(),

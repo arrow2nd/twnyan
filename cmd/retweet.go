@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 )
 
 func (cmd *Cmd) newRetweetCmd() *ishell.Cmd {
@@ -10,13 +10,14 @@ func (cmd *Cmd) newRetweetCmd() *ishell.Cmd {
 		Name:    "retweet",
 		Aliases: []string{"rt"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("RETWEETED", c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.Retweet)
+			cmd.actionOnTweet("RETWEETED", c.Cmd.Name, cmd.config.Color.Retweet, c.Args, cmd.twitter.Retweet)
 		},
 		Help: "retweet a tweet",
 		LongHelp: createLongHelp(
-			"Retweet a tweet.\nIf there is more than one, please separate them with a space.",
+			`Retweet a tweet.
+If there is more than one, please separate them with a space.`,
 			"rt",
-			"retweet [<tweetnumber>]...",
+			"retweet <tweet-number>...",
 			"retweet 0 1",
 		),
 	}
@@ -26,13 +27,14 @@ func (cmd *Cmd) newRetweetCmd() *ishell.Cmd {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func: func(c *ishell.Context) {
-			cmd.actionOnTweet("UN-RETWEETED", "retweet "+c.Cmd.Name, cmd.cfg.Color.Retweet, c.Args, cmd.api.UnRetweet)
+			cmd.actionOnTweet("UNRETWEETED", "retweet "+c.Cmd.Name, cmd.config.Color.Retweet, c.Args, cmd.twitter.UnRetweet)
 		},
-		Help: "un-retweet a tweet",
+		Help: "unretweet a tweet",
 		LongHelp: createLongHelp(
-			"UnRetweet a tweet.\nIf there is more than one, please separate them with a space.",
+			`Unretweet a tweet.
+If there is more than one, please separate them with a space.`,
 			"rm",
-			"retweet remove [<tweetnumber>]...",
+			"retweet remove <tweet-number>...",
 			"retweet remove 0 1",
 		),
 	})

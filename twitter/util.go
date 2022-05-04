@@ -1,6 +1,7 @@
-package api
+package twitter
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -10,37 +11,39 @@ import (
 
 // CreateQuery クエリを作成
 func CreateQuery(count string) url.Values {
-	q := url.Values{}
-	q.Add("tweet_mode", "extended")
-	q.Add("count", count)
-
-	return q
+	return url.Values{
+		"tweet_mode": {"extended"},
+		"count":      {count},
+	}
 }
 
-// createUserInfoStr ユーザー情報の文字列を作成
-func (tw *TwitterAPI) createUserInfoStr(name, screenName string) string {
+// createUserInfoText ユーザ情報の文字列を作成
+func (tw *Twitter) createUserInfoText(name, screenName string) string {
 	return fmt.Sprintf("%s @%s", name, screenName)
 }
 
-// createAPIErrorMsg エラーメッセージを作成
-func (tw *TwitterAPI) createAPIErrorMsg(resourceName string, err error) string {
-	bytes := []byte(err.Error())
-
+// createAPIErrorText APIのエラーメッセージを作成
+func (tw *Twitter) createAPIErrorText(resource string, err error) string {
 	// エラー文字列からメッセージを抽出
-	result := regexp.MustCompile(`"(message|error)":"([^"]+)"`).FindSubmatch(bytes)
-	if len(result) <= 0 {
+	result := regexp.MustCompile(`"(?:message|error)":"([^"]+)"`).FindSubmatch([]byte(err.Error()))
+	if len(result) == 0 {
 		return ""
 	}
 
-	errMsg := string(result[2])
+	errMsg := string(result[1])
 
 	// レート制限なら解除時刻を追加
-	if errMsg == "Rate limit exceeded" && resourceName != "" {
-		resetTimeStr := tw.fetchRateLimitResetTime(resourceName)
-		errMsg += fmt.Sprintf(" (Reset Time : %s)", resetTimeStr)
+	if errMsg == "Rate limit exceeded" && resource != "" {
+		resetTime := tw.fetchRateLimitResetTime(resource)
+		errMsg += fmt.Sprintf(" (Reset Time : %s)", resetTime)
 	}
 
 	return errMsg
+}
+
+// createAPIError APIのエラーを作成
+func (tw *Twitter) createAPIError(resource string, err error) error {
+	return errors.New(tw.createAPIErrorText(resource, err))
 }
 
 // showLogo ロゴを表示

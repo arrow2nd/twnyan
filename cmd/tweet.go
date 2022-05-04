@@ -1,9 +1,14 @@
 package cmd
 
 import (
+	"io/ioutil"
 	"net/url"
+	"os"
+	"syscall"
 
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
+	"github.com/arrow2nd/twnyan/twitter"
+	"golang.org/x/term"
 )
 
 func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
@@ -14,7 +19,9 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 		Func:    cmd.execTweetCmd,
 		Help:    "post a tweet",
 		LongHelp: createLongHelp(
-			"Post a tweet.\nIf there is no tweet text, 'にゃーん' will be posted.\nIf you are submitting an image, please add the file name separated by a space.",
+			`Post a tweet.
+If there is no tweet text, 'にゃーん' will be posted.
+If you are submitting an image, please add the file name separated by a space.`,
 			"tw",
 			"tweet [text] [image]...",
 			"tweet meow🐱 cat.png supercat.jpg",
@@ -28,7 +35,9 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 		Func:    cmd.execTweetMultiCmd,
 		Help:    "post a multi-line tweet",
 		LongHelp: createLongHelp(
-			"Post a multi-line tweet.\nEnter a semicolon to end the input.\nAnd if you want to cancel, input \":exit\".",
+			`Post a multi-line tweet.
+Enter a semicolon to end the input.
+And if you want to cancel, input ":exit".`,
 			"ml",
 			"tweet multi [image]...",
 			"",
@@ -40,11 +49,12 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 		Name:    "remove",
 		Aliases: []string{"rm"},
 		Func:    cmd.execTweetRemoveCmd,
-		Help:    "delete a tweet",
+		Help:    "remove a tweet",
 		LongHelp: createLongHelp(
-			"Delete a tweet.\nIf there is more than one, please separate them with a space.",
+			`Remove a tweet.
+If there is more than one, please separate them with a space.`,
 			"rm",
-			"tweet remove [<tweetnumber>]",
+			"tweet remove <tweet-number>...",
 			"tweet remove 0 1",
 		),
 	})
@@ -53,8 +63,14 @@ func (cmd *Cmd) newTweetCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) execTweetCmd(c *ishell.Context) {
-	text, images := cmd.parseTweetCmdArgs(c.Args)
-	cmd.tweet(text, images)
+	// パイプからの入力を処理
+	if len(c.Args) == 0 && !term.IsTerminal(syscall.Stdin) {
+		stdin, _ := ioutil.ReadAll(os.Stdin)
+		cmd.tweet(string(stdin), nil)
+		return
+	}
+
+	cmd.tweet(cmd.parseTweetCmdArgs(c.Args))
 }
 
 func (cmd *Cmd) execTweetMultiCmd(c *ishell.Context) {
@@ -77,19 +93,19 @@ func (cmd *Cmd) execTweetRemoveCmd(c *ishell.Context) {
 
 	// 引数の数だけ削除処理
 	for _, tweetNumStr := range c.Args {
-		tweetID, err := cmd.view.GetDataFromTweetNum(tweetNumStr, "tweetID")
+		tweetId, err := cmd.twitter.GetDataFromTweetNum(tweetNumStr, twitter.TweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		tweetText, err := cmd.api.DeleteTweet(tweetID)
+		tweetText, err := cmd.twitter.DeleteTweet(tweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		cmd.showMessage("DELETED", tweetText, cmd.cfg.Color.Accent2)
+		cmd.showMessage("DELETED", tweetText, cmd.config.Color.Accent3)
 	}
 }
 
@@ -103,11 +119,11 @@ func (cmd *Cmd) tweet(text string, images []string) {
 	}
 
 	// ツイートを投稿
-	tweetText, err := cmd.api.PostTweet(query, text)
+	tweetText, err := cmd.twitter.PostTweet(query, text)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())
 		return
 	}
 
-	cmd.showMessage("TWEETED", tweetText, cmd.cfg.Color.Accent2)
+	cmd.showMessage("TWEETED", tweetText, cmd.config.Color.Accent3)
 }

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/arrow2nd/ishell"
+	"github.com/arrow2nd/ishell/v2"
 	"github.com/gookit/color"
 	"github.com/pkg/browser"
 )
@@ -11,11 +11,11 @@ func (cmd *Cmd) newOpenCmd() *ishell.Cmd {
 		Name:    "open",
 		Aliases: []string{"op"},
 		Func:    cmd.execOpenCmd,
-		Help:    "view the tweet in your browser",
+		Help:    "open a tweet in browser",
 		LongHelp: createLongHelp(
-			"View the tweet in your browser.",
+			"Open a tweet in your browser.",
 			"op",
-			"open [<tweetnumber>]",
+			"open <tweet-number>",
 			"open 2",
 		),
 	}
@@ -28,12 +28,12 @@ func (cmd *Cmd) execOpenCmd(c *ishell.Context) {
 	}
 
 	// 該当ツイートのURLを取得
-	url, err := cmd.view.GetTweetURL(c.Args[0])
+	url, err := cmd.twitter.GetTweetURL(c.Args[0])
 	if err != nil {
 		color.Error.Prompt(err.Error())
 		return
 	}
 
-	cmd.showMessage("OPENED", url, cmd.cfg.Color.Accent2)
+	cmd.showMessage("OPENED", url, cmd.config.Color.Accent3)
 	browser.OpenURL(url)
 }

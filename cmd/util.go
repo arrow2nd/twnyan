@@ -8,13 +8,14 @@ import (
 	"os"
 	"strings"
 
+	"github.com/arrow2nd/twnyan/twitter"
 	"github.com/arrow2nd/twnyan/util"
 	"github.com/gookit/color"
 )
 
 // setDefaultPrompt デフォルトのプロンプトを設定
 func (cmd *Cmd) setDefaultPrompt() {
-	prompt := fmt.Sprintf("@%s : ", cmd.api.OwnUser.ScreenName)
+	prompt := fmt.Sprintf("@%s : ", cmd.twitter.OwnUser.ScreenName)
 	cmd.shell.SetPrompt(prompt)
 }
 
@@ -36,25 +37,49 @@ func (cmd *Cmd) parseTweetCmdArgs(args []string) (string, []string) {
 
 // parseTimelineCmdArgs タイムライン取得系のコマンドの引数をパース
 func (cmd *Cmd) parseTimelineCmdArgs(args []string) (string, string, error) {
-	if len(args) <= 0 {
+	argNum := len(args)
+
+	if argNum <= 0 {
 		return "", "", errors.New("no arguments")
 	}
 
-	str, count := args[0], cmd.cfg.Option.Counts
+	str, count := args[0], cmd.config.Option.Counts
 
 	// 2つ目の引数があればcountに代入
-	if len(args) >= 2 {
+	if argNum >= 2 {
 		count = args[1]
 	}
 
 	return str, count, nil
 }
 
+// parseAccountCmdArgs アカウント系のコマンド引数をパース
+func (cmd *Cmd) parseAccountCmdArgs(args []string) (string, error) {
+	// 対象のスクリーン名が指定されていない
+	if len(args) == 0 {
+		return "", errors.New("Specify the screen name of the target account")
+	}
+
+	screenName := strings.Replace(args[0], "@", "", 1)
+
+	// メインアカウントを示す "main" が許可されているなら通す
+	if screenName == "main" {
+		return "main", nil
+	}
+
+	// アカウントの存在チェック
+	if _, ok := cmd.config.Cred.Sub[screenName]; !ok {
+		return "", errors.New("Account does not exist")
+	}
+
+	return screenName, nil
+}
+
 // getCountFromCmdArg 引数からツイート取得件数を取得
 func (cmd *Cmd) getCountFromCmdArg(args []string) string {
 	// 引数が無い、または数値以外ならデフォルト値を返す
 	if len(args) <= 0 || !util.IsThreeDigitsNumber(args[0]) {
-		return cmd.cfg.Option.Counts
+		return cmd.config.Option.Counts
 	}
 
 	return args[0]
@@ -66,11 +91,7 @@ func (cmd *Cmd) inputMultiLine() string {
 	cmd.shell.SetPrompt("... ")
 	defer cmd.setDefaultPrompt()
 
-	cmd.showMessage(
-		"MULTI",
-		"End typing with a semicolon. (If you want to cancel, input ':exit')",
-		cmd.cfg.Color.Accent3,
-	)
+	cmd.shell.Println("End typing with a semicolon. (If you want to cancel, input ':exit')")
 
 	input := cmd.shell.ReadMultiLinesFunc(func(f string) bool {
 		return f != ":exit" && !strings.HasSuffix(f, ";")
@@ -78,11 +99,17 @@ func (cmd *Cmd) inputMultiLine() string {
 
 	// 文字列内に:exitがあればキャンセル
 	if strings.Contains(input, ":exit") {
-		cmd.showMessage("CANCELED", "Input interrupted.", cmd.cfg.Color.Accent2)
+		cmd.showMessage("CANCELED", "Input interrupted", cmd.config.Color.Accent2)
 		return ""
 	}
 
 	return strings.TrimRight(input, ";")
+}
+
+// showExecutionConf 実行確認を表示
+func (cmd *Cmd) showExecutionConf(msg string) bool {
+	result := cmd.shell.MultiChoice([]string{"No", "Yes"}, msg)
+	return result == 1
 }
 
 // upload 画像をアップロード
@@ -92,11 +119,11 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 	}
 
 	// プログレスバー開始
-	fmt.Print("Uploading... 🐾 ")
+	cmd.shell.Print("Uploading... 🐾 ")
 	cmd.shell.ProgressBar().Indeterminate(true)
 	cmd.shell.ProgressBar().Start()
 
-	mediaIDs, err := cmd.api.UploadImage(images)
+	mediaIDs, err := cmd.twitter.UploadImage(images)
 	cmd.shell.ProgressBar().Stop()
 	if err != nil {
 		return err
@@ -115,13 +142,13 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 
 	// 引数の数だけ処理
 	for _, v := range args {
-		tweetID, err := cmd.view.GetDataFromTweetNum(v, "tweetID")
+		tweetId, err := cmd.twitter.GetDataFromTweetNum(v, twitter.TweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
 		}
 
-		tweetText, err := actionFunc(tweetID)
+		tweetText, err := actionFunc(tweetId)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -131,7 +158,7 @@ func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string
 	}
 }
 
-// actionOnUser ユーザーに対しての操作
+// actionOnUser ユーザに対しての操作
 func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string, actionFunc func(string) (string, error)) {
 	var err error
 
@@ -144,7 +171,7 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 
 	// ツイート番号ならスクリーンネームに置換
 	if util.IsThreeDigitsNumber(args[0]) {
-		screenName, err = cmd.view.GetDataFromTweetNum(args[0], "screenName")
+		screenName, err = cmd.twitter.GetDataFromTweetNum(args[0], twitter.ScreenName)
 		if err != nil {
 			cmd.showErrorMessage(err.Error())
 			return
@@ -161,8 +188,13 @@ func (cmd *Cmd) actionOnUser(actionName, cmdName, bgColor string, args []string,
 	cmd.showMessage(actionName, userName, bgColor)
 }
 
+// showTweets 登録されたツイートを一覧表示
+func (cmd *Cmd) showTweets() {
+	cmd.view.ShowTweets(cmd.twitter.Tweets, true)
+}
+
 // showMessage メッセージを表示
-func (cmd *Cmd) showMessage(tips, text, bgColor string) {
+func (cmd *Cmd) showMessage(title, text, bgColor string) {
 	width := util.GetWindowWidth()
 
 	// 不要な文字を削除
@@ -170,19 +202,16 @@ func (cmd *Cmd) showMessage(tips, text, bgColor string) {
 	text = html.UnescapeString(text)
 
 	// 画面内に収まるよう丸める
-	text = util.TruncateString(text, width-len(tips)-3)
+	text = util.TruncateString(text, width-len(title)-3)
 
-	color.HEXStyle(cmd.cfg.Color.BoxForground, bgColor).Printf(" %s ", tips)
-	fmt.Printf(" %s\n", text)
+	tips := color.HEXStyle(cmd.config.Color.BoxForground, bgColor).Sprintf(" %s ", title)
+	cmd.shell.Printf("%s %s\n", tips, text)
 }
 
 // showErrorMessage エラーメッセージを表示
 func (cmd *Cmd) showErrorMessage(msg string) {
-	width := util.GetWindowWidth()
-	text := util.TruncateString(msg, width-9)
-
-	errMsg := color.HEXStyle(cmd.cfg.Color.BoxForground, cmd.cfg.Color.Error).Sprintf(" ERROR: %s ", text)
-	fmt.Fprintln(os.Stderr, errMsg)
+	tips := color.HEXStyle(cmd.config.Color.BoxForground, cmd.config.Color.Error).Sprint(" ERROR ")
+	fmt.Fprintf(os.Stderr, "%s %s\n", tips, msg)
 }
 
 // drawWrongArgError 引数ミスのメッセージを表示
@@ -193,16 +222,18 @@ func (cmd *Cmd) showWrongArgMessage(cmdName string) {
 
 // createLongHelp 詳細なヘルプ文を作成
 func createLongHelp(help, alias, use, exp string) string {
-	longHelp := fmt.Sprintf("%s\n", help)
+	longHelp := fmt.Sprintf("%s", help)
 
 	if alias != "" {
-		longHelp += fmt.Sprintf("\nAlias:\n  %s\n", alias)
+		longHelp += fmt.Sprintf("\n\nAlias:\n  %s", alias)
 	}
+
 	if use != "" {
-		longHelp += fmt.Sprintf("\nUse:\n  %s\n", use)
+		longHelp += fmt.Sprintf("\n\nUse:\n  %s", use)
 	}
+
 	if exp != "" {
-		longHelp += fmt.Sprintf("\nExample:\n  %s\n", exp)
+		longHelp += fmt.Sprintf("\n\nExample:\n  %s", exp)
 	}
 
 	return longHelp
