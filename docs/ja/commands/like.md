@@ -20,13 +20,3 @@ twnyan fv {<ツイート番号>... | <コマンド>}
 twnyan like remove <ツイート番号>...
 twnyan like rm <ツイート番号>...
 ```
-
-- ツイート番号は、半角スペースで区切ることで複数指定できます
-
-### like help
-
-ヘルプを表示します。
-
-```
-twnyan like help
-```

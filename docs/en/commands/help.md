@@ -3,5 +3,5 @@
 Displays help.
 
 ```
-twnyan help
+twnyan [command] help
 ```

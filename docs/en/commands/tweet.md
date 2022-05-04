@@ -31,16 +31,8 @@ twnyan tweet ml [image...]
 Remove a tweet.
 
 ```
-twnyan tweet remove [<tweet-number>...]
-twnyan tweet rm [<tweet-number>...]
+twnyan tweet remove <tweet-number>...
+twnyan tweet rm <tweet-number>...
 ```
 
 - If there are multiple tweet numbers, please specify them separated by spaces
-
-### tweet help
-
-Displays help.
-
-```
-twnyan tweet help
-```

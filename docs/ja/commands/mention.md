@@ -3,18 +3,8 @@
 自分宛てのメンションを表示します。
 
 ```
-twnyan mention {[取得件数] | <コマンド>}
-twnyan mt {[取得件数] | <コマンド>}
+twnyan mention [取得件数]
+twnyan mt [取得件数]
 ```
 
 - 取得件数を省略した場合、設定ファイル内のデフォルト値が指定されます
-
-## コマンド
-
-### mention help
-
-ヘルプを表示します。
-
-```
-twnyan mention help
-```

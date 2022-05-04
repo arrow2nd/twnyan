@@ -3,8 +3,8 @@
 ツイートを投稿します。
 
 ```
-twnyan tweet {[テキスト] [画像ファイル...] | <コマンド>}
-twnyan tw {[テキスト] [画像ファイル...] | <コマンド>}
+twnyan tweet {[テキスト] [画像...] | <コマンド>}
+twnyan tw {[テキスト] [画像...] | <コマンド>}
 ```
 
 - テキストを指定しない場合、「にゃーん」が投稿されます
@@ -18,8 +18,8 @@ twnyan tw {[テキスト] [画像ファイル...] | <コマンド>}
 複数行のツイートを投稿します。
 
 ```
-twnyan tweet multi [画像ファイル...]
-twnyan tweet ml [画像ファイル...]
+twnyan tweet multi [画像...]
+twnyan tweet ml [画像...]
 ```
 
 - 画像が複数ある場合、半角スペースで区切って指定してください
@@ -31,16 +31,8 @@ twnyan tweet ml [画像ファイル...]
 ツイートを削除します。
 
 ```
-twnyan tweet remove [<ツイート番号>...]
-twnyan tweet rm [<ツイート番号>...]
+twnyan tweet remove <ツイート番号>...
+twnyan tweet rm <ツイート番号>...
 ```
 
 - ツイート番号が複数ある場合は、スペース区切りで指定してください
-
-### tweet help
-
-ヘルプを表示します。
-
-```
-twnyan tweet help
-```

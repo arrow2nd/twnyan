@@ -43,11 +43,3 @@ twnyan account rm <ユーザ名>
 twnyan account switch <ユーザ名>
 twnyan account sw <ユーザ名>
 ```
-
-### account help
-
-ヘルプを表示します。
-
-```
-twnyan account help
-```

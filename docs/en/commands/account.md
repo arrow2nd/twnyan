@@ -43,11 +43,3 @@ Switch the account to be used.
 twnyan account switch <username>
 twnyan account sw <username>
 ```
-
-### account help
-
-Displays help.
-
-```
-twnyan account help
-```

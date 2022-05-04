@@ -7,6 +7,7 @@ twnyan follow {<username / tweet-number> | <command>}
 twnyan fw {<username / tweet-number> | <command>}
 ```
 
+- If tweet-number is specified, the poster of the tweet is specified
 - The `@` in the user name can be omitted
 
 ## Command
@@ -18,14 +19,4 @@ Unfollow a user.
 ```
 twnyan follow remove <username / tweet-number>
 twnyan follow rm <username / tweet-number>
-```
-
-- The `@` in the user name can be omitted
-
-### follow help
-
-Displays help.
-
-```
-twnyan follow help
 ```

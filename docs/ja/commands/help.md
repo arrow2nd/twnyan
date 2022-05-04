@@ -3,5 +3,5 @@
 ヘルプを表示します。
 
 ```
-twnyan help
+twnyan [コマンド] help
 ```

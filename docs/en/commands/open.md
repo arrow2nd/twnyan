@@ -3,17 +3,7 @@
 Open a tweet in your browser.
 
 ```
-twnyan open {<tweet-number> | <command>}
+twnyan open <tweet-number>
 ```
 
 - Your environment's default browser will start
-
-## Command
-
-### open help
-
-Displays help.
-
-```
-twnyan open help
-```

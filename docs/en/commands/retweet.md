@@ -19,13 +19,3 @@ Unretweet a tweet.
 twnyan retweet remove <tweet-number>...
 twnyan retweet rm <tweet-number>...
 ```
-
-- Multiple tweet numbers can be specified by separating them with a single space
-
-### retweet help
-
-Displays help.
-
-```
-twnyan retweet help
-```

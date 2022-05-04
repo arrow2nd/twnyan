@@ -21,11 +21,3 @@ twnyan user own [number]
 ```
 
 - If number of acquisitions is omitted, the default value in the configuration file is specified
-
-### user help
-
-Displays help.
-
-```
-twnyan user help
-```
