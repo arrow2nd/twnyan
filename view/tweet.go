@@ -123,12 +123,14 @@ func (v *View) highlightHashTags(text string, entities *anaconda.Entities) strin
 	for _, hashtag := range entities.Hashtags {
 		// ハッシュタグの開始位置 ("#"を含まない)
 		beginPos := hashtag.Indices[0] + 1
+		textLength := utf8.RuneCountInString(hashtag.Text) + 1
 
 		// NOTE: APIから帰ってくる開始位置が間違っている(値が大きすぎる)場合があるので
-		//       正しい位置が見つかるまで、開始位置を前方に移動させる
+		//       ハッシュタグが見つかるまで開始位置を前方にズラし、切り出した文字列がハッシュタグ名を含むか
+		//       チェックする
 		//       終了条件が i > 0 なので、beginPos は "#" を含むハッシュタグの開始位置になる
-		for ; beginPos > 0; beginPos-- {
-			if i := strings.Index(string(runes[beginPos:]), hashtag.Text); i > 0 {
+		for ; beginPos > endPos; beginPos-- {
+			if i := strings.Index(string(runes[beginPos:beginPos+textLength]), hashtag.Text); i > 0 {
 				break
 			}
 		}
