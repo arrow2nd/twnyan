@@ -1,5 +1,7 @@
 # quote
 
+> Only available in interactive mode
+
 Quote a tweet.
 
 ```

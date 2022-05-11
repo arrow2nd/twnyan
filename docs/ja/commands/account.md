@@ -37,6 +37,8 @@ twnyan account rm <ユーザ名>
 
 ### account switch
 
+> 対話モードでのみ使用可能
+
 使用するアカウントを切り替えます。
 
 ```

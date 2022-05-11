@@ -1,5 +1,7 @@
 # retweet
 
+> Only available in interactive mode
+
 Retweet a tweet.
 
 ```

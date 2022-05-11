@@ -37,6 +37,8 @@ twnyan account rm <username>
 
 ### account switch
 
+> Only available in interactive mode
+
 Switch the account to be used.
 
 ```

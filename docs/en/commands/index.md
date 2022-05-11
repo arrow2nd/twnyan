@@ -19,7 +19,7 @@ twnyan -A subaccount tweet "I want to eat sushi..."
 ## Option
 
 - `-A` `--account <username>`
-  - Specify account to use (if not specified, the main account will be used)
+  - Specify the account to be used for the operation (if omitted, the main account will be specified)
 - `-H` `--help`
   - Display help with options
 

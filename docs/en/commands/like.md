@@ -1,5 +1,7 @@
 # like
 
+> Only available in interactive mode
+
 Like a tweet.
 
 ```
