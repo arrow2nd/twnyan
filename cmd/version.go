@@ -8,7 +8,7 @@ import (
 
 const version = "1.8.2"
 
-func (c *Cmd) newVersionCmd() *ishell.Cmd {
+func (cmd *Cmd) newVersionCmd() *ishell.Cmd {
 	return &ishell.Cmd{
 		Name:    "version",
 		Aliases: []string{"ver"},
