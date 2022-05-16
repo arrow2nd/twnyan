@@ -92,8 +92,8 @@ func (cmd *Cmd) Run() {
 
 func (cmd *Cmd) registerFlags() {
 	// フラグを登録
-	cmd.flagSet.StringP("account", "A", "", "specify the account to use")
-	cmd.flagSet.BoolP("help", "H", false, "display help with options")
+	cmd.flagSet.StringP("account", "a", "", "specify the account to use")
+	cmd.flagSet.BoolP("help", "h", false, "display help with options")
 
 	// フラグのヘルプ表示
 	cmd.flagSet.Usage = func() {
