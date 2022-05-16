@@ -93,7 +93,7 @@ func (cmd *Cmd) Run() {
 func (cmd *Cmd) registerFlags() {
 	// フラグを登録
 	cmd.flagSet.StringP("account", "a", "", "specify the account to use")
-	cmd.flagSet.BoolP("help", "h", false, "display help with options")
+	cmd.flagSet.BoolP("help", "h", false, "display help")
 
 	// フラグのヘルプ表示
 	cmd.flagSet.Usage = func() {
@@ -123,6 +123,7 @@ func (cmd *Cmd) registerCommands() {
 	cmd.shell.AddCmd(cmd.newOpenCmd())
 	cmd.shell.AddCmd(cmd.newStreamCmd())
 	cmd.shell.AddCmd(cmd.newVersionCmd())
+	cmd.shell.AddCmd(cmd.newHelpCmd())
 
 	// コマンドエラー時の表示
 	cmd.shell.NotFound(func(c *ishell.Context) {
