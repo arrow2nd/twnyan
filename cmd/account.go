@@ -66,7 +66,8 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Func:      cmd.execAccountSwitchCmd,
 		Help:      "switch the account to use",
 		LongHelp: createLongHelp(
-			"Switch the account to be used.",
+			`Switch the account to be used.
+(Only available in interactive mode)`,
 			"sw",
 			"account switch <username>",
 			"account switch nekochan",

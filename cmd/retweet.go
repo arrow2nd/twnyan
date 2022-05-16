@@ -15,7 +15,8 @@ func (cmd *Cmd) newRetweetCmd() *ishell.Cmd {
 		Help: "retweet a tweet",
 		LongHelp: createLongHelp(
 			`Retweet a tweet.
-If there is more than one, please separate them with a space.`,
+If there is more than one, please separate them with a space.
+(Only available in interactive mode)`,
 			"rt",
 			"retweet <tweet-number>...",
 			"retweet 0 1",
