@@ -71,6 +71,10 @@ func (cmd *Cmd) execQuoteMultiCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execQuote(tweetNumStr, text string, images []string) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	query := url.Values{}
 
 	// 引用するツイートのURLを取得

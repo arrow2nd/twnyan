@@ -140,6 +140,10 @@ func (cmd *Cmd) upload(images []string, query *url.Values) error {
 
 // actionOnTweet ツイートに対しての操作
 func (cmd *Cmd) actionOnTweet(actionName, cmdName, bgColor string, args []string, actionFunc func(string) (string, error)) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	if len(args) <= 0 {
 		cmd.showWrongArgMessage(cmdName)
 		return
@@ -223,6 +227,14 @@ func (cmd *Cmd) showErrorMessage(msg string) {
 func (cmd *Cmd) showWrongArgMessage(cmdName string) {
 	msg := fmt.Sprintf("Wrong argument, try '%s help'", cmdName)
 	cmd.showErrorMessage(msg)
+}
+
+// checkCommandLineMode コマンドラインモードかどうかチェック
+func (cmd *Cmd) checkCommandLineMode() bool {
+	if cmd.isCommandLineMode {
+		cmd.showErrorMessage("Only available in interactive mode")
+	}
+	return cmd.isCommandLineMode
 }
 
 // createLongHelp 詳細なヘルプ文を作成

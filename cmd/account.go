@@ -139,6 +139,10 @@ func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execAccountSwitchCmd(c *ishell.Context) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	screenName, err := cmd.parseAccountCmdArgs(c.Args)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())

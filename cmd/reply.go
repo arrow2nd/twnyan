@@ -72,6 +72,10 @@ func (cmd *Cmd) execReplyMultiCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	// リプライ先のツイートIDを取得
 	tweetId, err := cmd.twitter.GetDataFromTweetNum(tweetNumStr, twitter.TweetId)
 	if err != nil {

@@ -13,11 +13,12 @@ import (
 
 // Cmd コマンド管理
 type Cmd struct {
-	shell   *ishell.Shell
-	flagSet *pflag.FlagSet
-	config  *config.Config
-	twitter *twitter.Twitter
-	view    *view.View
+	shell             *ishell.Shell
+	flagSet           *pflag.FlagSet
+	config            *config.Config
+	twitter           *twitter.Twitter
+	view              *view.View
+	isCommandLineMode bool
 }
 
 // New 作成
@@ -25,11 +26,12 @@ func New() *Cmd {
 	config := config.New()
 
 	return &Cmd{
-		shell:   ishell.New(),
-		flagSet: pflag.NewFlagSet("twnyan", pflag.ContinueOnError),
-		config:  config,
-		twitter: twitter.New(),
-		view:    view.New(config),
+		shell:             ishell.New(),
+		flagSet:           pflag.NewFlagSet("twnyan", pflag.ContinueOnError),
+		config:            config,
+		twitter:           twitter.New(),
+		view:              view.New(config),
+		isCommandLineMode: false,
 	}
 }
 
@@ -83,6 +85,8 @@ func (cmd *Cmd) Run() {
 		cmd.shell.Run()
 		return
 	}
+
+	cmd.isCommandLineMode = true
 
 	// 直接実行
 	if err := cmd.shell.Process(cmd.flagSet.Args()...); err != nil {

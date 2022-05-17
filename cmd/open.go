@@ -23,6 +23,10 @@ func (cmd *Cmd) newOpenCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) execOpenCmd(c *ishell.Context) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	if len(c.Args) != 1 {
 		cmd.showWrongArgMessage(c.Cmd.Name)
 		return
