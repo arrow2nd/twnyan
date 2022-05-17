@@ -16,7 +16,8 @@ func (cmd *Cmd) newQuoteCmd() *ishell.Cmd {
 		LongHelp: createLongHelp(
 			`Quote a tweet.
 If there is no tweet text, 'にゃーん' will be posted.
-If you are submitting an image, please add the file name separated by a space.`,
+If you are submitting an image, please add the file name separated by a space.
+(Only available in interactive mode)`,
 			"qt",
 			"quote <tweet-number> [text] [image]...",
 			"quote 0 cute!! cat.png",
@@ -70,6 +71,10 @@ func (cmd *Cmd) execQuoteMultiCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execQuote(tweetNumStr, text string, images []string) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	query := url.Values{}
 
 	// 引用するツイートのURLを取得

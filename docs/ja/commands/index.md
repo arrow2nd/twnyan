@@ -13,14 +13,14 @@ twnyan [フラグオプション] [コマンド]
 twnyan tweet hello,nekochan!
 
 # @subaccount でツイート
-twnyan -A subaccount tweet "I want to eat sushi..."
+twnyan --account subaccount tweet "I want to eat sushi..."
 ```
 
 ## フラグオプション
 
-- `-A` `--account <ユーザ名>`
-  - 使用するアカウントを指定 (指定しない場合、メインアカウントが使用されます)
-- `-H` `--help`
+- `-a` `--account <ユーザ名>`
+  - 操作に使用するアカウントを指定 (省略した場合、メインアカウントが指定されます)
+- `-h` `--help`
   - オプションを含むヘルプを表示
 
 ## コマンド

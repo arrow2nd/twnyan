@@ -13,7 +13,8 @@ func (cmd *Cmd) newOpenCmd() *ishell.Cmd {
 		Func:    cmd.execOpenCmd,
 		Help:    "open a tweet in browser",
 		LongHelp: createLongHelp(
-			"Open a tweet in your browser.",
+			`Open a tweet in your browser.
+      (Only available in interactive mode)`,
 			"op",
 			"open <tweet-number>",
 			"open 2",
@@ -22,6 +23,10 @@ func (cmd *Cmd) newOpenCmd() *ishell.Cmd {
 }
 
 func (cmd *Cmd) execOpenCmd(c *ishell.Context) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	if len(c.Args) != 1 {
 		cmd.showWrongArgMessage(c.Cmd.Name)
 		return

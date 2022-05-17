@@ -15,7 +15,8 @@ func (cmd *Cmd) newLikeCmd() *ishell.Cmd {
 		Help: "like a tweet",
 		LongHelp: createLongHelp(
 			`Like a tweet.
-If there is more than one, please separate them with a space.`,
+If there is more than one, please separate them with a space.
+(Only available in interactive mode)`,
 			"lk, fv",
 			"like <tweet-number>...",
 			"like 0 1",

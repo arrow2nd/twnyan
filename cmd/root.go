@@ -13,11 +13,12 @@ import (
 
 // Cmd コマンド管理
 type Cmd struct {
-	shell   *ishell.Shell
-	flagSet *pflag.FlagSet
-	config  *config.Config
-	twitter *twitter.Twitter
-	view    *view.View
+	shell             *ishell.Shell
+	flagSet           *pflag.FlagSet
+	config            *config.Config
+	twitter           *twitter.Twitter
+	view              *view.View
+	isCommandLineMode bool
 }
 
 // New 作成
@@ -25,11 +26,12 @@ func New() *Cmd {
 	config := config.New()
 
 	return &Cmd{
-		shell:   ishell.New(),
-		flagSet: pflag.NewFlagSet("twnyan", pflag.ContinueOnError),
-		config:  config,
-		twitter: twitter.New(),
-		view:    view.New(config),
+		shell:             ishell.New(),
+		flagSet:           pflag.NewFlagSet("twnyan", pflag.ContinueOnError),
+		config:            config,
+		twitter:           twitter.New(),
+		view:              view.New(config),
+		isCommandLineMode: false,
 	}
 }
 
@@ -84,6 +86,8 @@ func (cmd *Cmd) Run() {
 		return
 	}
 
+	cmd.isCommandLineMode = true
+
 	// 直接実行
 	if err := cmd.shell.Process(cmd.flagSet.Args()...); err != nil {
 		os.Exit(1)
@@ -92,8 +96,8 @@ func (cmd *Cmd) Run() {
 
 func (cmd *Cmd) registerFlags() {
 	// フラグを登録
-	cmd.flagSet.StringP("account", "A", "", "specify the account to use")
-	cmd.flagSet.BoolP("help", "H", false, "display help with options")
+	cmd.flagSet.StringP("account", "a", "", "specify the account to use")
+	cmd.flagSet.BoolP("help", "h", false, "display help")
 
 	// フラグのヘルプ表示
 	cmd.flagSet.Usage = func() {
@@ -123,6 +127,7 @@ func (cmd *Cmd) registerCommands() {
 	cmd.shell.AddCmd(cmd.newOpenCmd())
 	cmd.shell.AddCmd(cmd.newStreamCmd())
 	cmd.shell.AddCmd(cmd.newVersionCmd())
+	cmd.shell.AddCmd(cmd.newHelpCmd())
 
 	// コマンドエラー時の表示
 	cmd.shell.NotFound(func(c *ishell.Context) {

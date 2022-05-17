@@ -66,7 +66,8 @@ func (cmd *Cmd) newAccountCmd() *ishell.Cmd {
 		Func:      cmd.execAccountSwitchCmd,
 		Help:      "switch the account to use",
 		LongHelp: createLongHelp(
-			"Switch the account to be used.",
+			`Switch the account to be used.
+(Only available in interactive mode)`,
 			"sw",
 			"account switch <username>",
 			"account switch nekochan",
@@ -138,6 +139,10 @@ func (cmd *Cmd) execAccountListCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execAccountSwitchCmd(c *ishell.Context) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	screenName, err := cmd.parseAccountCmdArgs(c.Args)
 	if err != nil {
 		cmd.showErrorMessage(err.Error())

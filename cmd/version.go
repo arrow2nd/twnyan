@@ -6,9 +6,9 @@ import (
 	"github.com/arrow2nd/ishell/v2"
 )
 
-const version = "1.8.2"
+const version = "1.9.2"
 
-func (c *Cmd) newVersionCmd() *ishell.Cmd {
+func (cmd *Cmd) newVersionCmd() *ishell.Cmd {
 	return &ishell.Cmd{
 		Name:    "version",
 		Aliases: []string{"ver"},

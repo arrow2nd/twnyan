@@ -1,5 +1,7 @@
 # likert
 
+> Only available in interactive mode
+
 Like & Retweet a tweet.
 
 ```

@@ -1,5 +1,7 @@
 # open
 
+> Only available in interactive mode
+
 Open a tweet in your browser.
 
 ```

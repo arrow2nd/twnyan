@@ -17,7 +17,8 @@ func (cmd *Cmd) newReplyCmd() *ishell.Cmd {
 		LongHelp: createLongHelp(
 			`Post a reply.
 If there is no tweet text, 'にゃーん' will be posted.
-If you are submitting an image, please add the file name separated by a space.`,
+If you are submitting an image, please add the file name separated by a space.
+(Only available in interactive mode)`,
 			"rp",
 			"reply <tweet-number> [text] [image]...",
 			"reply 2 meow cat.jpg",
@@ -71,6 +72,10 @@ func (cmd *Cmd) execReplyMultiCmd(c *ishell.Context) {
 }
 
 func (cmd *Cmd) execReply(tweetNumStr, status string, files []string) {
+	if cmd.checkCommandLineMode() {
+		return
+	}
+
 	// リプライ先のツイートIDを取得
 	tweetId, err := cmd.twitter.GetDataFromTweetNum(tweetNumStr, twitter.TweetId)
 	if err != nil {

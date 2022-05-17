@@ -1,5 +1,7 @@
 # reply
 
+> Only available in interactive mode
+
 Post a Reply.
 
 ```

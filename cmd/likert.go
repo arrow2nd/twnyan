@@ -14,7 +14,8 @@ func (cmd *Cmd) newLikertCmd() *ishell.Cmd {
 		Help: "like & retweet a tweet",
 		LongHelp: createLongHelp(
 			`Like & Retweet a tweet.
-If there is more than one, please separate them with a space.`,
+If there is more than one, please separate them with a space.
+(Only available in interactive mode)`,
 			"lr, fr",
 			"likert <tweet-number>...",
 			"likert 0 1",
