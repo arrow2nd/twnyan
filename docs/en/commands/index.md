@@ -13,14 +13,14 @@ twnyan [Option] [Command]
 twnyan tweet hello,nekochan!
 
 # Tweet with @subaccount
-twnyan -A subaccount tweet "I want to eat sushi..."
+twnyan --account subaccount tweet "I want to eat sushi..."
 ```
 
 ## Option
 
-- `-A` `--account <username>`
+- `-a` `--account <username>`
   - Specify the account to be used for the operation (if omitted, the main account will be specified)
-- `-H` `--help`
+- `-h` `--help`
   - Display help with options
 
 ## Command
