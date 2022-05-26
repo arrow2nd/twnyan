@@ -283,7 +283,8 @@
 
 - リリースしました！
 
-[unreleased]: https://github.com/arrow2nd/twnyan/compare/v1.9.0...HEAD
+[unreleased]: https://github.com/arrow2nd/twnyan/compare/v1.9.1...HEAD
+[1.9.1]: https://github.com/arrow2nd/twnyan/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/arrow2nd/twnyan/compare/v1.8.2...v1.9.0
 [1.8.2]: https://github.com/arrow2nd/twnyan/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/arrow2nd/twnyan/compare/v1.8.0...v1.8.1
