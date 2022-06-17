@@ -100,6 +100,10 @@ func (v *View) processTweetText(tweet *anaconda.Tweet) string {
 	// 文字をアンエスケープ
 	text := html.UnescapeString(tweet.FullText) + "\n"
 
+	// 全角記号を置換
+	text = strings.ReplaceAll(text, "＃", "#")
+	text = strings.ReplaceAll(text, "＠", "@")
+
 	// ハッシュタグをハイライト
 	if len(tweet.Entities.Hashtags) != 0 {
 		text = v.highlightHashTags(text, &tweet.Entities)
@@ -107,7 +111,7 @@ func (v *View) processTweetText(tweet *anaconda.Tweet) string {
 
 	// メンションをハイライト
 	if len(tweet.Entities.User_mentions) != 0 {
-		rep := regexp.MustCompile(`(^|[^\w@#$%&])[@＠](\w+)`)
+		rep := regexp.MustCompile(`(^|[^\w@#$%&])@(\w+)`)
 		text = rep.ReplaceAllString(text, "$1"+color.HEX(v.config.Color.Reply).Sprintf("@$2"))
 	}
 
@@ -118,34 +122,38 @@ func (v *View) processTweetText(tweet *anaconda.Tweet) string {
 func (v *View) highlightHashTags(text string, entities *anaconda.Entities) string {
 	result := ""
 	runes := []rune(text)
-	endPos := 0
+	end := 0
 
 	for _, hashtag := range entities.Hashtags {
-		// ハッシュタグの開始位置 ("#"を含まない)
-		beginPos := hashtag.Indices[0] + 1
+		hashtagText := fmt.Sprintf("#%s", hashtag.Text)
+
+		// NOTE: URLや絵文字を多く含むツイートなどで、ハッシュタグの開始位置が後方にズレていることがあるので
+		//       +1 して意図的にズラした後、ハッシュタグ全文が見つかるまで開始位置を前方に移動することで正しい位置を見つける
+
+		begin := hashtag.Indices[0] + 1
 		textLength := utf8.RuneCountInString(hashtag.Text) + 1
 
-		// NOTE: APIから帰ってくる開始位置が間違っている(値が大きすぎる)場合があるので
-		//       ハッシュタグが見つかるまで開始位置を前方にズラし、切り出した文字列がハッシュタグ名を含むか
-		//       チェックする
-		//       終了条件が i > 0 なので、beginPos は "#" を含むハッシュタグの開始位置になる
-		for ; beginPos > endPos; beginPos-- {
-			if i := strings.Index(string(runes[beginPos:beginPos+textLength]), hashtag.Text); i > 0 {
+		for ; begin > end; begin-- {
+			e := begin + textLength
+			if e > len(runes) {
+				e = len(runes)
+			}
+
+			if string(runes[begin:e]) == hashtagText {
 				break
 			}
 		}
 
 		// 前方の文とハイライトされたハッシュタグを結合
-		hashtagText := fmt.Sprintf("#%s", hashtag.Text)
-		result += string(runes[endPos:beginPos]) + color.HEX(v.config.Color.Hashtag).Sprint(hashtagText)
+		result += string(runes[end:begin]) + color.HEX(v.config.Color.Hashtag).Sprint(hashtagText)
 
 		// ハッシュタグの終了位置
-		endPos = beginPos + utf8.RuneCountInString(hashtagText)
+		end = begin + utf8.RuneCountInString(hashtagText)
 	}
 
 	// 残りの文を結合
-	if len(runes) > endPos {
-		result += string(runes[endPos:])
+	if len(runes) > end {
+		result += string(runes[end:])
 	}
 
 	return result
