@@ -43,7 +43,6 @@ scoop:
     name: scoop-bucket
     token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
   url_template: "https://github.com/arrow2nd/twnyan/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-  folder: Scoops
   homepage: "https://arrow2nd.com/works/twnyan"
   description: "Twitter client for Terminal🐾"
   license: "MIT"
