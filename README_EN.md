@@ -34,6 +34,13 @@ brew tap arrow2nd/tap
 brew install twnyan
 ```
 
+### Scoop
+
+```
+scoop bucket add arrow2nd https://github.com/arrow2nd/scoop-bucket.git
+scoop install arrow2nd/twnyan
+```
+
 ### Go
 
 ```sh

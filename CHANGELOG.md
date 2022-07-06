@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [1.9.3] - 2022-07-06
+
+### Added
+
+- Scoop での配布を開始
+
+### Changed
+
+- Windows 向けファイルの圧縮形式を zip に変更
+
+### Security
+
+- 依存関係を更新
+
 ## [1.9.2] - 2022-06-17
 
 ### Fixed
@@ -293,7 +307,9 @@
 
 - リリースしました！
 
-[unreleased]: https://github.com/arrow2nd/twnyan/compare/v1.9.1...HEAD
+[unreleased]: https://github.com/arrow2nd/twnyan/compare/v1.9.3...HEAD
+[1.9.3]: https://github.com/arrow2nd/twnyan/compare/v1.9.2...v1.9.2
+[1.9.2]: https://github.com/arrow2nd/twnyan/compare/v1.9.1...v1.9.2
 [1.9.1]: https://github.com/arrow2nd/twnyan/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/arrow2nd/twnyan/compare/v1.8.2...v1.9.0
 [1.8.2]: https://github.com/arrow2nd/twnyan/compare/v1.8.1...v1.8.2
