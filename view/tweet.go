@@ -135,8 +135,9 @@ func (v *View) highlightHashTags(text string, entities *anaconda.Entities) strin
 
 		for ; begin > end; begin-- {
 			e := begin + textLength
-			if e > len(runes) {
-				e = len(runes)
+
+			if l := len(runes); e > l {
+				continue
 			}
 
 			if string(runes[begin:e]) == hashtagText {
