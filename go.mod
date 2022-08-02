@@ -15,10 +15,11 @@ require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-runewidth v0.0.13
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8
+	github.com/rivo/uniseg v0.3.1 // indirect
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/net v0.0.0-20220630215102-69896b714898 // indirect
-	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f
-	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e // indirect
-	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467
+	golang.org/x/net v0.0.0-20220728211354-c7608f3a8462 // indirect
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
+	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
+	golang.org/x/term v0.0.0-20220722155259-a9ba230a4035
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
 )
