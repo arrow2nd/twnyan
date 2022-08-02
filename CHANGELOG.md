@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [1.9.4] - 2022-08-02
+
+### Fixed
+
+- 特定のツイートにおいて、ハッシュタグのハイライト処理に失敗する
+
 ## [1.9.3] - 2022-07-06
 
 ### Added
@@ -307,8 +313,9 @@
 
 - リリースしました！
 
-[unreleased]: https://github.com/arrow2nd/twnyan/compare/v1.9.3...HEAD
-[1.9.3]: https://github.com/arrow2nd/twnyan/compare/v1.9.2...v1.9.2
+[unreleased]: https://github.com/arrow2nd/twnyan/compare/v1.9.4...HEAD
+[1.9.4]: https://github.com/arrow2nd/twnyan/compare/v1.9.3...v1.9.4
+[1.9.3]: https://github.com/arrow2nd/twnyan/compare/v1.9.2...v1.9.3
 [1.9.2]: https://github.com/arrow2nd/twnyan/compare/v1.9.1...v1.9.2
 [1.9.1]: https://github.com/arrow2nd/twnyan/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/arrow2nd/twnyan/compare/v1.8.2...v1.9.0
