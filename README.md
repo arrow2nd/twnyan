@@ -1,5 +1,10 @@
 # 🐈 twnyan
 
+> **Warning**
+>
+> twnyanはメンテナンスモードです。
+> [nekome](https://github.com/arrow2nd/nekome)への移行をおすすめします。
+
 いつでも「にゃーん」したいねこのための Twitter クライアント
 
 [![release](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml/badge.svg)](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml)
@@ -49,7 +54,8 @@ go install github.com/arrow2nd/twnyan@latest
 
 ### バイナリファイル
 
-[Releases](https://github.com/arrow2nd/twnyan/releases) からお使いの環境にあったファイルをダウンロードしてください。
+[Releases](https://github.com/arrow2nd/twnyan/releases)
+からお使いの環境にあったファイルをダ�ンロードしてください。
 
 ## アンインストール
 
