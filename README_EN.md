@@ -1,5 +1,10 @@
 # 🐈 twnyan
 
+> **Warning**
+>
+> twnyan is in maintenance mode. Recommend to migrate to
+> [nekome](https://github.com/arrow2nd/nekome)
+
 A colorful Twitter client that runs in a terminal
 
 [![release](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml/badge.svg)](https://github.com/arrow2nd/twnyan/actions/workflows/release.yml)
@@ -49,7 +54,8 @@ go install github.com/arrow2nd/twnyan@latest
 
 ### Use binary files
 
-Download the latest version of the file for your environment from [Releases](https://github.com/arrow2nd/twnyan/releases).
+Download the latest version of the file for your environment from
+[Releases](https://github.com/arrow2nd/twnyan/releases).
 
 ## Uninstall
 
@@ -72,8 +78,10 @@ rm -rf ~/.twnyan
 
 ![auth](https://user-images.githubusercontent.com/44780846/106747441-4a59dd00-6667-11eb-8248-3468cb39f7d1.png)
 
-1. Access the authentication page that appears the first time you start the program
-2. Follow the steps on the screen and enter the PIN code that appears on the screen into twnyan
+1. Access the authentication page that appears the first time you start the
+   program
+2. Follow the steps on the screen and enter the PIN code that appears on the
+   screen into twnyan
 3. done! 😺
 
 > The first account added is treated as the "main account"
