@@ -2,8 +2,7 @@
 
 > **Warning**
 >
-> twnyanはメンテナンスモードです。
-> [nekome](https://github.com/arrow2nd/nekome)への移行をおすすめします。
+> twnyanはメンテナンスモードです。 [nekome](https://github.com/arrow2nd/nekome)への移行をおすすめします。
 
 いつでも「にゃーん」したいねこのための Twitter クライアント
 
@@ -55,7 +54,7 @@ go install github.com/arrow2nd/twnyan@latest
 ### バイナリファイル
 
 [Releases](https://github.com/arrow2nd/twnyan/releases)
-からお使いの環境にあったファイルをダ�ンロードしてください。
+からお使いの環境にあったファイルをダ?ンロードしてください。
 
 ## アンインストール
 
