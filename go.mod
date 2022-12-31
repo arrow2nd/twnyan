@@ -12,14 +12,15 @@ require (
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/goccy/go-yaml v1.9.8
 	github.com/gookit/color v1.5.2
-	github.com/mattn/go-colorable v0.1.12 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8
-	github.com/rivo/uniseg v0.3.1 // indirect
+	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/net v0.0.0-20220728211354-c7608f3a8462 // indirect
-	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
-	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
-	golang.org/x/term v0.0.0-20220722155259-a9ba230a4035
-	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
+	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	golang.org/x/net v0.4.0 // indirect
+	golang.org/x/sync v0.1.0
+	golang.org/x/term v0.3.0
+	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 )
