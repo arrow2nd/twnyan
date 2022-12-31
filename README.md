@@ -2,7 +2,7 @@
 
 > **Warning**
 >
-> twnyanはメンテナンスモードです。 [nekome](https://github.com/arrow2nd/nekome)への移行をおすすめします。
+> twnyanは開発を終了しました。 [nekome](https://github.com/arrow2nd/nekome)への移行をおすすめします。
 
 いつでも「にゃーん」したいねこのための Twitter クライアント
 

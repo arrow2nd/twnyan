@@ -2,8 +2,8 @@
 
 > **Warning**
 >
-> twnyan is in maintenance mode. Recommend to migrate to
-> [nekome](https://github.com/arrow2nd/nekome)
+> twnyan is no longer in development. Recommend to migrate to
+> [nekome](https://github.com/arrow2nd/nekome).
 
 A colorful Twitter client that runs in a terminal
 
